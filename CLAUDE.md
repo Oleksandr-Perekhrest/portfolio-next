@@ -34,6 +34,8 @@ This project uses **Next.js 16.4.3** with **React 19.3.0** — versions that may
 - **Path alias**: `@/*` resolves to `./src/*`
 - **Fonts**: Geist Sans and Geist Mono via `next/font/google`, exposed as CSS variables `--font-geist-sans` and `--font-geist-mono`
 - `src/app/layout.tsx` is the root layout — HTML shell, font variables, global providers. Page-level metadata is a `Metadata` export per route file.
+- **Layout components**: `src/components/layout/` — `Header/` (client component with `useIsScrolled` hook), `Footer/` (server component).
+- **ThemeSwitch**: `src/components/ThemeSwitch/` — client component using Radix `Switch`, `useSyncExternalStore` + MutationObserver to read `data-theme` from `<html>`.
 
 ## Conventions
 
@@ -41,6 +43,7 @@ This project uses **Next.js 16.4.3** with **React 19.3.0** — versions that may
 - **Imports**: two groups — packages first under `// outsource dependencies`, then local (`@/` alias and relative paths) under `// local dependencies`, one blank line between groups; within each group sort by line length, shortest first. ESLint (perfectionist) enforces this.
 - **Styles**: SCSS Modules colocated with the component (`Component.module.scss`); no Tailwind, no CSS-in-JS.
 - **Unit tests**: colocated next to the module as `*.test.tsx` / `*.test.ts`.
+- **Component folders**: each component lives in its own folder (`ComponentName/`) containing `ComponentName.tsx`, `ComponentName.module.scss`, and `ComponentName.test.tsx`.
 - **Commits**: Conventional Commits for commit messages and PR titles.
 - **Tests**: import `describe`, `it`, `expect` explicitly from `@jest/globals`; no global Jest types (`@types/jest` is not installed).
 
@@ -53,6 +56,21 @@ pnpm format:check && pnpm lint && pnpm typecheck && pnpm test && pnpm build
 ```
 
 Skip a script only if it does not exist yet, and say so in the report.
+
+## Styling
+
+- Token source: `src/styles/_tokens.scss` — SCSS maps for colors (light/dark), spacing, radius, shadows, layout, effects, and type styles. Emitted as CSS custom properties in `src/app/globals.scss` (light on `:root`, dark on `:root[data-theme="dark"]`).
+- Shared SCSS utilities: `@use "styles" as *;` — resolves to `src/styles/_index.scss` (forwarding `_breakpoints.scss` and `_mixins.scss`); available from any SCSS file via `sassOptions.loadPaths: ["src"]` in `next.config.ts`.
+- Components: use only `var(--)` for token values; never hard-code colors, spacing, radius, or type properties.
+- Responsive breakpoints: `@include below(mobile)` / `@include below(tablet)` from `_breakpoints.scss`; never use CSS variables in media queries.
+- Available mixins: `container`, `focus-ring`, `visually-hidden`, `text($style)` — see `src/styles/_mixins.scss` for the full list of type-style names.
+
+## Theming
+
+- **Mechanism**: an inline `<script>` in `<head>` (from `src/lib/theme.ts`) runs before first paint — reads `localStorage["theme"]`, falls back to `prefers-color-scheme`, sets `document.documentElement.dataset.theme` to `"light"` or `"dark"`.
+- **CSS**: dark tokens activate via `:root[data-theme="dark"]` in `globals.scss`; component styles key off the same selector. Never use Radix `data-state` for theme-driven visuals.
+- **Programmatic changes**: call `setTheme(theme)` from `@/lib/theme` — updates `data-theme` on `<html>` and persists to `localStorage`.
+- **Hydration**: `suppressHydrationWarning` is on `<html>` only; `data-theme` is set before hydration by the script on purpose.
 
 ## Rules for the agent
 
