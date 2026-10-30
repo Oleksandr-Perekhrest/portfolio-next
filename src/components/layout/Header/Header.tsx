@@ -7,6 +7,7 @@ import { useTranslations } from "next-intl";
 import styles from "./Header.module.scss";
 import { useIsScrolled } from "./useIsScrolled";
 import ThemeSwitch from "@/components/ThemeSwitch/ThemeSwitch";
+import LocaleSwitch from "@/components/LocaleSwitch/LocaleSwitch";
 
 export default function Header() {
     const t = useTranslations("Header");
@@ -51,7 +52,10 @@ export default function Header() {
                             </li>
                         </ul>
                     </nav>
-                    <ThemeSwitch />
+                    <div className={styles.controls}>
+                        <LocaleSwitch />
+                        <ThemeSwitch />
+                    </div>
                 </div>
             </div>
         </header>

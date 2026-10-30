@@ -27,6 +27,13 @@
   "ThemeSwitch": {
     "aria": "Темна тема"
   },
+  "LocaleSwitch": {
+    "label": "Мова",
+    "en": "EN",
+    "uk": "UA",
+    "nameEn": "English",
+    "nameUk": "Українська"
+  },
   "Home": {
     "heroName": "Олександр Перехрест",
     "heroTagline": "Web Engineer — сайт у розробці",

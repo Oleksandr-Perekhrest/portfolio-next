@@ -74,6 +74,13 @@
     gap: var(--space-4);
 }
 
+.controls {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    margin-left: auto;
+}
+
 .nav {
     @include below(mobile) {
         display: none;

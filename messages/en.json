@@ -27,6 +27,13 @@
   "ThemeSwitch": {
     "aria": "Dark theme"
   },
+  "LocaleSwitch": {
+    "label": "Language",
+    "en": "EN",
+    "uk": "UA",
+    "nameEn": "English",
+    "nameUk": "Українська"
+  },
   "Home": {
     "heroName": "Alex Perekhrest",
     "heroTagline": "Web Engineer — site under construction",
