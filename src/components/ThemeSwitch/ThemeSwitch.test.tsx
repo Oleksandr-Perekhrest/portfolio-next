@@ -1,6 +1,12 @@
 // outsource dependencies
 import { it, expect, describe, afterEach } from "@jest/globals";
-import { act, render, screen, fireEvent } from "@testing-library/react";
+import {
+    act,
+    render,
+    screen,
+    cleanup,
+    fireEvent,
+} from "@testing-library/react";
 
 // local dependencies
 import ThemeSwitch from "./ThemeSwitch";
@@ -8,6 +14,7 @@ import { THEME_STORAGE_KEY } from "@/lib/theme";
 
 describe("ThemeSwitch", () => {
     afterEach(() => {
+        cleanup();
         delete document.documentElement.dataset.theme;
         localStorage.clear();
     });
