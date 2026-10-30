@@ -1,3 +1,65 @@
+// local dependencies
+@use "styles/tokens";
+
+// ── Light theme (default) ─────────────────────────────────────────────────────
+
+:root {
+    color-scheme: light;
+
+    @each $name, $value in tokens.$colors-light {
+        --color-#{$name}: #{$value};
+    }
+
+    @each $name, $value in tokens.$shadows-static {
+        --shadow-#{$name}: #{$value};
+    }
+
+    @each $name, $value in tokens.$shadows-light {
+        --shadow-#{$name}: #{$value};
+    }
+
+    @each $n, $value in tokens.$spacing {
+        --space-#{$n}: #{$value};
+    }
+
+    @each $name, $value in tokens.$radius {
+        --radius-#{$name}: #{$value};
+    }
+
+    @each $name, $value in tokens.$layout {
+        --#{$name}: #{$value};
+    }
+
+    @each $name, $value in tokens.$durations {
+        --duration-#{$name}: #{$value};
+    }
+
+    --blur-layer: #{tokens.$blur-layer};
+    --ease-standard: #{tokens.$ease-standard};
+
+    // Font families reference next/font CSS variables set on <html>
+    --font-sans:
+        var(--font-geist-sans), system-ui, -apple-system, "Segoe UI", sans-serif;
+    --font-mono:
+        var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+// ── Dark theme ────────────────────────────────────────────────────────────────
+
+:root[data-theme="dark"] {
+    color-scheme: dark;
+
+    @each $name, $value in tokens.$colors-dark {
+        --color-#{$name}: #{$value};
+    }
+
+    @each $name, $value in tokens.$shadows-dark {
+        --shadow-#{$name}: #{$value};
+    }
+}
+
+// ── Reset ─────────────────────────────────────────────────────────────────────
+
 *,
 *::before,
 *::after {
@@ -5,6 +67,26 @@
     margin: 0;
 }
 
+// ── Base ──────────────────────────────────────────────────────────────────────
+
 body {
-    font-family: var(--font-geist-sans), system-ui, sans-serif;
+    background-color: var(--color-bg);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+}
+
+:focus-visible {
+    outline: 2px solid var(--color-focus-ring);
+    outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
 }

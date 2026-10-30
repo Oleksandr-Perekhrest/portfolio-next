@@ -54,6 +54,14 @@ pnpm format:check && pnpm lint && pnpm typecheck && pnpm test && pnpm build
 
 Skip a script only if it does not exist yet, and say so in the report.
 
+## Styling
+
+- Token source: `src/styles/_tokens.scss` — SCSS maps for colors (light/dark), spacing, radius, shadows, layout, effects, and type styles. Emitted as CSS custom properties in `src/app/globals.scss` (light on `:root`, dark on `:root[data-theme="dark"]`).
+- Shared SCSS utilities: `@use "styles" as *;` — resolves to `src/styles/_index.scss` (forwarding `_breakpoints.scss` and `_mixins.scss`); available from any SCSS file via `sassOptions.loadPaths: ["src"]` in `next.config.ts`.
+- Components: use only `var(--)` for token values; never hard-code colors, spacing, radius, or type properties.
+- Responsive breakpoints: `@include below(mobile)` / `@include below(tablet)` from `_breakpoints.scss`; never use CSS variables in media queries.
+- Available mixins: `focus-ring`, `visually-hidden`, `text($style)` — see `src/styles/_mixins.scss` for the full list of type-style names.
+
 ## Rules for the agent
 
 - Do NOT commit, push, create branches, or open PRs — the developer does that.

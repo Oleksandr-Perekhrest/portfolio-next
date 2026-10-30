@@ -1,0 +1,60 @@
+@use "sass:map";
+@use "breakpoints" as *;
+@use "functions" as *;
+@use "tokens";
+
+// ── Focus ring ───────────────────────────────────────────────────────────────
+
+@mixin focus-ring {
+    &:focus-visible {
+        outline: 2px solid var(--color-focus-ring);
+        outline-offset: 2px;
+    }
+}
+
+// ── Visually hidden ──────────────────────────────────────────────────────────
+
+@mixin visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+// ── Type scale ───────────────────────────────────────────────────────────────
+
+@mixin text($style) {
+    $def: map.get(tokens.$type-styles, $style);
+    $family: map.get($def, family);
+    $size: map.get($def, size);
+    $lh: map.get($def, lh);
+    $weight: map.get($def, weight);
+    $ls: map.get($def, ls);
+    $transform: map.get($def, transform);
+    $mobile: map.get($def, mobile);
+
+    font-family: var(--font-#{$family});
+    font-size: rem($size);
+    line-height: rem($lh);
+    font-weight: $weight;
+
+    @if $ls {
+        letter-spacing: $ls;
+    }
+
+    @if $transform {
+        text-transform: $transform;
+    }
+
+    @if $mobile {
+        @include below(mobile) {
+            font-size: rem(map.get($mobile, size));
+            line-height: rem(map.get($mobile, lh));
+        }
+    }
+}
