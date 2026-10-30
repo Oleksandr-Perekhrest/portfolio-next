@@ -1,0 +1,21 @@
+// local dependencies
+@use "styles" as *;
+
+.footer {
+    @include container;
+
+    padding-top: var(--space-12);
+    padding-bottom: var(--space-16);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+
+    @include text(small);
+
+    color: var(--color-muted);
+}
+
+.built {
+    font-family: var(--font-mono);
+}

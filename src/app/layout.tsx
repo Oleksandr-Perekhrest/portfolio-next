@@ -3,6 +3,9 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 
 // local dependencies
+import styles from "./layout.module.scss";
+import Footer from "@/components/layout/Footer/Footer";
+import Header from "@/components/layout/Header/Header";
 import "./globals.scss";
 
 const geistSans = Geist({
@@ -24,9 +27,16 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     return (
         <html
             lang="en"
+            data-scroll-behavior="smooth"
             className={`${geistSans.variable} ${geistMono.variable}`}
         >
-            <body>{children}</body>
+            <body>
+                <Header />
+                <main id="top" className={styles.main}>
+                    {children}
+                </main>
+                <Footer />
+            </body>
         </html>
     );
 }
