@@ -1,0 +1,69 @@
+// local dependencies
+@use "styles" as *;
+
+.root {
+    position: relative;
+    display: inline-flex;
+    flex-shrink: 0;
+    width: 60px;
+    height: 32px;
+    border-radius: var(--radius-full);
+    border: 1px solid var(--color-line-strong);
+    background-color: var(--color-chip);
+    padding: 0;
+    cursor: pointer;
+    transition:
+        background-color var(--duration-base) var(--ease-standard),
+        border-color var(--duration-base) var(--ease-standard);
+
+    @include focus-ring;
+
+    // Expand clickable area to meet tap-target without changing visual size
+    &::before {
+        content: "";
+        position: absolute;
+        inset: calc((var(--tap-target) - 32px) / -2) 0;
+    }
+}
+
+:global(:root[data-theme="dark"]) .root {
+    background-color: var(--color-accent);
+    border-color: var(--color-accent);
+}
+
+.thumb {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    display: grid;
+    place-items: center;
+    width: 24px;
+    height: 24px;
+    border-radius: var(--radius-full);
+    background: var(--color-surface);
+    box-shadow: var(--shadow-knob);
+    color: var(--color-ink);
+    transition: transform var(--duration-base) var(--ease-standard);
+}
+
+:global(:root[data-theme="dark"]) .thumb {
+    transform: translateX(28px);
+}
+
+.sun,
+.moon {
+    grid-column: 1;
+    grid-row: 1;
+}
+
+.moon {
+    display: none;
+}
+
+:global(:root[data-theme="dark"]) .sun {
+    display: none;
+}
+
+:global(:root[data-theme="dark"]) .moon {
+    display: block;
+}

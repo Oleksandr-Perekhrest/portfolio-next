@@ -3,6 +3,7 @@
 // local dependencies
 import styles from "./Header.module.scss";
 import { useIsScrolled } from "./useIsScrolled";
+import ThemeSwitch from "@/components/ThemeSwitch/ThemeSwitch";
 
 export default function Header() {
     const isScrolled = useIsScrolled();
@@ -25,25 +26,31 @@ export default function Header() {
                         OP
                     </span>
                 </a>
-                <nav aria-label="Main" className={styles.nav}>
-                    <ul className={styles.navList}>
-                        <li>
-                            <a href="#experience" className={styles.navLink}>
-                                Experience
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#about" className={styles.navLink}>
-                                About
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#contact" className={styles.navLink}>
-                                Contact
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
+                <div className={styles.actions}>
+                    <nav aria-label="Main" className={styles.nav}>
+                        <ul className={styles.navList}>
+                            <li>
+                                <a
+                                    href="#experience"
+                                    className={styles.navLink}
+                                >
+                                    Experience
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#about" className={styles.navLink}>
+                                    About
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#contact" className={styles.navLink}>
+                                    Contact
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                    <ThemeSwitch />
+                </div>
             </div>
         </header>
     );

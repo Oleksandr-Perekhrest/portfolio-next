@@ -4,6 +4,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 
 // local dependencies
 import styles from "./layout.module.scss";
+import { themeScript } from "@/lib/theme";
 import Footer from "@/components/layout/Footer/Footer";
 import Header from "@/components/layout/Header/Header";
 import "./globals.scss";
@@ -27,9 +28,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     return (
         <html
             lang="en"
+            suppressHydrationWarning
             data-scroll-behavior="smooth"
             className={`${geistSans.variable} ${geistMono.variable}`}
         >
+            <head>
+                <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+            </head>
             <body>
                 <Header />
                 <main id="top" className={styles.main}>

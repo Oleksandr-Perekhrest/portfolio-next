@@ -35,6 +35,7 @@ This project uses **Next.js 16.4.3** with **React 19.3.0** — versions that may
 - **Fonts**: Geist Sans and Geist Mono via `next/font/google`, exposed as CSS variables `--font-geist-sans` and `--font-geist-mono`
 - `src/app/layout.tsx` is the root layout — HTML shell, font variables, global providers. Page-level metadata is a `Metadata` export per route file.
 - **Layout components**: `src/components/layout/` — `Header/` (client component with `useIsScrolled` hook), `Footer/` (server component).
+- **ThemeSwitch**: `src/components/ThemeSwitch/` — client component using Radix `Switch`, `useSyncExternalStore` + MutationObserver to read `data-theme` from `<html>`.
 
 ## Conventions
 
@@ -63,6 +64,13 @@ Skip a script only if it does not exist yet, and say so in the report.
 - Components: use only `var(--)` for token values; never hard-code colors, spacing, radius, or type properties.
 - Responsive breakpoints: `@include below(mobile)` / `@include below(tablet)` from `_breakpoints.scss`; never use CSS variables in media queries.
 - Available mixins: `container`, `focus-ring`, `visually-hidden`, `text($style)` — see `src/styles/_mixins.scss` for the full list of type-style names.
+
+## Theming
+
+- **Mechanism**: an inline `<script>` in `<head>` (from `src/lib/theme.ts`) runs before first paint — reads `localStorage["theme"]`, falls back to `prefers-color-scheme`, sets `document.documentElement.dataset.theme` to `"light"` or `"dark"`.
+- **CSS**: dark tokens activate via `:root[data-theme="dark"]` in `globals.scss`; component styles key off the same selector. Never use Radix `data-state` for theme-driven visuals.
+- **Programmatic changes**: call `setTheme(theme)` from `@/lib/theme` — updates `data-theme` on `<html>` and persists to `localStorage`.
+- **Hydration**: `suppressHydrationWarning` is on `<html>` only; `data-theme` is set before hydration by the script on purpose.
 
 ## Rules for the agent
 

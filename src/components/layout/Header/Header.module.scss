@@ -68,6 +68,12 @@
     color: var(--color-muted);
 }
 
+.actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+}
+
 .nav {
     @include below(mobile) {
         display: none;
