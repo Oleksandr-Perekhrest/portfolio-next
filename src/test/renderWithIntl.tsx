@@ -6,12 +6,22 @@ import type { RenderOptions } from "@testing-library/react";
 
 // local dependencies
 import en from "../../messages/en.json";
+import uk from "../../messages/uk.json";
 
-export function renderWithIntl(ui: ReactElement, options?: RenderOptions) {
+type Locale = "en" | "uk";
+
+const messages: Record<Locale, typeof en> = { en, uk };
+
+interface IntlRenderOptions extends RenderOptions {
+    locale?: Locale;
+}
+
+export function renderWithIntl(ui: ReactElement, options?: IntlRenderOptions) {
+    const { locale = "en", ...renderOptions } = options ?? {};
     return render(
-        <NextIntlClientProvider locale="en" messages={en}>
+        <NextIntlClientProvider locale={locale} messages={messages[locale]}>
             {ui}
         </NextIntlClientProvider>,
-        options,
+        renderOptions,
     );
 }

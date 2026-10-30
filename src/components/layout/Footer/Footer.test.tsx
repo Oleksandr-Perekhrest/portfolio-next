@@ -1,19 +1,20 @@
 // outsource dependencies
+import { screen } from "@testing-library/react";
 import { it, expect, describe } from "@jest/globals";
-import { render, screen } from "@testing-library/react";
 
 // local dependencies
 import Footer from "./Footer";
+import { renderWithIntl } from "@/test/renderWithIntl";
 
 describe("Footer", () => {
     it("renders the current year", () => {
-        render(<Footer />);
+        renderWithIntl(<Footer />);
         const year = new Date().getFullYear().toString();
         expect(screen.getByText(new RegExp(year))).toBeInTheDocument();
     });
 
     it("renders the built-with line", () => {
-        render(<Footer />);
+        renderWithIntl(<Footer />);
         expect(screen.getByText(/Built with Next\.js/)).toBeInTheDocument();
     });
 });

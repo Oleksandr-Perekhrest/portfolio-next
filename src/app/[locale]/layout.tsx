@@ -19,8 +19,8 @@ export function generateStaticParams() {
 export const dynamicParams = false;
 
 export const metadata: Metadata = {
-    title: "Alex Perekhrest — Web Engineer",
-    description: "Personal portfolio of Alex Perekhrest, web engineer.",
+    title: "Oleksandr Perekhrest — Web Engineer",
+    description: "Personal portfolio of Oleksandr Perekhrest, web engineer.",
 };
 
 export default async function LocaleLayout({

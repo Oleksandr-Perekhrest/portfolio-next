@@ -1,10 +1,37 @@
 {
   "Metadata": {
-    "title": "Alex Perekhrest — Web Engineer"
+    "title": "Oleksandr Perekhrest — Web Engineer"
   },
   "NotFound": {
     "title": "Page not found",
     "description": "The page you are looking for does not exist.",
     "home": "Go home"
+  },
+  "Header": {
+    "brand": {
+      "name": "Alex Perekhrest",
+      "role": "Web Engineer",
+      "initials": "OP"
+    },
+    "nav": {
+      "aria": "Main",
+      "experience": "Experience",
+      "about": "About",
+      "contact": "Contact"
+    }
+  },
+  "Footer": {
+    "copyright": "© {year} Oleksandr Perekhrest",
+    "built": "Built with Next.js · SCSS · Radix"
+  },
+  "ThemeSwitch": {
+    "aria": "Dark theme"
+  },
+  "Home": {
+    "heroName": "Alex Perekhrest",
+    "heroTagline": "Web Engineer — site under construction",
+    "experience": "Experience",
+    "about": "About",
+    "contact": "Contact"
   }
 }

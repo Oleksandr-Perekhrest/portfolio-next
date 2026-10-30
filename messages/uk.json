@@ -1,10 +1,37 @@
 {
   "Metadata": {
-    "title": "Олександр Перехрест — Вебінженер"
+    "title": "Олександр Перехрест — Web Engineer"
   },
   "NotFound": {
     "title": "Сторінку не знайдено",
     "description": "Сторінка, яку ви шукаєте, не існує.",
     "home": "На головну"
+  },
+  "Header": {
+    "brand": {
+      "name": "Олександр Перехрест",
+      "role": "Web Engineer",
+      "initials": "OP"
+    },
+    "nav": {
+      "aria": "Основна",
+      "experience": "Досвід",
+      "about": "Про мене",
+      "contact": "Контакти"
+    }
+  },
+  "Footer": {
+    "copyright": "© {year} Олександр Перехрест",
+    "built": "Створено на Next.js · SCSS · Radix"
+  },
+  "ThemeSwitch": {
+    "aria": "Темна тема"
+  },
+  "Home": {
+    "heroName": "Олександр Перехрест",
+    "heroTagline": "Web Engineer — сайт у розробці",
+    "experience": "Досвід",
+    "about": "Про мене",
+    "contact": "Контакти"
   }
 }

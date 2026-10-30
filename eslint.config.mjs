@@ -58,6 +58,29 @@ const eslintConfig = defineConfig([
             ...perfectionistRules,
         },
     },
+    {
+        files: ["src/components/**/*.{ts,tsx}", "src/app/**/*.{ts,tsx}"],
+        ignores: ["**/*.test.tsx", "src/app/global-not-found.tsx"],
+        rules: {
+            "no-restricted-syntax": [
+                "error",
+                {
+                    selector: "JSXText[value=/[a-zA-Zа-яА-ЯіїєґІЇЄҐ]/]",
+                    message: "Move user-visible text into messages/*.json",
+                },
+                {
+                    selector:
+                        "JSXAttribute[name.name=/^(aria-label|alt|title|placeholder)$/] > Literal[value=/[a-zA-Zа-яА-ЯіїєґІЇЄҐ]/]",
+                    message: "Move user-visible text into messages/*.json",
+                },
+                {
+                    selector:
+                        "JSXElement > JSXExpressionContainer > Literal[value=/[a-zA-Zа-яА-ЯіїєґІЇЄҐ]/]",
+                    message: "Move user-visible text into messages/*.json",
+                },
+            ],
+        },
+    },
     prettierConfig,
     globalIgnores([".next/**", "out/**", "build/**", "next-env.d.ts"]),
 ]);
