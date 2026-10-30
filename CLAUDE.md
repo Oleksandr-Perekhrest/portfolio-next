@@ -20,6 +20,8 @@ pnpm lint           # ESLint on the whole project
 pnpm typecheck      # generate Next.js types, then tsc --noEmit
 pnpm format         # Prettier write (whole project)
 pnpm format:check   # Prettier check (CI / pre-push)
+pnpm test           # Jest (single run)
+pnpm test:watch     # Jest in watch mode
 ```
 
 ## Next.js version warning
@@ -40,6 +42,7 @@ This project uses **Next.js 16.4.3** with **React 19.3.0** — versions that may
 - **Styles**: SCSS Modules colocated with the component (`Component.module.scss`); no Tailwind, no CSS-in-JS.
 - **Unit tests**: colocated next to the module as `*.test.tsx` / `*.test.ts`.
 - **Commits**: Conventional Commits for commit messages and PR titles.
+- **Tests**: import `describe`, `it`, `expect` explicitly from `@jest/globals`; no global Jest types (`@types/jest` is not installed).
 
 ## Checks
 
