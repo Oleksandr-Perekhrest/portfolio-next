@@ -2,6 +2,7 @@
 
 // outsource dependencies
 import { Switch } from "radix-ui";
+import { useTranslations } from "next-intl";
 import { useSyncExternalStore } from "react";
 
 // local dependencies
@@ -26,6 +27,7 @@ function getServerSnapshot(): boolean {
 }
 
 export default function ThemeSwitch() {
+    const t = useTranslations("ThemeSwitch");
     const isDark = useSyncExternalStore(
         subscribe,
         getSnapshot,
@@ -37,7 +39,7 @@ export default function ThemeSwitch() {
             className={styles.root}
             checked={isDark}
             onCheckedChange={(checked) => setTheme(checked ? "dark" : "light")}
-            aria-label="Dark theme"
+            aria-label={t("aria")}
         >
             <Switch.Thumb className={styles.thumb}>
                 <svg

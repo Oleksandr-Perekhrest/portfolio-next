@@ -1,11 +1,12 @@
 // outsource dependencies
 import { test, expect } from "@jest/globals";
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 
 // local dependencies
 import Home from "./page";
+import { renderWithIntl } from "@/test/renderWithIntl";
 
 test("renders h1 with author name", () => {
-    render(<Home />);
+    renderWithIntl(<Home />);
     expect(screen.getByRole("heading", { level: 1 })).toBeInTheDocument();
 });

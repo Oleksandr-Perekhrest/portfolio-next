@@ -72,6 +72,10 @@ Skip a script only if it does not exist yet, and say so in the report.
 - **Programmatic changes**: call `setTheme(theme)` from `@/lib/theme` — updates `data-theme` on `<html>` and persists to `localStorage`.
 - **Hydration**: `suppressHydrationWarning` is on `<html>` only; `data-theme` is set before hydration by the script on purpose.
 
+## Skills
+
+- **i18n-keys** (`.claude/skills/i18n-keys/SKILL.md`): follow when adding or changing any user-visible text, aria-label, alt, title, placeholder, metadata, or translation keys.
+
 ## Rules for the agent
 
 - Do NOT commit, push, create branches, or open PRs — the developer does that.

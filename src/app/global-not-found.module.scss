@@ -1,0 +1,30 @@
+// local dependencies
+@use "styles" as *;
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100dvh;
+    gap: var(--space-4);
+    padding: var(--space-10);
+    text-align: center;
+}
+
+.title {
+    @include text(section-title);
+}
+
+.description {
+    @include text(lead);
+
+    color: var(--color-muted);
+}
+
+.link {
+    @include text(button);
+
+    margin-top: var(--space-4);
+    color: var(--color-accent-text);
+}

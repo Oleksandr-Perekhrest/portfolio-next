@@ -1,16 +1,11 @@
 // outsource dependencies
 import { it, expect, describe, afterEach } from "@jest/globals";
-import {
-    act,
-    render,
-    screen,
-    cleanup,
-    fireEvent,
-} from "@testing-library/react";
+import { act, screen, cleanup, fireEvent } from "@testing-library/react";
 
 // local dependencies
 import ThemeSwitch from "./ThemeSwitch";
 import { THEME_STORAGE_KEY } from "@/lib/theme";
+import { renderWithIntl } from "@/test/renderWithIntl";
 
 describe("ThemeSwitch", () => {
     afterEach(() => {
@@ -21,7 +16,7 @@ describe("ThemeSwitch", () => {
 
     it("unchecked when data-theme is light before render", () => {
         document.documentElement.dataset.theme = "light";
-        render(<ThemeSwitch />);
+        renderWithIntl(<ThemeSwitch />);
         expect(screen.getByRole("switch")).toHaveAttribute(
             "aria-checked",
             "false",
@@ -30,7 +25,7 @@ describe("ThemeSwitch", () => {
 
     it("checked when data-theme is dark before render", () => {
         document.documentElement.dataset.theme = "dark";
-        render(<ThemeSwitch />);
+        renderWithIntl(<ThemeSwitch />);
         expect(screen.getByRole("switch")).toHaveAttribute(
             "aria-checked",
             "true",
@@ -39,7 +34,7 @@ describe("ThemeSwitch", () => {
 
     it("click sets data-theme to dark, saves to localStorage, aria-checked true; click again → light", async () => {
         document.documentElement.dataset.theme = "light";
-        render(<ThemeSwitch />);
+        renderWithIntl(<ThemeSwitch />);
 
         await act(async () => {
             fireEvent.click(screen.getByRole("switch"));
@@ -64,7 +59,7 @@ describe("ThemeSwitch", () => {
 
     it("external data-theme change on <html> updates aria-checked via MutationObserver", async () => {
         document.documentElement.dataset.theme = "light";
-        render(<ThemeSwitch />);
+        renderWithIntl(<ThemeSwitch />);
         expect(screen.getByRole("switch")).toHaveAttribute(
             "aria-checked",
             "false",

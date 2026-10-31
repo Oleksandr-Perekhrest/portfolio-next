@@ -1,0 +1,109 @@
+// local dependencies
+@use "styles" as *;
+
+.root {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+.globe {
+    flex-shrink: 0;
+    color: var(--color-muted);
+}
+
+.container {
+    display: flex;
+    align-items: center;
+    // 3px has no token (closest --space-1 is 4px); kept literal to match spec
+    padding: 3px;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+}
+
+.track {
+    position: relative;
+    display: flex;
+}
+
+.indicator {
+    position: absolute;
+    top: 0;
+    left: 0;
+    // 50% of track — works because both segments are flex: 1 (equal width)
+    width: 50%;
+    // 38px has no token; segment radius 7px has no token (--radius-sm is 8px)
+    height: rem(38px);
+    border-radius: rem(7px);
+    overflow: hidden;
+    background: var(--color-chip);
+    box-shadow: inset 0 0 0 1px var(--color-line-strong);
+    pointer-events: none;
+    transition: transform var(--duration-fast) var(--ease-standard);
+
+    .track[data-locale="en"] & {
+        transform: translateX(100%);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        transition: none;
+    }
+}
+
+.flag {
+    position: absolute;
+    inset: 0;
+    // 30% mix chosen so active ink (#e9e9e9 dark / #1a1a1a light) clears 4.5:1
+    // on both the blue half and yellow half in both themes
+    background: linear-gradient(
+        to bottom,
+        color-mix(in srgb, var(--color-flag-blue) 30%, var(--color-chip)) 50%,
+        color-mix(in srgb, var(--color-flag-yellow) 30%, var(--color-chip)) 50%
+    );
+    opacity: 0;
+    transition: opacity var(--duration-fast) var(--ease-standard);
+
+    .track[data-locale="uk"] & {
+        opacity: 1;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        transition: none;
+    }
+}
+
+.segment {
+    position: relative;
+    z-index: 1;
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: rem(38px);
+    // 10px has no token (between --space-2 8px and --space-3 12px)
+    padding: 0 rem(10px);
+    border-radius: rem(7px);
+    @include text(tag);
+    text-decoration: none;
+    color: var(--color-muted);
+    transition: color var(--duration-fast) var(--ease-standard);
+
+    @include focus-ring;
+
+    &:focus-visible {
+        outline-offset: 0;
+    }
+
+    &:hover {
+        color: var(--color-ink);
+    }
+
+    &[aria-current="true"] {
+        color: var(--color-ink);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        transition: none;
+    }
+}
