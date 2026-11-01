@@ -78,8 +78,12 @@ export default function Header() {
                         </ul>
                     </nav>
                     <div className={styles.controls}>
-                        <LocaleSwitch />
-                        <ThemeSwitch />
+                        <div className={styles.switchWrapper}>
+                            <LocaleSwitch />
+                        </div>
+                        <div className={styles.switchWrapper}>
+                            <ThemeSwitch />
+                        </div>
                     </div>
                 </div>
             </div>

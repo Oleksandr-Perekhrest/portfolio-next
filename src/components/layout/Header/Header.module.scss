@@ -42,6 +42,10 @@
     .header[data-compact="true"] & {
         display: none;
     }
+
+    @include below(mobile) {
+        display: none;
+    }
 }
 
 .brandCompact {
@@ -51,6 +55,10 @@
     color: var(--color-ink);
 
     .header[data-compact="true"] & {
+        display: block;
+    }
+
+    @include below(mobile) {
         display: block;
     }
 }
@@ -79,12 +87,36 @@
     align-items: center;
     gap: var(--space-4);
     margin-left: auto;
+
+    @include below(mobile) {
+        position: fixed;
+        left: var(--space-4);
+        right: var(--space-4);
+        bottom: calc(var(--space-4) + env(safe-area-inset-bottom, 0px));
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        pointer-events: none;
+        margin-left: 0;
+        gap: 0;
+        z-index: 11;
+    }
+}
+
+.switchWrapper {
+    @include below(mobile) {
+        pointer-events: auto;
+        display: flex;
+        align-items: center;
+        background: var(--color-surface);
+        border: 1px solid var(--color-line);
+        border-radius: var(--radius-full);
+        box-shadow: var(--shadow-hover);
+        padding: var(--space-2) var(--space-3);
+    }
 }
 
 .nav {
-    @include below(mobile) {
-        display: none;
-    }
 }
 
 .navList {
@@ -104,6 +136,10 @@
     text-decoration: none;
     padding: var(--space-2) var(--space-3);
     min-height: var(--tap-target);
+
+    @include below(mobile) {
+        padding-inline: var(--space-2);
+    }
     transition: color var(--duration-fast);
 
     @include focus-ring;
