@@ -1,6 +1,12 @@
 // outsource dependencies
 import { it, expect, describe } from "@jest/globals";
-import { act, screen, within, fireEvent } from "@testing-library/react";
+import {
+    act,
+    screen,
+    within,
+    waitFor,
+    fireEvent,
+} from "@testing-library/react";
 
 // local dependencies
 import TechTile from "./TechTile";
@@ -73,7 +79,7 @@ describe("TechTile (frontend)", () => {
             fireEvent.keyDown(document.body, { key: "Escape" });
         });
         expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
-        expect(document.activeElement).toBe(tile);
+        await waitFor(() => expect(document.activeElement).toBe(tile));
     });
 
     it("Close button closes the dialog", () => {
