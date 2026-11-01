@@ -3,9 +3,9 @@
 // outsource dependencies
 import { Dialog } from "radix-ui";
 import { useForm } from "react-hook-form";
-import { useTranslations } from "next-intl";
 import type { SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useLocale, useTranslations } from "next-intl";
 import { useId, useRef, useState, useEffect } from "react";
 
 // local dependencies
@@ -26,6 +26,7 @@ type Props = {
 export default function ContactForm({ isUnavailable, onUnavailable }: Props) {
     const t = useTranslations("ContactForm");
     const tBtn = useTranslations("ButtonLink");
+    const locale = useLocale();
     const formId = useId();
 
     const [websiteValue, setWebsiteValue] = useState("");
@@ -56,6 +57,7 @@ export default function ContactForm({ isUnavailable, onUnavailable }: Props) {
                 ...values,
                 website: websiteValue,
                 startedAt,
+                locale,
             });
         } catch {
             result = { status: "unavailable" };

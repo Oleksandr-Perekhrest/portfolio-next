@@ -4,7 +4,10 @@
 import { z } from "zod";
 
 // local dependencies
+import { siteUrl } from "@/lib/site";
 import { sendEmail } from "./mailer";
+import { routing } from "@/i18n/routing";
+import { buildContactEmail } from "./email";
 import {
     contactSchema,
     type ContactErrorCode,
@@ -14,6 +17,7 @@ import {
 const antiSpamSchema = z.object({
     website: z.string(),
     startedAt: z.number(),
+    locale: z.string().optional(),
 });
 
 export type ContactResult =
@@ -39,6 +43,11 @@ export async function sendContactMessage(
         return { status: "success" };
     }
 
+    const rawLocale = antiSpam.data.locale ?? "";
+    const locale = (routing.locales as readonly string[]).includes(rawLocale)
+        ? rawLocale
+        : "unknown";
+
     const parsed = contactSchema.safeParse(input);
     if (!parsed.success) {
         const { fieldErrors } = z.flattenError(
@@ -58,13 +67,21 @@ export async function sendContactMessage(
         return { status: "unavailable" };
     }
 
+    const { subject, text } = buildContactEmail({
+        name: parsed.data.name,
+        email: parsed.data.email,
+        message: parsed.data.message,
+        locale,
+        siteUrl,
+    });
+
     try {
         const { error } = await sendEmail({
             apiKey,
             to: toEmail,
             replyTo: parsed.data.email,
-            subject: `Portfolio: ${parsed.data.name}`,
-            body: `Name: ${parsed.data.name}\nEmail: ${parsed.data.email}\n\n${parsed.data.message}`,
+            subject,
+            body: text,
         });
 
         if (error) {
