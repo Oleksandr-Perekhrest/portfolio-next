@@ -1,5 +1,5 @@
 // outsource dependencies
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getTranslations } from "next-intl/server";
 
@@ -13,6 +13,10 @@ import { geistSans, geistMono } from "@/app/fonts";
 import Footer from "@/components/layout/Footer/Footer";
 import Header from "@/components/layout/Header/Header";
 import { ogLocaleMap, buildAlternates } from "@/lib/metadata";
+
+export const viewport: Viewport = {
+    viewportFit: "cover",
+};
 
 export function generateStaticParams() {
     return routing.locales.map((locale) => ({ locale }));

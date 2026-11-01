@@ -1,6 +1,13 @@
 // outsource dependencies
-import { it, expect, describe, afterEach } from "@jest/globals";
 import { act, screen, fireEvent } from "@testing-library/react";
+import {
+    it,
+    jest,
+    expect,
+    describe,
+    afterEach,
+    beforeEach,
+} from "@jest/globals";
 
 // local dependencies
 import Header from "./Header";
@@ -21,7 +28,9 @@ describe("Header", () => {
 
     it("brand link has accessible name and href #top", () => {
         renderWithIntl(<Header />);
-        const brand = screen.getByRole("link", { name: "Alex Perekhrest" });
+        const brand = screen.getByRole("link", {
+            name: "Oleksandr Perekhrest",
+        });
         expect(brand).toHaveAttribute("href", "#top");
     });
 
@@ -117,5 +126,68 @@ describe("Header", () => {
         expect(
             screen.getByRole("navigation", { name: "Основна" }),
         ).toBeInTheDocument();
+    });
+
+    describe("active section indicator", () => {
+        type IOCallback = IntersectionObserverCallback;
+        let capturedCallback: IOCallback | null;
+        const savedIO = window.IntersectionObserver;
+
+        beforeEach(() => {
+            capturedCallback = null;
+
+            window.IntersectionObserver = jest.fn().mockImplementation((cb) => {
+                capturedCallback = cb as IOCallback;
+                return {
+                    observe: jest.fn(),
+                    unobserve: jest.fn(),
+                    disconnect: jest.fn(),
+                };
+            }) as unknown as typeof IntersectionObserver;
+
+            // Large scrollHeight keeps the bottom rule inactive during this test
+            Object.defineProperty(document.documentElement, "scrollHeight", {
+                get: () => 10000,
+                configurable: true,
+            });
+
+            ["experience", "about", "contact"].forEach((id) => {
+                const el = document.createElement("section");
+                el.id = id;
+                document.body.appendChild(el);
+            });
+        });
+
+        afterEach(() => {
+            ["experience", "about", "contact"].forEach((id) => {
+                document.getElementById(id)?.remove();
+            });
+            window.IntersectionObserver = savedIO;
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            delete (document.documentElement as any).scrollHeight;
+        });
+
+        it("About link has aria-current='location' when about is active; others have none", () => {
+            renderWithIntl(<Header />);
+            const about = document.getElementById("about")!;
+            act(() => {
+                capturedCallback!(
+                    [
+                        { isIntersecting: true, target: about },
+                    ] as unknown as IntersectionObserverEntry[],
+                    {} as IntersectionObserver,
+                );
+            });
+            expect(screen.getByRole("link", { name: "About" })).toHaveAttribute(
+                "aria-current",
+                "location",
+            );
+            expect(
+                screen.getByRole("link", { name: "Experience" }),
+            ).not.toHaveAttribute("aria-current");
+            expect(
+                screen.getByRole("link", { name: "Contact" }),
+            ).not.toHaveAttribute("aria-current");
+        });
     });
 });

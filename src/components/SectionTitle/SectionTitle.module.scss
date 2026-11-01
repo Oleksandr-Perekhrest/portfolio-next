@@ -1,0 +1,9 @@
+// local dependencies
+@use "styles" as *;
+
+.title {
+    @include text(eyebrow);
+
+    color: var(--color-muted);
+    margin-bottom: var(--space-5);
+}

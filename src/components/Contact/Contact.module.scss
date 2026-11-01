@@ -1,0 +1,73 @@
+// local dependencies
+@use "styles" as *;
+
+.section {
+    @include container;
+
+    margin-top: var(--space-24);
+}
+
+.card {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-8);
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-8);
+    background: var(--color-surface);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-2xl);
+
+    @include below(mobile) {
+        padding: var(--space-5);
+    }
+}
+
+.textCol {
+    display: flex;
+    flex: 1 1 360px;
+    flex-direction: column;
+    gap: var(--space-3);
+}
+
+.title {
+    @include text(card-title-lg);
+
+    margin: 0;
+}
+
+.lead {
+    @include text(lead);
+
+    margin: 0;
+    color: var(--color-muted);
+}
+
+.links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    align-items: center;
+}
+
+.iconLink {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--space-12);
+    height: var(--space-12);
+    color: var(--color-ink);
+    background: var(--color-surface);
+    border: 1px solid var(--color-line-strong);
+    border-radius: var(--radius-lg);
+
+    &:hover {
+        background: var(--color-chip);
+    }
+
+    @include focus-ring;
+}
+
+.srOnly {
+    @include visually-hidden;
+}

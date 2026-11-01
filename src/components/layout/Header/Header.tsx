@@ -6,12 +6,16 @@ import { useTranslations } from "next-intl";
 // local dependencies
 import styles from "./Header.module.scss";
 import { useIsScrolled } from "./useIsScrolled";
+import { useActiveSection } from "./useActiveSection";
 import ThemeSwitch from "@/components/ThemeSwitch/ThemeSwitch";
 import LocaleSwitch from "@/components/LocaleSwitch/LocaleSwitch";
+
+const NAV_IDS = ["experience", "about", "contact"] as const;
 
 export default function Header() {
     const t = useTranslations("Header");
     const isScrolled = useIsScrolled();
+    const activeSection = useActiveSection(NAV_IDS);
 
     return (
         <header className={styles.header} data-compact={String(isScrolled)}>
@@ -36,25 +40,50 @@ export default function Header() {
                                 <a
                                     href="#experience"
                                     className={styles.navLink}
+                                    aria-current={
+                                        activeSection === "experience"
+                                            ? "location"
+                                            : undefined
+                                    }
                                 >
                                     {t("nav.experience")}
                                 </a>
                             </li>
                             <li>
-                                <a href="#about" className={styles.navLink}>
+                                <a
+                                    href="#about"
+                                    className={styles.navLink}
+                                    aria-current={
+                                        activeSection === "about"
+                                            ? "location"
+                                            : undefined
+                                    }
+                                >
                                     {t("nav.about")}
                                 </a>
                             </li>
                             <li>
-                                <a href="#contact" className={styles.navLink}>
+                                <a
+                                    href="#contact"
+                                    className={styles.navLink}
+                                    aria-current={
+                                        activeSection === "contact"
+                                            ? "location"
+                                            : undefined
+                                    }
+                                >
                                     {t("nav.contact")}
                                 </a>
                             </li>
                         </ul>
                     </nav>
                     <div className={styles.controls}>
-                        <LocaleSwitch />
-                        <ThemeSwitch />
+                        <div className={styles.switchWrapper}>
+                            <LocaleSwitch />
+                        </div>
+                        <div className={styles.switchWrapper}>
+                            <ThemeSwitch />
+                        </div>
                     </div>
                 </div>
             </div>

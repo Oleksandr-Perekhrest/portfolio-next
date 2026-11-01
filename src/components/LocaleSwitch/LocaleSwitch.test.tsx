@@ -187,5 +187,15 @@ describe("LocaleSwitch", () => {
 
             expect(navigateSpy()).not.toHaveBeenCalled();
         });
+
+        it("clicking the current locale link is default-prevented and does not navigate", () => {
+            renderWithIntl(<LocaleSwitch />, { locale: "en" });
+            const result = fireEvent.click(
+                screen.getByRole("link", { name: "English" }),
+                { button: 0 },
+            );
+            expect(result).toBe(false);
+            expect(navigateSpy()).not.toHaveBeenCalled();
+        });
     });
 });

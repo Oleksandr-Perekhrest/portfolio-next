@@ -1,7 +1,7 @@
 {
   "Metadata": {
     "title": "Олександр Перехрест — Web Engineer",
-    "description": "Особисте портфоліо Олександра Перехреста, веб-розробника."
+    "description": "Олександр Перехрест — веб-інженер: React, Next.js, Node.js і React Native. Проєкти, досвід і контакти."
   },
   "NotFound": {
     "title": "Сторінку не знайдено",
@@ -35,11 +35,75 @@
     "nameEn": "English",
     "nameUk": "Українська"
   },
-  "Home": {
-    "heroName": "Олександр Перехрест",
-    "heroTagline": "Web Engineer — сайт у розробці",
-    "experience": "Досвід",
-    "about": "Про мене",
-    "contact": "Контакти"
+  "Hero": {
+    "title": "Web Engineer",
+    "keywords": "Full-stack · React · Next.js · Node.js · React Native",
+    "lead": "Створюю веб- і мобільні продукти від початку до кінця — від складних форм і порталів на React до API на Node.js, баз даних і деплою.",
+    "projects": "Проєкти"
+  },
+  "ButtonLink": {
+    "newTab": "(відкривається в новій вкладці)"
+  },
+  "Experience": {
+    "title": "Досвід",
+    "featured": "Обраний проєкт",
+    "projectCounter": "Проєкт {current} / {total}",
+    "prevProject": "Попередній проєкт",
+    "nextProject": "Наступний проєкт",
+    "demo": "Демо",
+    "github": "GitHub",
+    "more": "+ ще {count}",
+    "showAll": "Показати всі {area}-технології",
+    "projects": {
+      "authkit": {
+        "description": "Повноцінна автентифікація: фронтенд на Next.js, API на Express, PostgreSQL із Prisma, Google OAuth. Docker, CI, unit- та інтеграційні тести, деплой на Vercel і Render."
+      }
+    },
+    "commercial": {
+      "label": "Комерційний досвід · {current} / {total}",
+      "nda": "NDA",
+      "ndaHint": "Під NDA: без назв компаній і скриншотів",
+      "prev": "Попередній",
+      "next": "Наступний",
+      "items": {
+        "healthcare": "Медична платформа",
+        "hr": "Внутрішня HR-система"
+      }
+    },
+    "languages": {
+      "title": "Мови",
+      "native": "рідна",
+      "uk": "українська",
+      "en": "англійська",
+      "cs": "чеська"
+    },
+    "cloud": {
+      "close": "Закрити",
+      "list": "{area}-технології"
+    }
+  },
+  "About": {
+    "label": "Про мене",
+    "title": "Якщо коротко",
+    "summary": "Від кухні до веб-розробки",
+    "intro": "В IT я прийшов у 2022 році після 18 років зовсім іншої роботи: кухні в Харкові, складська логістика й продажі в Празі. Керування кухнею і відділом продажів навчило мене того, що найбільше потрібно в продуктовій роботі: дедлайнів, процесів і спілкування з людьми. З 2023 року розробляю комерційні продукти на React і React Native, а тепер рухаюся у фулстек.",
+    "now": "Зараз",
+    "journey": {
+      "cook": "Кухар",
+      "headChef": "Шеф-кухар",
+      "logistics": "Логістика",
+      "headOfSales": "Керівник продажів",
+      "intoIt": "Перехід в IT",
+      "frontend": "Frontend developer",
+      "fullstack": "Full-stack"
+    }
+  },
+  "Contact": {
+    "label": "Контакти",
+    "title": "Зв’язок",
+    "lead": "Відкритий до пропозицій на frontend- і full-stack-позиції. Пишіть у LinkedIn або Telegram.",
+    "linkedin": "Профіль у LinkedIn",
+    "github": "Профіль на GitHub",
+    "telegram": "Telegram"
   }
 }

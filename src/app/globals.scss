@@ -1,4 +1,5 @@
 // local dependencies
+@use "styles" as *;
 @use "styles/tokens";
 
 // ── Light theme (default) ─────────────────────────────────────────────────────
@@ -95,5 +96,17 @@ body {
         animation-iteration-count: 1 !important;
         transition-duration: 0.01ms !important;
         scroll-behavior: auto !important;
+    }
+}
+
+// ── Mobile bottom spacing ─────────────────────────────────────────────────────
+
+@include below(mobile) {
+    body {
+        // Reserve space for the fixed locale/theme controls (≈ 60px) + their
+        // 16px bottom offset, so the footer is never hidden beneath them.
+        padding-bottom: calc(
+            var(--space-16) + var(--space-4) + env(safe-area-inset-bottom, 0px)
+        );
     }
 }

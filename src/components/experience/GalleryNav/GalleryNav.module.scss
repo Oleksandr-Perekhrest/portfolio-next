@@ -1,0 +1,59 @@
+// local dependencies
+@use "styles" as *;
+
+.nav {
+    display: flex;
+    gap: var(--space-2);
+}
+
+.btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--tap-target);
+    height: var(--tap-target);
+    padding: 0;
+    border: none;
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    transition: background-color var(--duration-fast);
+
+    @include focus-ring;
+
+    &:disabled {
+        cursor: not-allowed;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        transition: none;
+    }
+}
+
+.default {
+    border: 1px solid var(--color-line);
+    background: var(--color-surface);
+    color: var(--color-ink);
+
+    &:hover:not(:disabled) {
+        background: var(--color-chip);
+    }
+
+    &:disabled {
+        color: var(--color-muted);
+    }
+}
+
+.onAccent {
+    border: 1px solid
+        color-mix(in srgb, var(--color-on-accent) 60%, transparent);
+    background: transparent;
+    color: var(--color-on-accent);
+
+    &:hover:not(:disabled) {
+        background: color-mix(in srgb, var(--color-on-accent) 12%, transparent);
+    }
+
+    &:disabled {
+        color: color-mix(in srgb, var(--color-on-accent) 40%, transparent);
+    }
+}

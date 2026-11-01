@@ -11,6 +11,16 @@ class ResizeObserverStub {
 
 window.ResizeObserver = ResizeObserverStub;
 
+// jsdom does not implement IntersectionObserver; provide a minimal stub for useActiveSection
+class IntersectionObserverStub {
+    observe() {}
+    unobserve() {}
+    disconnect() {}
+}
+
+window.IntersectionObserver =
+    IntersectionObserverStub as unknown as typeof IntersectionObserver;
+
 // window.location.assign is non-configurable in jsdom 26, so navigateTo is mocked
 // at the module level; tests assert against jest.mocked(navigateTo).
 jest.mock("@/lib/navigate", () => ({ navigateTo: jest.fn() }));
