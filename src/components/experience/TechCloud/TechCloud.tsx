@@ -5,25 +5,25 @@ import { Dialog } from "radix-ui";
 import { useTranslations } from "next-intl";
 
 // local dependencies
+import { getCloud } from "@/content/tech";
 import styles from "./TechCloud.module.scss";
-import { getCloud, type Tech } from "@/content/tech";
 
 type TechCloudProps = {
     area: "frontend" | "backend";
+};
+
+const tierStyles: Record<1 | 2 | 3 | 4, string> = {
+    1: styles.level1!,
+    2: styles.level2!,
+    3: styles.level3!,
+    4: styles.level4!,
 };
 
 export default function TechCloud({ area }: TechCloudProps) {
     const t = useTranslations("Experience");
     const title = area === "frontend" ? "Frontend" : "Backend";
 
-    const all = getCloud(area);
-    const areaItems = all.filter(
-        (item): item is Extract<Tech, { area: "frontend" | "backend" }> =>
-            item.area !== "shared",
-    );
-    const sharedItems = all.filter((item) => item.area === "shared");
-    const sorted = [...areaItems].sort((a, b) => a.level - b.level);
-    const items = [...sorted, ...sharedItems];
+    const items = getCloud(area);
 
     return (
         <>
@@ -64,13 +64,7 @@ export default function TechCloud({ area }: TechCloudProps) {
                             const tierClass =
                                 item.area === "shared"
                                     ? styles.shared
-                                    : item.level === 1
-                                      ? styles.level1
-                                      : item.level === 2
-                                        ? styles.level2
-                                        : item.level === 3
-                                          ? styles.level3
-                                          : styles.level4;
+                                    : tierStyles[item.level];
 
                             return (
                                 <li

@@ -1,7 +1,10 @@
+// local dependencies
+import type en from "../../messages/en.json";
+
 export type Role = "frontend" | "backend" | "fullstack";
 
 export type CommercialProject = {
-    id: string;
+    id: keyof (typeof en)["Experience"]["commercial"]["items"];
     role: Role;
     stack: readonly string[];
 };

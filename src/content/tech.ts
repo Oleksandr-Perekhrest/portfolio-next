@@ -65,7 +65,12 @@ export const techs: readonly Tech[] = [
 ];
 
 export function getCloud(area: "frontend" | "backend"): readonly Tech[] {
-    return techs.filter((t) => t.area === area || t.area === "shared");
+    const areaItems = techs.filter(
+        (t): t is FrontendTech | BackendTech => t.area === area,
+    );
+    const sharedItems = techs.filter((t) => t.area === "shared");
+    const sorted = [...areaItems].sort((a, b) => a.level - b.level);
+    return [...sorted, ...sharedItems];
 }
 
 export function getTileSummary(

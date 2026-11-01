@@ -1,5 +1,8 @@
+// local dependencies
+import type en from "../../messages/en.json";
+
 export type JourneyEntry = {
-    id: string;
+    id: keyof (typeof en)["About"]["journey"];
     year: number | "now";
 };
 

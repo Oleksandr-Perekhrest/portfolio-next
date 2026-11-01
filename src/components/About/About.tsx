@@ -62,11 +62,7 @@ export default function About() {
                                                 <span
                                                     className={styles.stepTitle}
                                                 >
-                                                    {t(
-                                                        `journey.${entry.id}` as Parameters<
-                                                            typeof t
-                                                        >[0],
-                                                    )}
+                                                    {t(`journey.${entry.id}`)}
                                                 </span>
                                             </li>
                                         );
