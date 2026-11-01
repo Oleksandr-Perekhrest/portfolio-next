@@ -29,7 +29,6 @@ export default function ContactForm({ isUnavailable, onUnavailable }: Props) {
     const locale = useLocale();
     const formId = useId();
 
-    const websiteRef = useRef<HTMLInputElement>(null);
     const [startedAt] = useState(() => Date.now());
     const [succeeded, setSucceeded] = useState(false);
     const closeRef = useRef<HTMLButtonElement>(null);
@@ -50,12 +49,19 @@ export default function ContactForm({ isUnavailable, onUnavailable }: Props) {
         }
     }, [succeeded]);
 
-    const onSubmit: SubmitHandler<ContactFormValues> = async (values) => {
+    const onSubmit: SubmitHandler<ContactFormValues> = async (
+        values,
+        event,
+    ) => {
+        const formEl = event?.currentTarget as HTMLFormElement | undefined;
+        const website =
+            (formEl?.elements.namedItem("website") as HTMLInputElement | null)
+                ?.value ?? "";
         let result: ContactResult;
         try {
             result = await sendContactMessage({
                 ...values,
-                website: websiteRef.current?.value ?? "",
+                website,
                 startedAt,
                 locale,
             });
@@ -108,8 +114,6 @@ export default function ContactForm({ isUnavailable, onUnavailable }: Props) {
         );
     }
 
-    // ref is read at event time, not during render — linter is conservative here
-    // eslint-disable-next-line react-hooks/refs
     const formSubmitHandler = handleSubmit(onSubmit);
 
     return (
@@ -117,7 +121,6 @@ export default function ContactForm({ isUnavailable, onUnavailable }: Props) {
             <div aria-hidden="true" className={styles.honeypot}>
                 <label htmlFor={`${formId}-website`}>{HONEYPOT_LABEL}</label>
                 <input
-                    ref={websiteRef}
                     id={`${formId}-website`}
                     type="text"
                     name="website"
