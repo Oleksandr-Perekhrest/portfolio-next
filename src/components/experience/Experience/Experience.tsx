@@ -6,6 +6,7 @@ import TechTile from "../TechTile/TechTile";
 import styles from "./Experience.module.scss";
 import LanguagesCard from "../LanguagesCard/LanguagesCard";
 import ProjectGallery from "../ProjectGallery/ProjectGallery";
+import SectionTitle from "@/components/SectionTitle/SectionTitle";
 import CommercialGallery from "../CommercialGallery/CommercialGallery";
 
 export default function Experience() {
@@ -13,7 +14,7 @@ export default function Experience() {
 
     return (
         <section id="experience" className={styles.section}>
-            <h2 className={styles.title}>{t("title")}</h2>
+            <SectionTitle>{t("title")}</SectionTitle>
             <div className={styles.grid}>
                 <ProjectGallery />
                 <TechTile area="frontend" />

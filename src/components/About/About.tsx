@@ -7,22 +7,24 @@ import { useTranslations } from "next-intl";
 // local dependencies
 import styles from "./About.module.scss";
 import { journey } from "@/content/journey";
+import SectionTitle from "@/components/SectionTitle/SectionTitle";
 
 export default function About() {
     const t = useTranslations("About");
 
     return (
         <section id="about" className={styles.section}>
+            <SectionTitle>{t("label")}</SectionTitle>
             <div className={styles.card}>
                 <Collapsible.Root>
-                    <h2 className={styles.heading}>
+                    <h3 className={styles.heading}>
                         <Collapsible.Trigger className={styles.trigger}>
                             <span className={styles.triggerLeft}>
-                                <span className={styles.label}>
-                                    {t("label")}
-                                </span>
                                 <span className={styles.title}>
                                     {t("title")}
+                                </span>
+                                <span className={styles.summary}>
+                                    {t("summary")}
                                 </span>
                             </span>
                             <span className={styles.chevronCircle} aria-hidden>
@@ -38,33 +40,40 @@ export default function About() {
                                 </svg>
                             </span>
                         </Collapsible.Trigger>
-                    </h2>
+                    </h3>
                     <Collapsible.Content forceMount className={styles.content}>
-                        <p className={styles.intro}>{t("intro")}</p>
-                        <ol className={styles.journey}>
-                            {journey.map((entry, index) => {
-                                const isAccent = index >= journey.length - 2;
-                                return (
-                                    <li
-                                        key={entry.id}
-                                        className={`${styles.step}${isAccent ? ` ${styles.stepAccent}` : ""}`}
-                                    >
-                                        <span className={styles.year}>
-                                            {entry.year === "now"
-                                                ? t("now")
-                                                : entry.year}
-                                        </span>
-                                        <span className={styles.stepTitle}>
-                                            {t(
-                                                `journey.${entry.id}` as Parameters<
-                                                    typeof t
-                                                >[0],
-                                            )}
-                                        </span>
-                                    </li>
-                                );
-                            })}
-                        </ol>
+                        <div className={styles.contentInner}>
+                            <div className={styles.contentBody}>
+                                <p className={styles.intro}>{t("intro")}</p>
+                                <ol className={styles.journey}>
+                                    {journey.map((entry, index) => {
+                                        const isAccent =
+                                            index >= journey.length - 2;
+                                        return (
+                                            <li
+                                                key={entry.id}
+                                                className={`${styles.step}${isAccent ? ` ${styles.stepAccent}` : ""}`}
+                                            >
+                                                <span className={styles.year}>
+                                                    {entry.year === "now"
+                                                        ? t("now")
+                                                        : entry.year}
+                                                </span>
+                                                <span
+                                                    className={styles.stepTitle}
+                                                >
+                                                    {t(
+                                                        `journey.${entry.id}` as Parameters<
+                                                            typeof t
+                                                        >[0],
+                                                    )}
+                                                </span>
+                                            </li>
+                                        );
+                                    })}
+                                </ol>
+                            </div>
+                        </div>
                     </Collapsible.Content>
                 </Collapsible.Root>
             </div>

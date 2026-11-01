@@ -85,6 +85,7 @@
   "About": {
     "label": "About",
     "title": "Long story short",
+    "summary": "From kitchen to web engineering",
     "intro": "I came to IT in 2022 after 18 years of very different work: kitchens in Kharkiv, warehouse logistics and sales in Prague. Running a kitchen and a sales team taught me what product work needs most — deadlines, processes and talking to people. Since 2023 I’ve been building commercial React and React Native products, and now I’m growing into full-stack.",
     "now": "Now",
     "journey": {
@@ -98,6 +99,7 @@
     }
   },
   "Contact": {
+    "label": "Contact",
     "title": "Get in touch",
     "lead": "Open to frontend and full-stack roles. Message me on LinkedIn or Telegram.",
     "linkedin": "LinkedIn profile",

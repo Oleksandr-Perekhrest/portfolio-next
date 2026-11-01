@@ -7,13 +7,6 @@
     margin-top: var(--space-24);
 }
 
-.title {
-    @include text(eyebrow);
-
-    color: var(--color-muted);
-    margin-bottom: var(--space-5);
-}
-
 .grid {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));

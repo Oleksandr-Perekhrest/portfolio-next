@@ -13,13 +13,13 @@
     gap: var(--space-8);
     align-items: center;
     justify-content: space-between;
-    padding: var(--space-12);
+    padding: var(--space-8);
     background: var(--color-surface);
     border: 1px solid var(--color-line);
     border-radius: var(--radius-2xl);
 
     @include below(mobile) {
-        padding: var(--space-6);
+        padding: var(--space-5);
     }
 }
 
@@ -27,17 +27,17 @@
     display: flex;
     flex: 1 1 360px;
     flex-direction: column;
-    gap: var(--space-3); // design: 10px; nearest token: space-3 (12px)
+    gap: var(--space-3);
 }
 
 .title {
-    @include text(section-title);
+    @include text(card-title-lg);
 
     margin: 0;
 }
 
 .lead {
-    @include text(lead); // design: 18px; nearest token: lead (20px)
+    @include text(lead);
 
     margin: 0;
     color: var(--color-muted);

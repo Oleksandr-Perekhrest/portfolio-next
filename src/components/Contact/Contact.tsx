@@ -4,6 +4,7 @@ import { useTranslations } from "next-intl";
 // local dependencies
 import styles from "./Contact.module.scss";
 import { contacts } from "@/content/contacts";
+import SectionTitle from "@/components/SectionTitle/SectionTitle";
 
 export default function Contact() {
     const t = useTranslations("Contact");
@@ -11,9 +12,10 @@ export default function Contact() {
 
     return (
         <section id="contact" className={styles.section}>
+            <SectionTitle>{t("label")}</SectionTitle>
             <div className={styles.card}>
                 <div className={styles.textCol}>
-                    <h2 className={styles.title}>{t("title")}</h2>
+                    <h3 className={styles.title}>{t("title")}</h3>
                     <p className={styles.lead}>{t("lead")}</p>
                 </div>
                 <div className={styles.links}>
