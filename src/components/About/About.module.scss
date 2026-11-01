@@ -1,0 +1,149 @@
+// local dependencies
+@use "styles" as *;
+
+.section {
+    @include container;
+
+    margin-top: var(--space-24);
+}
+
+.card {
+    overflow: hidden;
+    background: var(--color-surface);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-2xl);
+}
+
+.heading {
+    margin: 0;
+}
+
+.trigger {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    width: 100%;
+    padding: var(
+        --space-8
+    ); // design: 28px 32px; 28px → space-8 (32px), 32px → space-8 exact
+    background: transparent;
+    border: none;
+    color: var(--color-ink);
+    text-align: left;
+    font-family: inherit;
+    cursor: pointer;
+
+    &:focus-visible {
+        outline: 2px solid var(--color-focus-ring);
+        outline-offset: -2px;
+    }
+
+    @include below(mobile) {
+        padding-inline: var(--space-5);
+    }
+}
+
+.triggerLeft {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1); // design: 6px; nearest token: space-1 (4px)
+}
+
+.label {
+    @include text(tag);
+
+    color: var(--color-muted);
+}
+
+.title {
+    @include text(card-title-lg);
+}
+
+.chevronCircle {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-full);
+
+    svg {
+        transition: transform var(--duration-slow) var(--ease-standard);
+
+        @media (prefers-reduced-motion: reduce) {
+            transition: none;
+        }
+    }
+}
+
+.trigger[data-state="open"] .chevronCircle svg {
+    transform: rotate(180deg);
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    gap: var(
+        --space-8
+    ); // design: 28px; nearest token: space-8 (32px) or space-6 (24px); chose space-8
+    padding: 0 var(--space-8) var(--space-8); // design: 0 32px 36px; 36px → space-8 (32px)
+
+    @include below(mobile) {
+        padding-inline: var(--space-5);
+    }
+}
+
+.content[data-state="closed"] {
+    display: none;
+}
+
+.intro {
+    @include text(lead); // design: 18px; nearest token: lead (20px)
+
+    max-width: 640px;
+    color: var(--color-muted);
+}
+
+.journey {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: var(--space-3);
+    padding: 0;
+    margin: 0;
+    list-style: none;
+
+    @include below(tablet) {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    @include below(mobile) {
+        grid-template-columns: 1fr;
+    }
+}
+
+.step {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1); // design: 6px; nearest token: space-1 (4px)
+    padding-top: var(--space-4);
+    border-top: 2px solid var(--color-line);
+}
+
+.stepAccent {
+    border-top-color: var(--color-accent);
+}
+
+.year {
+    @include text(tag);
+
+    color: var(--color-muted);
+}
+
+.stepTitle {
+    @include text(button); // 16px/600; nearest to 16px semibold
+
+    line-height: 1.3; // design: 1.3; text(button) default is 20px (1.25); override
+}
