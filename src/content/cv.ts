@@ -8,6 +8,6 @@ const cvPaths: Record<Locale, string> = {
     uk: "/cv/CV-Perekhrest-Oleksandr-Web-Developer-UA.pdf",
 };
 
-export function getCvPath(locale: string): string {
-    return cvPaths[locale as Locale] ?? cvPaths["en"];
+export function getCvPath(locale: Locale): string {
+    return cvPaths[locale];
 }
