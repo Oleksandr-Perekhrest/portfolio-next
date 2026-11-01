@@ -16,6 +16,7 @@ export default function Contact() {
     const t = useTranslations("Contact");
     const tBtn = useTranslations("ButtonLink");
     const [emailOpen, setEmailOpen] = useState(false);
+    const [isUnavailable, setIsUnavailable] = useState(false);
 
     return (
         <section id="contact" className={styles.section}>
@@ -113,7 +114,10 @@ export default function Contact() {
             </div>
             <Dialog.Root open={emailOpen} onOpenChange={setEmailOpen}>
                 <Dialog.Portal>
-                    <ContactDialog />
+                    <ContactDialog
+                        isUnavailable={isUnavailable}
+                        onUnavailable={() => setIsUnavailable(true)}
+                    />
                 </Dialog.Portal>
             </Dialog.Root>
         </section>

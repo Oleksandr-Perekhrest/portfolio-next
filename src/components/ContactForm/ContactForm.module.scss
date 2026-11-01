@@ -7,6 +7,25 @@
     gap: 18px;
 }
 
+.honeypot {
+    position: absolute;
+    top: 0;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}
+
+.fieldset {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    padding: 0;
+    margin: 0;
+    border: 0;
+    min-width: 0;
+}
+
 .field {
     display: flex;
     flex-direction: column;
@@ -88,6 +107,11 @@
     @include btn-primary-colors;
     @include focus-ring;
 
+    &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
     @media (prefers-reduced-motion: reduce) {
         transition: none;
     }
@@ -113,6 +137,70 @@
     text-decoration: underline;
     text-underline-offset: 2px;
 
+    @include focus-ring;
+}
+
+.unavailable {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1);
+    align-items: center;
+    margin: 0;
+    color: var(--color-error);
+
+    @include text(small);
+}
+
+.unavailableLink {
+    color: var(--color-error);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+
+    @include focus-ring;
+}
+
+.success {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 32px 0;
+}
+
+.successCircle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    border-radius: var(--radius-full);
+    background: var(--color-accent);
+}
+
+.successTitle {
+    margin: 0;
+    color: var(--color-ink);
+
+    @include text(card-title);
+}
+
+.successText {
+    margin: 0;
+    color: var(--color-muted);
+
+    @include text(body);
+}
+
+.close {
+    height: 44px;
+    padding: 0 20px;
+    border: 1px solid var(--color-line-strong);
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+    color: var(--color-ink);
+    cursor: pointer;
+
+    @include text(button);
     @include focus-ring;
 }
 

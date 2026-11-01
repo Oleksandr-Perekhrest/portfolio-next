@@ -8,7 +8,12 @@ import { useTranslations } from "next-intl";
 import styles from "./ContactDialog.module.scss";
 import ContactForm from "@/components/ContactForm/ContactForm";
 
-export default function ContactDialog() {
+type Props = {
+    isUnavailable: boolean;
+    onUnavailable: () => void;
+};
+
+export default function ContactDialog({ isUnavailable, onUnavailable }: Props) {
     const t = useTranslations("ContactForm");
 
     return (
@@ -41,7 +46,10 @@ export default function ContactDialog() {
                         </svg>
                     </Dialog.Close>
                 </div>
-                <ContactForm />
+                <ContactForm
+                    isUnavailable={isUnavailable}
+                    onUnavailable={onUnavailable}
+                />
             </Dialog.Content>
         </>
     );
