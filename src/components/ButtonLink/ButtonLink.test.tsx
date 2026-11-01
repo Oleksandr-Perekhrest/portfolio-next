@@ -1,13 +1,14 @@
 // outsource dependencies
+import { screen } from "@testing-library/react";
 import { it, expect, describe } from "@jest/globals";
-import { render, screen } from "@testing-library/react";
 
 // local dependencies
 import ButtonLink from "./ButtonLink";
+import { renderWithIntl } from "@/test/renderWithIntl";
 
 describe("ButtonLink", () => {
     it("renders a link with correct href", () => {
-        render(
+        renderWithIntl(
             <ButtonLink href="/test" variant="primary">
                 Click me
             </ButtonLink>,
@@ -17,7 +18,7 @@ describe("ButtonLink", () => {
     });
 
     it("applies the variant class", () => {
-        render(
+        renderWithIntl(
             <ButtonLink href="/test" variant="primary">
                 Click me
             </ButtonLink>,
@@ -27,7 +28,7 @@ describe("ButtonLink", () => {
     });
 
     it("renders children", () => {
-        render(
+        renderWithIntl(
             <ButtonLink href="/test" variant="secondary">
                 Secondary
             </ButtonLink>,

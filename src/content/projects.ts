@@ -6,7 +6,7 @@ export type Project = {
     stack: readonly string[];
 };
 
-export const projects = [
+export const projects: readonly Project[] = [
     {
         id: "authkit",
         name: "authkit-next-express",
@@ -14,4 +14,4 @@ export const projects = [
         demoUrl: "https://authkit-web.vercel.app",
         stack: ["Next.js", "Express", "PostgreSQL", "Docker"],
     },
-] as const satisfies readonly Project[];
+];

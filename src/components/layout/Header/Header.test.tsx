@@ -21,7 +21,9 @@ describe("Header", () => {
 
     it("brand link has accessible name and href #top", () => {
         renderWithIntl(<Header />);
-        const brand = screen.getByRole("link", { name: "Alex Perekhrest" });
+        const brand = screen.getByRole("link", {
+            name: "Oleksandr Perekhrest",
+        });
         expect(brand).toHaveAttribute("href", "#top");
     });
 

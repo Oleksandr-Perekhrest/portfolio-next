@@ -1,0 +1,105 @@
+// local dependencies
+@use "styles" as *;
+
+.card {
+    grid-column: span 2;
+    grid-row: span 2;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    padding: var(--space-8);
+    border-radius: var(--radius-xl);
+    border: 1px solid var(--color-line);
+    background: var(--color-surface);
+
+    @include below(mobile) {
+        grid-column: auto;
+        grid-row: auto;
+    }
+}
+
+.topRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.label {
+    @include text(tag);
+
+    color: var(--color-muted);
+}
+
+.name {
+    @include text(card-title-lg);
+}
+
+.description {
+    @include text(body);
+
+    color: var(--color-muted);
+}
+
+.imagePlaceholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1 1 auto;
+    min-height: 180px;
+    border-radius: var(--radius-lg);
+    background: var(--color-chip);
+    border: 1px solid var(--color-line);
+    color: var(--color-muted);
+}
+
+.tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.tag {
+    @include text(tag);
+
+    padding: var(--space-1) var(--space-2);
+    border-radius: var(--radius-sm);
+    background: var(--color-chip);
+}
+
+.bottomRow {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2);
+    margin-top: auto;
+}
+
+.links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+}
+
+.dots {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+.dot {
+    width: 8px;
+    height: 8px;
+    border-radius: var(--radius-full);
+    background: var(--color-line-strong);
+}
+
+.dotActive {
+    width: 18px;
+    height: 8px;
+    border-radius: var(--radius-full);
+    background: var(--color-ink);
+}

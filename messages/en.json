@@ -41,10 +41,15 @@
     "lead": "I build web and mobile products end to end — from complex React forms and portals to Node.js APIs, databases and deploys.",
     "projects": "View projects"
   },
+  "ButtonLink": {
+    "newTab": "(opens in a new tab)"
+  },
   "Experience": {
     "title": "Experience",
     "featured": "Featured project",
     "projectCounter": "Project {current} / {total}",
+    "prevProject": "Previous project",
+    "nextProject": "Next project",
     "demo": "Live demo",
     "github": "GitHub",
     "more": "+ {count} more",

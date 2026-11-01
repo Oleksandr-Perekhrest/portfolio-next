@@ -19,6 +19,12 @@
     }
 }
 
+.sm {
+    height: var(--tap-target);
+    padding: 0 var(--space-4);
+    border-radius: var(--radius-md);
+}
+
 .primary {
     background: var(--color-accent);
     color: var(--color-on-accent);
@@ -45,4 +51,17 @@
     &:hover {
         background: var(--color-chip);
     }
+}
+
+.inverse {
+    background: var(--color-ink);
+    color: var(--color-bg);
+
+    &:hover {
+        background: var(--color-ink-mid);
+    }
+}
+
+.newTab {
+    @include visually-hidden;
 }

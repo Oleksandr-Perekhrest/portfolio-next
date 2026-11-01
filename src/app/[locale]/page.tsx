@@ -4,18 +4,16 @@ import { useTranslations } from "next-intl";
 // local dependencies
 import styles from "./page.module.scss";
 import Hero from "@/components/Hero/Hero";
+import Experience from "@/components/experience/Experience/Experience";
 
 export default function Home() {
-    const tExp = useTranslations("Experience");
     const tAbout = useTranslations("About");
     const tContact = useTranslations("Contact");
 
     return (
         <>
             <Hero />
-            <section id="experience" className={styles.section}>
-                <h2 className={styles.eyebrow}>{tExp("title")}</h2>
-            </section>
+            <Experience />
             <section id="about" className={styles.section}>
                 <h2 className={styles.eyebrow}>{tAbout("label")}</h2>
             </section>

@@ -41,10 +41,15 @@
     "lead": "Створюю веб- і мобільні продукти від початку до кінця — від складних форм і порталів на React до API на Node.js, баз даних і деплою.",
     "projects": "Проєкти"
   },
+  "ButtonLink": {
+    "newTab": "(відкривається в новій вкладці)"
+  },
   "Experience": {
     "title": "Досвід",
     "featured": "Обраний проєкт",
     "projectCounter": "Проєкт {current} / {total}",
+    "prevProject": "Попередній проєкт",
+    "nextProject": "Наступний проєкт",
     "demo": "Демо",
     "github": "GitHub",
     "more": "+ ще {count}",
