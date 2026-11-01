@@ -57,14 +57,14 @@
 }
 
 .title {
-    @include text(dialog-title);
+    @include text(card-title-lg);
 
     margin: 0;
     color: var(--color-ink);
 }
 
 .description {
-    @include text(dialog-description);
+    @include text(body);
 
     margin: 0;
     color: var(--color-muted);

@@ -102,7 +102,7 @@
     margin: 0;
     color: var(--color-muted);
 
-    @include text(form-hint);
+    @include text(small);
 }
 
 .hintLink {
