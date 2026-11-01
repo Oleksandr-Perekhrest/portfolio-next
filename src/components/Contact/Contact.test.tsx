@@ -95,7 +95,7 @@ describe("Contact", () => {
         it("renders h3 containing 'Зв'язок'", () => {
             renderWithIntl(<Contact />, { locale: "uk" });
             expect(
-                screen.getByRole("heading", { level: 3, name: /Зв.язок/ }),
+                screen.getByRole("heading", { level: 3, name: /Зв’язок/ }),
             ).toBeInTheDocument();
         });
     });
