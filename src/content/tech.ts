@@ -1,15 +1,39 @@
-type FrontendTech = { name: string; area: "frontend"; level: 1 | 2 | 3 | 4 };
-type BackendTech = { name: string; area: "backend"; level: 1 | 2 | 3 | 4 };
+// outsource dependencies
+import type { SimpleIcon } from "simple-icons";
+import {
+    siReact,
+    siRedux,
+    siPrisma,
+    siExpress,
+    siNextdotjs,
+    siNodedotjs,
+    siJavascript,
+    siPostgresql,
+    siTypescript,
+} from "simple-icons";
+
+type FrontendTech = {
+    name: string;
+    area: "frontend";
+    level: 1 | 2 | 3 | 4;
+    icon?: SimpleIcon;
+};
+type BackendTech = {
+    name: string;
+    area: "backend";
+    level: 1 | 2 | 3 | 4;
+    icon?: SimpleIcon;
+};
 type SharedTech = { name: string; area: "shared" };
 export type Tech = FrontendTech | BackendTech | SharedTech;
 
 export const techs: readonly Tech[] = [
-    { name: "React", area: "frontend", level: 1 },
-    { name: "Next.js", area: "frontend", level: 2 },
-    { name: "TypeScript", area: "frontend", level: 2 },
-    { name: "Redux", area: "frontend", level: 2 },
-    { name: "React Native", area: "frontend", level: 2 },
-    { name: "JavaScript", area: "frontend", level: 2 },
+    { name: "React", area: "frontend", level: 1, icon: siReact },
+    { name: "Next.js", area: "frontend", level: 2, icon: siNextdotjs },
+    { name: "TypeScript", area: "frontend", level: 2, icon: siTypescript },
+    { name: "Redux", area: "frontend", level: 2, icon: siRedux },
+    { name: "React Native", area: "frontend", level: 2, icon: siReact },
+    { name: "JavaScript", area: "frontend", level: 2, icon: siJavascript },
     { name: "SCSS", area: "frontend", level: 3 },
     { name: "CSS", area: "frontend", level: 3 },
     { name: "HTML", area: "frontend", level: 3 },
@@ -22,10 +46,10 @@ export const techs: readonly Tech[] = [
     { name: "CRA", area: "frontend", level: 4 },
     { name: "i18next", area: "frontend", level: 4 },
     { name: "next-intl", area: "frontend", level: 4 },
-    { name: "Node.js", area: "backend", level: 1 },
-    { name: "Express", area: "backend", level: 2 },
-    { name: "Prisma", area: "backend", level: 2 },
-    { name: "PostgreSQL", area: "backend", level: 2 },
+    { name: "Node.js", area: "backend", level: 1, icon: siNodedotjs },
+    { name: "Express", area: "backend", level: 2, icon: siExpress },
+    { name: "Prisma", area: "backend", level: 2, icon: siPrisma },
+    { name: "PostgreSQL", area: "backend", level: 2, icon: siPostgresql },
     { name: "Docker", area: "backend", level: 3 },
     { name: "REST API", area: "backend", level: 3 },
     { name: "zod", area: "backend", level: 3 },

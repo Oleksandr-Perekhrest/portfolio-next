@@ -1,0 +1,123 @@
+// local dependencies
+@use "styles" as *;
+
+.overlayBg {
+    position: fixed;
+    inset: 0;
+    z-index: 20;
+    background: var(--color-veil);
+    -webkit-backdrop-filter: var(--blur-layer);
+    backdrop-filter: var(--blur-layer);
+    box-shadow: var(--shadow-vignette);
+    opacity: 1;
+    transition: opacity var(--duration-slow) var(--ease-standard);
+
+    &[data-state="closed"] {
+        opacity: 0;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        transition: none;
+    }
+}
+
+.overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 21;
+    display: flex;
+    flex-direction: column;
+    padding: var(--space-10) var(--space-12);
+    overflow-y: auto;
+
+    @include below(mobile) {
+        padding: var(--space-5);
+    }
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.title {
+    @include text(eyebrow);
+
+    color: var(--color-muted);
+}
+
+.closeBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-full);
+    background: var(--color-surface);
+    color: var(--color-ink);
+    cursor: pointer;
+
+    @include focus-ring;
+
+    &:hover {
+        background: var(--color-chip);
+    }
+}
+
+.body {
+    display: flex;
+    flex: 1 1 auto;
+    align-items: center;
+    justify-content: center;
+}
+
+.list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4) var(--space-6);
+    justify-content: center;
+    align-items: center;
+    max-width: 980px;
+    margin: auto;
+    padding: 0;
+    list-style: none;
+}
+
+.item {
+    display: inline-flex;
+    gap: 0.25em;
+    align-items: center;
+    white-space: nowrap;
+}
+
+.level1 {
+    @include text(section-title);
+
+    color: var(--color-accent-text);
+}
+
+.level2 {
+    @include text(card-title-lg);
+
+    color: var(--color-ink);
+}
+
+.level3 {
+    @include text(card-title);
+
+    color: var(--color-ink-mid);
+}
+
+.level4 {
+    @include text(small);
+
+    color: var(--color-muted);
+}
+
+.shared {
+    @include text(tag);
+
+    color: var(--color-muted);
+}

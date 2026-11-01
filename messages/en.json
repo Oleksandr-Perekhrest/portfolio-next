@@ -76,6 +76,10 @@
       "uk": "Ukrainian",
       "en": "English",
       "cs": "Czech"
+    },
+    "cloud": {
+      "close": "Close",
+      "list": "{area} technologies"
     }
   },
   "About": {

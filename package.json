@@ -22,7 +22,8 @@
     "next-intl": "^4.14.9",
     "radix-ui": "^1.8.1",
     "react": "19.3.0",
-    "react-dom": "19.3.0"
+    "react-dom": "19.3.0",
+    "simple-icons": "16.35.0"
   },
   "devDependencies": {
     "@jest/globals": "^30.5.2",
