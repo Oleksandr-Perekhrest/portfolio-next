@@ -6,7 +6,6 @@ import { Dialog } from "radix-ui";
 import { useLocale, useTranslations } from "next-intl";
 
 // local dependencies
-import { routing } from "@/i18n/routing";
 import { getCvPath } from "@/content/cv";
 import { breakpoints } from "@/lib/breakpoints";
 import CvDialog from "@/components/CvDialog/CvDialog";
@@ -14,10 +13,7 @@ import ButtonLink from "@/components/ButtonLink/ButtonLink";
 
 export default function CvActions() {
     const t = useTranslations("Hero");
-    const localeStr = useLocale();
-    const locale =
-        routing.locales.find((l) => l === localeStr) ?? routing.defaultLocale;
-    const pdfPath = getCvPath(locale);
+    const pdfPath = getCvPath(useLocale());
     const [cvOpen, setCvOpen] = useState(false);
 
     return (

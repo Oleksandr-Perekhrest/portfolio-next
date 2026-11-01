@@ -1,7 +1,5 @@
-// local dependencies
-import { routing } from "@/i18n/routing";
-
-type Locale = (typeof routing.locales)[number];
+// outsource dependencies
+import type { Locale } from "next-intl";
 
 const cvPaths: Record<Locale, string> = {
     en: "/cv/CV-Perekhrest-Oleksandr-Web-Developer-EN.pdf",
