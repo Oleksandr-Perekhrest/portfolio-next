@@ -33,12 +33,14 @@ export default function ContactForm({ isUnavailable, onUnavailable }: Props) {
     const [succeeded, setSucceeded] = useState(false);
     const closeRef = useRef<HTMLButtonElement>(null);
 
+    const [isSending, setIsSending] = useState(false);
+
     const {
         register,
         handleSubmit,
         setError,
         setFocus,
-        formState: { errors, isSubmitting },
+        formState: { errors },
     } = useForm<ContactFormValues>({
         resolver: zodResolver(contactSchema),
     });
@@ -58,6 +60,7 @@ export default function ContactForm({ isUnavailable, onUnavailable }: Props) {
             (formEl?.elements.namedItem("website") as HTMLInputElement | null)
                 ?.value ?? "";
         let result: ContactResult;
+        setIsSending(true);
         try {
             result = await sendContactMessage({
                 ...values,
@@ -67,6 +70,8 @@ export default function ContactForm({ isUnavailable, onUnavailable }: Props) {
             });
         } catch {
             result = { status: "unavailable" };
+        } finally {
+            setIsSending(false);
         }
 
         if (result.status === "success") {
@@ -129,7 +134,7 @@ export default function ContactForm({ isUnavailable, onUnavailable }: Props) {
                 />
             </div>
 
-            <fieldset disabled={isSubmitting} className={styles.fieldset}>
+            <fieldset disabled={isSending} className={styles.fieldset}>
                 <div className={styles.field}>
                     <label htmlFor={`${formId}-name`} className={styles.label}>
                         {t("name")}
@@ -222,7 +227,7 @@ export default function ContactForm({ isUnavailable, onUnavailable }: Props) {
                     >
                         <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" />
                     </svg>
-                    {isSubmitting ? t("sending") : t("submit")}
+                    {isSending ? t("sending") : t("submit")}
                 </button>
             </fieldset>
 
