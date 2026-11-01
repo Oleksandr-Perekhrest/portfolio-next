@@ -2,34 +2,38 @@
 import { jest } from "@jest/globals";
 import "@testing-library/jest-dom/jest-globals";
 
-// jsdom does not implement ResizeObserver; provide a minimal stub for Radix primitives
-class ResizeObserverStub {
-    observe() {}
-    unobserve() {}
-    disconnect() {}
+if (typeof window !== "undefined") {
+    // jsdom does not implement ResizeObserver; provide a minimal stub for Radix primitives
+    class ResizeObserverStub {
+        observe() {}
+        unobserve() {}
+        disconnect() {}
+    }
+
+    window.ResizeObserver = ResizeObserverStub;
+
+    // jsdom does not implement IntersectionObserver; provide a minimal stub for useActiveSection
+    class IntersectionObserverStub {
+        observe() {}
+        unobserve() {}
+        disconnect() {}
+    }
+
+    window.IntersectionObserver =
+        IntersectionObserverStub as unknown as typeof IntersectionObserver;
 }
 
-window.ResizeObserver = ResizeObserverStub;
+if (typeof window !== "undefined") {
+    // window.location.assign is non-configurable in jsdom 26, so navigateTo is mocked
+    // at the module level; tests assert against jest.mocked(navigateTo).
+    jest.mock("@/lib/navigate", () => ({ navigateTo: jest.fn() }));
 
-// jsdom does not implement IntersectionObserver; provide a minimal stub for useActiveSection
-class IntersectionObserverStub {
-    observe() {}
-    unobserve() {}
-    disconnect() {}
+    // resend (via mailer.ts) pulls in postal-mime which requires TextEncoder — not in jsdom.
+    // Unit tests don't exercise actual email delivery, so mock the action at the boundary.
+    jest.mock("@/lib/contact/actions", () => ({
+        sendContactMessage: jest.fn(),
+    }));
 }
-
-window.IntersectionObserver =
-    IntersectionObserverStub as unknown as typeof IntersectionObserver;
-
-// window.location.assign is non-configurable in jsdom 26, so navigateTo is mocked
-// at the module level; tests assert against jest.mocked(navigateTo).
-jest.mock("@/lib/navigate", () => ({ navigateTo: jest.fn() }));
-
-// resend (via mailer.ts) pulls in postal-mime which requires TextEncoder — not in jsdom.
-// Unit tests don't exercise actual email delivery, so mock the action at the boundary.
-jest.mock("@/lib/contact/actions", () => ({
-    sendContactMessage: jest.fn(),
-}));
 
 // LocaleSwitch uses usePathname and getPathname (both unavailable in jsdom).
 // not-found.tsx still uses Link. All three are mocked here:
