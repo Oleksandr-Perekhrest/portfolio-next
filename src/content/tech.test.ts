@@ -65,4 +65,60 @@ describe("getCloud", () => {
         const allNames = Array.from(techs).map((t) => t.name);
         expect(new Set(allNames).size).toBe(allNames.length);
     });
+
+    it("frontend cloud: first item is React", () => {
+        const cloud = getCloud("frontend");
+        expect(cloud[0]?.name).toBe("React");
+    });
+
+    it("frontend cloud: area item levels are non-decreasing", () => {
+        const cloud = getCloud("frontend");
+        const areaItems = cloud.filter((t) => t.area !== "shared");
+        for (let i = 1; i < areaItems.length; i++) {
+            const prev = areaItems[i - 1]!;
+            const curr = areaItems[i]!;
+            expect((curr as { level: number }).level).toBeGreaterThanOrEqual(
+                (prev as { level: number }).level,
+            );
+        }
+    });
+
+    it("frontend cloud: last three items are Git, Claude Code, Cursor", () => {
+        const cloud = getCloud("frontend");
+        expect(cloud.slice(-3).map((t) => t.name)).toEqual([
+            "Git",
+            "Claude Code",
+            "Cursor",
+        ]);
+    });
+
+    it("frontend cloud: length is 18 + 3 = 21", () => {
+        const cloud = getCloud("frontend");
+        expect(cloud).toHaveLength(21);
+    });
+});
+
+describe("icon coverage", () => {
+    it("every frontend/backend item with level 1–2 has an icon", () => {
+        const lowLevel = Array.from(techs).filter((t) => {
+            if (t.area === "shared") return false;
+            return t.level <= 2;
+        });
+        expect(lowLevel.length).toBeGreaterThan(0);
+        for (const item of lowLevel) {
+            if (item.area !== "shared") {
+                expect(item.icon).toBeDefined();
+            }
+        }
+    });
+
+    it("level 3–4 and shared items have no icon", () => {
+        for (const t of techs) {
+            if (t.area === "shared") {
+                expect("icon" in t).toBe(false);
+            } else if (t.level >= 3) {
+                expect(t.icon).toBeUndefined();
+            }
+        }
+    });
 });
