@@ -1,0 +1,83 @@
+// local dependencies
+@use "styles" as *;
+
+.veil {
+    position: fixed;
+    inset: 0;
+    z-index: 20;
+    background: var(--color-veil);
+    -webkit-backdrop-filter: var(--blur-layer);
+    backdrop-filter: var(--blur-layer);
+    box-shadow: var(--shadow-vignette);
+    opacity: 1;
+    transition: opacity var(--duration-slow) var(--ease-standard);
+
+    &[data-state="closed"] {
+        opacity: 0;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        transition: none;
+    }
+}
+
+.content {
+    position: fixed;
+    inset: 0;
+    z-index: 21;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.panel {
+    display: flex;
+    flex-direction: column;
+    width: min(90vw, 960px);
+    height: 90vh;
+    overflow: hidden;
+    border-radius: var(--radius-xl);
+    background: var(--color-surface);
+    box-shadow: var(--shadow-modal);
+}
+
+.header {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-4) var(--space-6);
+    border-bottom: 1px solid var(--color-line);
+}
+
+.title {
+    @include text(eyebrow);
+
+    color: var(--color-muted);
+}
+
+.closeBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-full);
+    background: var(--color-surface);
+    color: var(--color-ink);
+    cursor: pointer;
+
+    @include focus-ring;
+
+    &:hover {
+        background: var(--color-chip);
+    }
+}
+
+.iframe {
+    display: block;
+    flex: 1 1 auto;
+    width: 100%;
+    border: none;
+}

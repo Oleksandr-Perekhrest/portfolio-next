@@ -39,7 +39,12 @@
     "title": "Web Engineer",
     "keywords": "Full-stack · React · Next.js · Node.js · React Native",
     "lead": "I build web and mobile products end to end — from complex React forms and portals to Node.js APIs, databases and deploys.",
-    "projects": "View projects"
+    "projects": "View projects",
+    "cv": {
+      "viewCv": "View CV",
+      "downloadPdf": "Download PDF",
+      "dialogTitle": "CV"
+    }
   },
   "ButtonLink": {
     "newTab": "(opens in a new tab)"
