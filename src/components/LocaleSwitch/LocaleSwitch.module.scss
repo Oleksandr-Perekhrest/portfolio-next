@@ -95,12 +95,13 @@
         outline-offset: 0;
     }
 
-    &:hover {
+    &:hover:not([aria-current="true"]) {
         color: var(--color-ink);
     }
 
     &[aria-current="true"] {
         color: var(--color-ink);
+        cursor: default;
     }
 
     @media (prefers-reduced-motion: reduce) {

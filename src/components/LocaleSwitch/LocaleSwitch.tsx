@@ -36,7 +36,10 @@ export default function LocaleSwitch() {
         ) {
             return;
         }
-        if (targetLocale === locale) return;
+        if (targetLocale === locale) {
+            e.preventDefault();
+            return;
+        }
         if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
             return;
         }
