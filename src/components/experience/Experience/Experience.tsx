@@ -2,8 +2,11 @@
 import { useTranslations } from "next-intl";
 
 // local dependencies
+import TechTile from "../TechTile/TechTile";
 import styles from "./Experience.module.scss";
+import LanguagesCard from "../LanguagesCard/LanguagesCard";
 import ProjectGallery from "../ProjectGallery/ProjectGallery";
+import CommercialGallery from "../CommercialGallery/CommercialGallery";
 
 export default function Experience() {
     const t = useTranslations("Experience");
@@ -13,6 +16,10 @@ export default function Experience() {
             <h2 className={styles.title}>{t("title")}</h2>
             <div className={styles.grid}>
                 <ProjectGallery />
+                <TechTile area="frontend" />
+                <TechTile area="backend" />
+                <CommercialGallery />
+                <LanguagesCard />
             </div>
         </section>
     );

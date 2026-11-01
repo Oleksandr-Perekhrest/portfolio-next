@@ -63,6 +63,8 @@
       "label": "Commercial · {current} / {total}",
       "nda": "NDA",
       "ndaHint": "Under NDA: no company names or screenshots",
+      "prev": "Previous",
+      "next": "Next",
       "items": {
         "healthcare": "Healthcare platform",
         "hr": "Internal HR system"
