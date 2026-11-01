@@ -17,7 +17,6 @@ import {
 const antiSpamSchema = z.object({
     website: z.string(),
     startedAt: z.number(),
-    locale: z.string().optional(),
 });
 
 export type ContactResult =
@@ -43,7 +42,9 @@ export async function sendContactMessage(
         return { status: "success" };
     }
 
-    const rawLocale = antiSpam.data.locale ?? "";
+    const rawLocale =
+        z.object({ locale: z.string().optional() }).safeParse(input).data
+            ?.locale ?? "";
     const locale = (routing.locales as readonly string[]).includes(rawLocale)
         ? rawLocale
         : "unknown";

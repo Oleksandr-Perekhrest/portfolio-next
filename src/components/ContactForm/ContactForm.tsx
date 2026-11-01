@@ -29,7 +29,7 @@ export default function ContactForm({ isUnavailable, onUnavailable }: Props) {
     const locale = useLocale();
     const formId = useId();
 
-    const [websiteValue, setWebsiteValue] = useState("");
+    const websiteRef = useRef<HTMLInputElement>(null);
     const [startedAt] = useState(() => Date.now());
     const [succeeded, setSucceeded] = useState(false);
     const closeRef = useRef<HTMLButtonElement>(null);
@@ -55,7 +55,7 @@ export default function ContactForm({ isUnavailable, onUnavailable }: Props) {
         try {
             result = await sendContactMessage({
                 ...values,
-                website: websiteValue,
+                website: websiteRef.current?.value ?? "",
                 startedAt,
                 locale,
             });
@@ -91,7 +91,7 @@ export default function ContactForm({ isUnavailable, onUnavailable }: Props) {
                         height={28}
                         viewBox="0 0 24 24"
                         fill="none"
-                        stroke="white"
+                        stroke="currentColor"
                         strokeWidth={2.5}
                         strokeLinecap="round"
                         strokeLinejoin="round"
@@ -108,22 +108,21 @@ export default function ContactForm({ isUnavailable, onUnavailable }: Props) {
         );
     }
 
+    // ref is read at event time, not during render — linter is conservative here
+    // eslint-disable-next-line react-hooks/refs
+    const formSubmitHandler = handleSubmit(onSubmit);
+
     return (
-        <form
-            className={styles.form}
-            onSubmit={handleSubmit(onSubmit)}
-            noValidate
-        >
+        <form className={styles.form} onSubmit={formSubmitHandler} noValidate>
             <div aria-hidden="true" className={styles.honeypot}>
                 <label htmlFor={`${formId}-website`}>{HONEYPOT_LABEL}</label>
                 <input
+                    ref={websiteRef}
                     id={`${formId}-website`}
                     type="text"
                     name="website"
-                    value={websiteValue}
                     tabIndex={-1}
                     autoComplete="off"
-                    onChange={(e) => setWebsiteValue(e.target.value)}
                 />
             </div>
 
