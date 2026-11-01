@@ -13,7 +13,7 @@ export default function LanguagesCard() {
             <h3 className={styles.title}>{t("languages.title")}</h3>
             <ul className={styles.list}>
                 {languages.map(({ code, level }) => (
-                    <li key={code} className={styles.item}>
+                    <li key={code}>
                         {t(`languages.${code}`)}
                         {" — "}
                         {level === "native" ? t("languages.native") : level}

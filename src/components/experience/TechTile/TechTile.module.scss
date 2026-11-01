@@ -16,8 +16,8 @@
     color: var(--color-ink);
     cursor: pointer;
     transition:
-        transform var(--duration-base) cubic-bezier(0.2, 0, 0, 1),
-        box-shadow var(--duration-base) cubic-bezier(0.2, 0, 0, 1);
+        transform var(--duration-base) var(--ease-standard),
+        box-shadow var(--duration-base) var(--ease-standard);
 
     @include focus-ring;
 
@@ -52,15 +52,17 @@
 }
 
 .summary {
+    @include text(small);
+
     font-family: var(--font-mono);
-    font-size: 14px;
     line-height: 1.8;
     color: var(--color-muted);
 }
 
 .more {
+    @include text(small);
+
     margin-top: auto;
-    font-size: 14px;
     font-weight: 600;
     color: var(--color-ink);
 }
