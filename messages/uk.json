@@ -39,7 +39,12 @@
     "title": "Web Engineer",
     "keywords": "Full-stack · React · Next.js · Node.js · React Native",
     "lead": "Створюю веб- і мобільні продукти від початку до кінця — від складних форм і порталів на React до API на Node.js, баз даних і деплою.",
-    "projects": "Проєкти"
+    "projects": "Проєкти",
+    "cv": {
+      "viewCv": "Переглянути CV",
+      "downloadPdf": "Завантажити PDF",
+      "dialogTitle": "Резюме"
+    }
   },
   "ButtonLink": {
     "newTab": "(відкривається в новій вкладці)"

@@ -3,6 +3,7 @@ import { useTranslations } from "next-intl";
 
 // local dependencies
 import styles from "./Hero.module.scss";
+import CvActions from "@/components/CvActions/CvActions";
 import ButtonLink from "@/components/ButtonLink/ButtonLink";
 
 export default function Hero() {
@@ -29,6 +30,7 @@ export default function Hero() {
                             <path d="M12 5v14M5 12l7 7 7-7" />
                         </svg>
                     </ButtonLink>
+                    <CvActions />
                 </div>
             </div>
         </section>

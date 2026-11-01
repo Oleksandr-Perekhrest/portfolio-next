@@ -1,6 +1,6 @@
 // outsource dependencies
-import { screen } from "@testing-library/react";
-import { it, expect, describe } from "@jest/globals";
+import { screen, fireEvent } from "@testing-library/react";
+import { it, jest, expect, describe } from "@jest/globals";
 
 // local dependencies
 import ButtonLink from "./ButtonLink";
@@ -34,5 +34,38 @@ describe("ButtonLink", () => {
             </ButtonLink>,
         );
         expect(screen.getByText("Secondary")).toBeTruthy();
+    });
+
+    it("renders the download attribute when download prop is set", () => {
+        renderWithIntl(
+            <ButtonLink href="/test.pdf" variant="primary" download>
+                Download
+            </ButtonLink>,
+        );
+        expect(screen.getByRole("link", { name: "Download" })).toHaveAttribute(
+            "download",
+        );
+    });
+
+    it("does not render download attribute when download prop is absent", () => {
+        renderWithIntl(
+            <ButtonLink href="/test.pdf" variant="primary">
+                No download
+            </ButtonLink>,
+        );
+        expect(
+            screen.getByRole("link", { name: "No download" }),
+        ).not.toHaveAttribute("download");
+    });
+
+    it("calls onClick when the link is clicked", () => {
+        const handleClick = jest.fn();
+        renderWithIntl(
+            <ButtonLink href="/test" variant="primary" onClick={handleClick}>
+                Click
+            </ButtonLink>,
+        );
+        fireEvent.click(screen.getByRole("link", { name: "Click" }));
+        expect(handleClick).toHaveBeenCalledTimes(1);
     });
 });
