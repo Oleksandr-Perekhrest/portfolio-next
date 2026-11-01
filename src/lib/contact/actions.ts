@@ -1,48 +1,50 @@
 "use server";
 
+// outsource dependencies
+import { z } from "zod";
+
 // local dependencies
 import { sendEmail } from "./mailer";
-import { contactSchema } from "./schema";
-import type { ContactFormValues } from "./schema";
+import {
+    contactSchema,
+    type ContactErrorCode,
+    type ContactFormValues,
+} from "./schema";
+
+const antiSpamSchema = z.object({
+    website: z.string(),
+    startedAt: z.number().finite(),
+});
 
 export type ContactResult =
     | { status: "success" }
     | { status: "unavailable" }
     | {
           status: "invalid";
-          fieldErrors: Partial<Record<keyof ContactFormValues, string[]>>;
+          fieldErrors: Partial<
+              Record<keyof ContactFormValues, ContactErrorCode[]>
+          >;
       };
 
-interface ContactInput extends ContactFormValues {
-    website: string;
-    startedAt: number | null | undefined;
-}
-
 export async function sendContactMessage(
-    input: ContactInput,
+    input: unknown,
 ): Promise<ContactResult> {
-    const elapsed =
-        typeof input.startedAt === "number" && !Number.isNaN(input.startedAt)
-            ? Date.now() - input.startedAt
-            : -1;
+    const antiSpam = antiSpamSchema.safeParse(input);
+    if (!antiSpam.success) return { status: "success" };
 
-    if (input.website !== "" || elapsed < 3000) {
+    if (
+        antiSpam.data.website !== "" ||
+        Date.now() - antiSpam.data.startedAt < 3000
+    ) {
         return { status: "success" };
     }
 
-    const parsed = contactSchema.safeParse({
-        name: input.name,
-        email: input.email,
-        message: input.message,
-    });
-
+    const parsed = contactSchema.safeParse(input);
     if (!parsed.success) {
-        const fieldErrors: Partial<Record<keyof ContactFormValues, string[]>> =
-            {};
-        for (const issue of parsed.error.issues) {
-            const key = issue.path[0] as keyof ContactFormValues;
-            (fieldErrors[key] ??= []).push(issue.message);
-        }
+        const { fieldErrors } = z.flattenError(
+            parsed.error,
+            (issue) => issue.message as ContactErrorCode,
+        );
         return { status: "invalid", fieldErrors };
     }
 

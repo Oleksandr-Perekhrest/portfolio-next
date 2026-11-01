@@ -23,5 +23,5 @@ export async function sendEmail(opts: MailOptions): Promise<MailResult> {
         subject: opts.subject,
         text: opts.body,
     });
-    return { error: error as MailResult["error"] };
+    return { error };
 }
