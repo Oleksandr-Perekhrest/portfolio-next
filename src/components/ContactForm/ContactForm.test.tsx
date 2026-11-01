@@ -1,5 +1,4 @@
 // outsource dependencies
-import { screen, cleanup, waitFor, fireEvent } from "@testing-library/react";
 import {
     it,
     jest,
@@ -8,11 +7,19 @@ import {
     afterEach,
     beforeEach,
 } from "@jest/globals";
+import {
+    act,
+    screen,
+    within,
+    cleanup,
+    waitFor,
+    fireEvent,
+} from "@testing-library/react";
 
 // local dependencies
 import Contact from "../Contact/Contact";
 import { renderWithIntl } from "@/test/renderWithIntl";
-import { sendContactMessage } from "@/lib/contact/actions";
+import { sendContactMessage, type ContactResult } from "@/lib/contact/actions";
 
 describe("ContactForm", () => {
     beforeEach(() => {
@@ -136,6 +143,132 @@ describe("ContactForm", () => {
                     screen.getByText("Вкажіть ім’я (до 100 символів)"),
                 ).toBeInTheDocument();
             });
+        });
+    });
+
+    describe("submission", () => {
+        async function openAndFill() {
+            renderWithIntl(<Contact />);
+            fireEvent.click(screen.getByRole("button", { name: "Email me" }));
+            await waitFor(() => screen.getByRole("dialog"));
+            fireEvent.change(screen.getByRole("textbox", { name: "Name" }), {
+                target: { value: "Alice" },
+            });
+            fireEvent.change(screen.getByRole("textbox", { name: "Email" }), {
+                target: { value: "alice@example.com" },
+            });
+            fireEvent.change(screen.getByRole("textbox", { name: "Message" }), {
+                target: { value: "Hello, I have a role for you." },
+            });
+        }
+
+        it("valid submit calls sendContactMessage once with correct payload", async () => {
+            jest.mocked(sendContactMessage).mockResolvedValueOnce({
+                status: "success",
+            });
+            await openAndFill();
+
+            fireEvent.click(
+                screen.getByRole("button", { name: "Send message" }),
+            );
+
+            await waitFor(() => {
+                expect(jest.mocked(sendContactMessage)).toHaveBeenCalledTimes(
+                    1,
+                );
+                expect(jest.mocked(sendContactMessage)).toHaveBeenCalledWith({
+                    name: "Alice",
+                    email: "alice@example.com",
+                    message: "Hello, I have a role for you.",
+                    website: "",
+                    locale: "en",
+                    startedAt: expect.any(Number),
+                });
+            });
+        });
+
+        it("while pending shows ‘Sending…’ and disables fields; resolves to success view", async () => {
+            let resolve!: (value: ContactResult) => void;
+            const pending = new Promise<ContactResult>((res) => {
+                resolve = res;
+            });
+            jest.mocked(sendContactMessage).mockReturnValueOnce(pending);
+
+            await openAndFill();
+            fireEvent.click(
+                screen.getByRole("button", { name: "Send message" }),
+            );
+
+            await waitFor(() =>
+                expect(
+                    screen.getByRole("button", { name: "Sending…" }),
+                ).toBeInTheDocument(),
+            );
+            expect(
+                screen.getByRole("textbox", { name: "Name" }),
+            ).toBeDisabled();
+            expect(
+                screen.getByRole("textbox", { name: "Email" }),
+            ).toBeDisabled();
+            expect(
+                screen.getByRole("textbox", { name: "Message" }),
+            ).toBeDisabled();
+
+            act(() => resolve({ status: "success" }));
+
+            await waitFor(() =>
+                expect(screen.getByText("Message sent")).toBeInTheDocument(),
+            );
+            expect(
+                screen.getByText("Thanks! I’ll get back to you soon."),
+            ).toBeInTheDocument();
+        });
+
+        it("success: hides form fields and focuses Close button", async () => {
+            jest.mocked(sendContactMessage).mockResolvedValueOnce({
+                status: "success",
+            });
+            await openAndFill();
+            fireEvent.click(
+                screen.getByRole("button", { name: "Send message" }),
+            );
+
+            await waitFor(() =>
+                expect(screen.getByText("Message sent")).toBeInTheDocument(),
+            );
+            expect(
+                screen.queryByRole("textbox", { name: "Name" }),
+            ).not.toBeInTheDocument();
+
+            await waitFor(() =>
+                expect(
+                    within(screen.getByRole("status")).getByRole("button", {
+                        name: "Close",
+                    }),
+                ).toHaveFocus(),
+            );
+        });
+
+        it("honeypot: sets website to the spam value before submitting", async () => {
+            jest.mocked(sendContactMessage).mockResolvedValueOnce({
+                status: "success",
+            });
+            await openAndFill();
+
+            const websiteInput = document.querySelector(
+                'input[name="website"]',
+            ) as HTMLInputElement;
+            websiteInput.value = "spam";
+
+            fireEvent.click(
+                screen.getByRole("button", { name: "Send message" }),
+            );
+
+            await waitFor(() =>
+                expect(jest.mocked(sendContactMessage)).toHaveBeenCalledWith(
+                    expect.objectContaining({ website: "spam" }),
+                ),
+            );
         });
     });
 });

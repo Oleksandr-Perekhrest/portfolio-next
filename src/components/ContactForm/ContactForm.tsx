@@ -55,7 +55,7 @@ export default function ContactForm({ isUnavailable, onUnavailable }: Props) {
         values,
         event,
     ) => {
-        const formEl = event?.currentTarget as HTMLFormElement | undefined;
+        const formEl = event?.target as HTMLFormElement | undefined;
         const website =
             (formEl?.elements.namedItem("website") as HTMLInputElement | null)
                 ?.value ?? "";

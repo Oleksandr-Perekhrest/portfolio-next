@@ -115,7 +115,7 @@
   },
   "ContactForm": {
     "title": "Email me",
-    "description": "I'll reply to the email you leave below.",
+    "description": "I’ll reply to the email you leave below.",
     "name": "Name",
     "namePlaceholder": "Your name",
     "email": "Email",
@@ -130,7 +130,7 @@
       "messageLength": "Message must be 10 to 2000 characters"
     },
     "successTitle": "Message sent",
-    "successText": "Thanks! I'll get back to you soon.",
+    "successText": "Thanks! I’ll get back to you soon.",
     "unavailable": "The form is temporarily unavailable. Message me on <link>Telegram</link>.",
     "hint": "Prefer messengers? <link>Telegram</link>",
     "close": "Close"
