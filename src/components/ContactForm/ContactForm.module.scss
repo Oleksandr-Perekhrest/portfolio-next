@@ -107,6 +107,11 @@
 }
 
 .hint {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1);
+    align-items: center;
+    justify-content: center;
     margin: 0;
     font-family: var(--font-sans);
     font-size: rem(13px);
