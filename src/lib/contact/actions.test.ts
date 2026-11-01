@@ -47,6 +47,9 @@ describe("sendContactMessage", () => {
         sendEmailMock = jest
             .fn<(opts: MailOptions) => Promise<MailResult>>()
             .mockResolvedValue({ error: null });
+        // jest.mock is not hoisted above imports when jest comes from @jest/globals
+        // (next/jest SWC transform), so ./mailer is mocked with doMock and ./actions
+        // is required afterwards inside isolateModules.
         jest.isolateModules(() => {
             jest.doMock("./mailer", () => ({ sendEmail: sendEmailMock }));
             // eslint-disable-next-line @typescript-eslint/no-require-imports

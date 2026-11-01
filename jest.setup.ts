@@ -28,8 +28,9 @@ if (typeof window !== "undefined") {
     // at the module level; tests assert against jest.mocked(navigateTo).
     jest.mock("@/lib/navigate", () => ({ navigateTo: jest.fn() }));
 
-    // resend (via mailer.ts) pulls in postal-mime which requires TextEncoder — not in jsdom.
-    // Unit tests don't exercise actual email delivery, so mock the action at the boundary.
+    // resend (via mailer.ts) pulls in postal-mime, which needs TextEncoder (not in jsdom).
+    // The mock lives here, not in test files: jest.mock in a test file is not hoisted
+    // above imports when jest comes from @jest/globals (next/jest SWC transform).
     jest.mock("@/lib/contact/actions", () => ({
         sendContactMessage: jest.fn(),
     }));
