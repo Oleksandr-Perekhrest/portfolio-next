@@ -1,7 +1,7 @@
 {
   "Metadata": {
     "title": "Oleksandr Perekhrest — Web Engineer",
-    "description": "Personal portfolio of Oleksandr Perekhrest, web engineer."
+    "description": "Oleksandr Perekhrest — web engineer working with React, Next.js, Node.js and React Native. Projects, experience and contacts."
   },
   "NotFound": {
     "title": "Page not found",
@@ -10,7 +10,7 @@
   },
   "Header": {
     "brand": {
-      "name": "Alex Perekhrest",
+      "name": "Oleksandr Perekhrest",
       "role": "Web Engineer",
       "initials": "OP"
     },
@@ -35,11 +35,62 @@
     "nameEn": "English",
     "nameUk": "Українська"
   },
-  "Home": {
-    "heroName": "Alex Perekhrest",
-    "heroTagline": "Web Engineer — site under construction",
-    "experience": "Experience",
-    "about": "About",
-    "contact": "Contact"
+  "Hero": {
+    "title": "Web Engineer",
+    "keywords": "Full-stack · React · Next.js · Node.js · React Native",
+    "lead": "I build web and mobile products end to end — from complex React forms and portals to Node.js APIs, databases and deploys.",
+    "projects": "View projects"
+  },
+  "Experience": {
+    "title": "Experience",
+    "featured": "Featured project",
+    "projectCounter": "Project {current} / {total}",
+    "demo": "Live demo",
+    "github": "GitHub",
+    "more": "+ {count} more",
+    "showAll": "Show all {area} technologies",
+    "projects": {
+      "authkit": {
+        "description": "Full-stack authentication: Next.js frontend, Express API, PostgreSQL with Prisma, Google OAuth. Docker, CI, unit and integration tests, deployed to Vercel and Render."
+      }
+    },
+    "commercial": {
+      "label": "Commercial · {current} / {total}",
+      "nda": "NDA",
+      "ndaHint": "Under NDA: no company names or screenshots",
+      "items": {
+        "healthcare": "Healthcare platform",
+        "hr": "Internal HR system"
+      }
+    },
+    "languages": {
+      "title": "Languages",
+      "native": "native",
+      "uk": "Ukrainian",
+      "en": "English",
+      "cs": "Czech"
+    }
+  },
+  "About": {
+    "label": "About",
+    "title": "Long story short",
+    "intro": "I came to IT in 2022 after 18 years of very different work: kitchens in Kharkiv, warehouse logistics and sales in Prague. Running a kitchen and a sales team taught me what product work needs most — deadlines, processes and talking to people. Since 2023 I’ve been building commercial React and React Native products, and now I’m growing into full-stack.",
+    "now": "Now",
+    "journey": {
+      "cook": "Cook",
+      "headChef": "Head chef",
+      "logistics": "Logistics",
+      "headOfSales": "Head of sales",
+      "intoIt": "Into IT",
+      "frontend": "Frontend developer",
+      "fullstack": "Full-stack"
+    }
+  },
+  "Contact": {
+    "title": "Get in touch",
+    "lead": "Open to frontend and full-stack roles. Message me on LinkedIn or Telegram.",
+    "linkedin": "LinkedIn profile",
+    "github": "GitHub profile",
+    "telegram": "Telegram"
   }
 }

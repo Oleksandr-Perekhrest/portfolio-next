@@ -126,6 +126,7 @@ describe("ExperienceYears (uk plurals)", () => {
 
 ## Ukrainian wording
 
+- Use the typographic apostrophe ’ (U+2019) in all message values, never the straight '.
 - Use **2019 orthography**: compound web- words written together —
   `вебсайт`, `веброзробник`, `вебдодаток`.
 - Write natural Ukrainian, not a word-for-word translation of the English.

@@ -1,0 +1,40 @@
+// local dependencies
+@use "styles" as *;
+
+.hero {
+    @include container;
+
+    padding-top: 104px;
+    padding-bottom: 80px;
+}
+
+.inner {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+    max-width: 860px;
+}
+
+.title {
+    @include text(hero);
+}
+
+.keywords {
+    @include text(keywords);
+
+    color: var(--color-ink);
+}
+
+.lead {
+    @include text(lead);
+
+    max-width: 640px;
+    color: var(--color-muted);
+}
+
+.actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-top: var(--space-2);
+}
