@@ -1,6 +1,7 @@
 "use client";
 
 // outsource dependencies
+import { useId } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslations } from "next-intl";
 import type { SubmitHandler } from "react-hook-form";
@@ -9,16 +10,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 // local dependencies
 import { contacts } from "@/content/contacts";
 import styles from "./ContactForm.module.scss";
+import FieldError from "./FieldError/FieldError";
 import TelegramIcon from "@/components/icons/TelegramIcon";
-import {
-    contactSchema,
-    type ContactErrorCode,
-    type ContactFormValues,
-} from "@/lib/contact/schema";
+import { contactSchema, type ContactFormValues } from "@/lib/contact/schema";
 
 export default function ContactForm() {
     const t = useTranslations("ContactForm");
     const tBtn = useTranslations("ButtonLink");
+    const formId = useId();
 
     const {
         register,
@@ -37,124 +36,71 @@ export default function ContactForm() {
             noValidate
         >
             <div className={styles.field}>
-                <label htmlFor="cf-name" className={styles.label}>
+                <label htmlFor={`${formId}-name`} className={styles.label}>
                     {t("name")}
                 </label>
                 <input
-                    id="cf-name"
+                    id={`${formId}-name`}
                     type="text"
                     className={`${styles.input}${errors.name ? ` ${styles.inputError}` : ""}`}
                     placeholder={t("namePlaceholder")}
                     aria-invalid={errors.name ? true : undefined}
-                    aria-describedby={errors.name ? "cf-name-error" : undefined}
+                    aria-describedby={
+                        errors.name ? `${formId}-name-error` : undefined
+                    }
                     {...register("name")}
                 />
                 {errors.name?.message && (
-                    <p
-                        id="cf-name-error"
-                        className={styles.errorMsg}
-                        role="alert"
-                    >
-                        <svg
-                            aria-hidden
-                            width={14}
-                            height={14}
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth={2}
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                        >
-                            <circle cx="12" cy="12" r="9" />
-                            <path d="M12 8v5M12 16v.01" />
-                        </svg>
-                        {t(`errors.${errors.name.message as ContactErrorCode}`)}
-                    </p>
+                    <FieldError
+                        id={`${formId}-name-error`}
+                        code={errors.name.message}
+                    />
                 )}
             </div>
 
             <div className={styles.field}>
-                <label htmlFor="cf-email" className={styles.label}>
+                <label htmlFor={`${formId}-email`} className={styles.label}>
                     {t("email")}
                 </label>
                 <input
-                    id="cf-email"
+                    id={`${formId}-email`}
                     type="email"
                     className={`${styles.input}${errors.email ? ` ${styles.inputError}` : ""}`}
                     placeholder={t("emailPlaceholder")}
                     aria-invalid={errors.email ? true : undefined}
                     aria-describedby={
-                        errors.email ? "cf-email-error" : undefined
+                        errors.email ? `${formId}-email-error` : undefined
                     }
                     {...register("email")}
                 />
                 {errors.email?.message && (
-                    <p
-                        id="cf-email-error"
-                        className={styles.errorMsg}
-                        role="alert"
-                    >
-                        <svg
-                            aria-hidden
-                            width={14}
-                            height={14}
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth={2}
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                        >
-                            <circle cx="12" cy="12" r="9" />
-                            <path d="M12 8v5M12 16v.01" />
-                        </svg>
-                        {t(
-                            `errors.${errors.email.message as ContactErrorCode}`,
-                        )}
-                    </p>
+                    <FieldError
+                        id={`${formId}-email-error`}
+                        code={errors.email.message}
+                    />
                 )}
             </div>
 
             <div className={styles.field}>
-                <label htmlFor="cf-message" className={styles.label}>
+                <label htmlFor={`${formId}-message`} className={styles.label}>
                     {t("message")}
                 </label>
                 <textarea
-                    id="cf-message"
+                    id={`${formId}-message`}
                     rows={5}
                     className={`${styles.input} ${styles.textarea}${errors.message ? ` ${styles.inputError}` : ""}`}
                     placeholder={t("messagePlaceholder")}
                     aria-invalid={errors.message ? true : undefined}
                     aria-describedby={
-                        errors.message ? "cf-message-error" : undefined
+                        errors.message ? `${formId}-message-error` : undefined
                     }
                     {...register("message")}
                 />
                 {errors.message?.message && (
-                    <p
-                        id="cf-message-error"
-                        className={styles.errorMsg}
-                        role="alert"
-                    >
-                        <svg
-                            aria-hidden
-                            width={14}
-                            height={14}
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth={2}
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                        >
-                            <circle cx="12" cy="12" r="9" />
-                            <path d="M12 8v5M12 16v.01" />
-                        </svg>
-                        {t(
-                            `errors.${errors.message.message as ContactErrorCode}`,
-                        )}
-                    </p>
+                    <FieldError
+                        id={`${formId}-message-error`}
+                        code={errors.message.message}
+                    />
                 )}
             </div>
 

@@ -14,9 +14,8 @@
 }
 
 .label {
-    font-family: var(--font-sans);
-    font-size: rem(14px);
-    line-height: rem(20px);
+    @include text(small);
+
     font-weight: 600;
     color: var(--color-ink);
 }
@@ -25,16 +24,14 @@
     width: 100%;
     height: var(--space-12);
     padding: 0 14px;
-    font-family: var(--font-sans);
-    font-size: rem(16px);
-    line-height: rem(25px);
-    font-weight: 400;
     color: var(--color-ink);
     background: var(--color-surface);
     border: 1px solid var(--color-line-strong);
     border-radius: var(--radius-md);
     transition: border-color var(--duration-fast);
     appearance: none;
+
+    @include text(body);
 
     &::placeholder {
         color: var(--color-muted);
@@ -75,16 +72,6 @@
     resize: vertical;
 }
 
-.errorMsg {
-    display: flex;
-    gap: var(--space-1);
-    align-items: center;
-
-    @include text(small);
-
-    color: var(--color-error);
-}
-
 .submitBtn {
     display: flex;
     gap: var(--space-2);
@@ -113,12 +100,9 @@
     align-items: center;
     justify-content: center;
     margin: 0;
-    font-family: var(--font-sans);
-    font-size: rem(13px);
-    line-height: rem(18px);
-    font-weight: 400;
     color: var(--color-muted);
-    text-align: center;
+
+    @include text(form-hint);
 }
 
 .hintLink {
