@@ -18,19 +18,34 @@ describe("buildContactEmail", () => {
         expect(subject).toBe("Portfolio: Alice");
     });
 
-    it("includes name, email, and message in the text body", () => {
+    it("builds the complete text body", () => {
         const { text } = buildContactEmail(base);
-        expect(text).toContain("Name: Alice");
-        expect(text).toContain("Email: alice@example.com");
-        expect(text).toContain("Hello from the contact form.");
+        expect(text).toBe(
+            [
+                "New message from the contact form on example.com",
+                "",
+                "Name: Alice",
+                "Email: alice@example.com",
+                "Page language: EN",
+                "",
+                "Message:",
+                "Hello from the contact form.",
+                "",
+                "—",
+                "Reply to this email to answer the sender directly.",
+            ].join("\n"),
+        );
     });
 
-    it("extracts the host from siteUrl", () => {
+    it("uses only the host from siteUrl, not the full URL", () => {
         const { text } = buildContactEmail({
             ...base,
             siteUrl: "https://myportfolio.dev/contact",
         });
-        expect(text).toContain("myportfolio.dev");
+        const firstLine = text.split("\n")[0];
+        expect(firstLine).toBe(
+            "New message from the contact form on myportfolio.dev",
+        );
     });
 
     describe("locale label", () => {
@@ -48,12 +63,5 @@ describe("buildContactEmail", () => {
             const { text } = buildContactEmail({ ...base, locale: "fr" });
             expect(text).toContain("Page language: unknown");
         });
-    });
-
-    it("includes the reply instruction line", () => {
-        const { text } = buildContactEmail(base);
-        expect(text).toContain(
-            "Reply to this email to answer the sender directly.",
-        );
     });
 });

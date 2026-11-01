@@ -1,4 +1,5 @@
 // outsource dependencies
+import { z } from "zod";
 import { it, expect, describe } from "@jest/globals";
 
 // local dependencies
@@ -9,6 +10,12 @@ const valid = {
     email: "alice@example.com",
     message: "Hello there!",
 };
+
+function fieldErrors(input: unknown) {
+    const result = contactSchema.safeParse(input);
+    if (result.success) return null;
+    return z.flattenError(result.error).fieldErrors;
+}
 
 describe("contactSchema", () => {
     describe("valid input", () => {
@@ -34,24 +41,21 @@ describe("contactSchema", () => {
 
     describe("name", () => {
         it("rejects an empty name", () => {
-            const result = contactSchema.safeParse({ ...valid, name: "" });
-            expect(result.success).toBe(false);
-            if (!result.success) {
-                const flat = result.error.flatten();
-                expect(flat.fieldErrors.name).toContain("nameInvalid");
-            }
+            expect(fieldErrors({ ...valid, name: "" })?.name).toContain(
+                "nameInvalid",
+            );
+        });
+
+        it("rejects a name that is only whitespace", () => {
+            expect(fieldErrors({ ...valid, name: "   " })?.name).toContain(
+                "nameInvalid",
+            );
         });
 
         it("rejects a name longer than 100 characters", () => {
-            const result = contactSchema.safeParse({
-                ...valid,
-                name: "a".repeat(101),
-            });
-            expect(result.success).toBe(false);
-            if (!result.success) {
-                const flat = result.error.flatten();
-                expect(flat.fieldErrors.name).toContain("nameInvalid");
-            }
+            expect(
+                fieldErrors({ ...valid, name: "a".repeat(101) })?.name,
+            ).toContain("nameInvalid");
         });
 
         it("accepts a name of exactly 100 characters", () => {
@@ -62,52 +66,43 @@ describe("contactSchema", () => {
             expect(result.success).toBe(true);
         });
 
-        it("rejects a name containing a control character", () => {
-            const result = contactSchema.safeParse({
-                ...valid,
-                name: "Alice\x01",
-            });
-            expect(result.success).toBe(false);
-            if (!result.success) {
-                const flat = result.error.flatten();
-                expect(flat.fieldErrors.name).toContain("nameInvalid");
-            }
+        it("rejects a name containing a control character (\\x01)", () => {
+            expect(
+                fieldErrors({ ...valid, name: "Alice\x01" })?.name,
+            ).toContain("nameInvalid");
+        });
+
+        it("rejects a name containing a line break (\\n)", () => {
+            expect(
+                fieldErrors({ ...valid, name: "Alice\nBob" })?.name,
+            ).toContain("nameInvalid");
+        });
+
+        it("rejects a non-string name and returns only our error code", () => {
+            expect(fieldErrors({ ...valid, name: 123 })?.name).toEqual([
+                "nameInvalid",
+            ]);
         });
     });
 
     describe("email", () => {
         it("rejects an empty email", () => {
-            const result = contactSchema.safeParse({ ...valid, email: "" });
-            expect(result.success).toBe(false);
-            if (!result.success) {
-                const flat = result.error.flatten();
-                expect(flat.fieldErrors.email).toContain("emailInvalid");
-            }
+            expect(fieldErrors({ ...valid, email: "" })?.email).toContain(
+                "emailInvalid",
+            );
         });
 
         it("rejects a malformed email", () => {
-            const result = contactSchema.safeParse({
-                ...valid,
-                email: "not-an-email",
-            });
-            expect(result.success).toBe(false);
-            if (!result.success) {
-                const flat = result.error.flatten();
-                expect(flat.fieldErrors.email).toContain("emailInvalid");
-            }
+            expect(
+                fieldErrors({ ...valid, email: "not-an-email" })?.email,
+            ).toContain("emailInvalid");
         });
 
         it("rejects an email longer than 254 characters", () => {
             const local = "a".repeat(243);
-            const result = contactSchema.safeParse({
-                ...valid,
-                email: `${local}@example.com`,
-            });
-            expect(result.success).toBe(false);
-            if (!result.success) {
-                const flat = result.error.flatten();
-                expect(flat.fieldErrors.email).toContain("emailInvalid");
-            }
+            expect(
+                fieldErrors({ ...valid, email: `${local}@example.com` })?.email,
+            ).toContain("emailInvalid");
         });
 
         it("accepts an email of exactly 254 characters", () => {
@@ -118,19 +113,19 @@ describe("contactSchema", () => {
             });
             expect(result.success).toBe(true);
         });
+
+        it("rejects an undefined email and returns only our error code", () => {
+            expect(fieldErrors({ ...valid, email: undefined })?.email).toEqual([
+                "emailInvalid",
+            ]);
+        });
     });
 
     describe("message", () => {
         it("rejects a message shorter than 10 characters", () => {
-            const result = contactSchema.safeParse({
-                ...valid,
-                message: "Hi!",
-            });
-            expect(result.success).toBe(false);
-            if (!result.success) {
-                const flat = result.error.flatten();
-                expect(flat.fieldErrors.message).toContain("messageLength");
-            }
+            expect(
+                fieldErrors({ ...valid, message: "Hi!" })?.message,
+            ).toContain("messageLength");
         });
 
         it("accepts a message of exactly 10 characters", () => {
@@ -142,15 +137,9 @@ describe("contactSchema", () => {
         });
 
         it("rejects a message longer than 2000 characters", () => {
-            const result = contactSchema.safeParse({
-                ...valid,
-                message: "a".repeat(2001),
-            });
-            expect(result.success).toBe(false);
-            if (!result.success) {
-                const flat = result.error.flatten();
-                expect(flat.fieldErrors.message).toContain("messageLength");
-            }
+            expect(
+                fieldErrors({ ...valid, message: "a".repeat(2001) })?.message,
+            ).toContain("messageLength");
         });
 
         it("accepts a message of exactly 2000 characters", () => {
@@ -159,6 +148,12 @@ describe("contactSchema", () => {
                 message: "a".repeat(2000),
             });
             expect(result.success).toBe(true);
+        });
+
+        it("rejects a null message and returns only our error code", () => {
+            expect(fieldErrors({ ...valid, message: null })?.message).toEqual([
+                "messageLength",
+            ]);
         });
     });
 });
