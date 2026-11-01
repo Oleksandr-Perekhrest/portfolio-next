@@ -9,7 +9,7 @@ const EMAIL_ERR = "emailInvalid" satisfies ContactErrorCode;
 const MSG_ERR = "messageLength" satisfies ContactErrorCode;
 
 const nameSchema = z
-    .string()
+    .string({ error: NAME_ERR })
     .trim()
     .min(1, NAME_ERR)
     .max(100, NAME_ERR)
@@ -17,12 +17,16 @@ const nameSchema = z
 
 // trim → max → z.email() (v4 standalone) via pipe to ensure trim runs before format check.
 const emailSchema = z
-    .string()
+    .string({ error: EMAIL_ERR })
     .trim()
     .max(254, EMAIL_ERR)
     .pipe(z.email(EMAIL_ERR));
 
-const messageSchema = z.string().trim().min(10, MSG_ERR).max(2000, MSG_ERR);
+const messageSchema = z
+    .string({ error: MSG_ERR })
+    .trim()
+    .min(10, MSG_ERR)
+    .max(2000, MSG_ERR);
 
 export const contactSchema = z.object({
     name: nameSchema,

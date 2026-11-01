@@ -26,21 +26,7 @@
 }
 
 .primary {
-    background: var(--color-accent);
-    color: var(--color-on-accent);
-
-    &:hover,
-    &:active {
-        background: var(--color-accent-hover);
-    }
-
-    &:active {
-        transform: translateY(1px);
-
-        @media (prefers-reduced-motion: reduce) {
-            transform: none;
-        }
-    }
+    @include btn-primary-colors;
 }
 
 .secondary {

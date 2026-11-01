@@ -13,7 +13,7 @@ import {
 
 const antiSpamSchema = z.object({
     website: z.string(),
-    startedAt: z.number().finite(),
+    startedAt: z.number(),
 });
 
 export type ContactResult =

@@ -1,14 +1,20 @@
+"use client";
+
 // outsource dependencies
+import { useState } from "react";
+import { Dialog } from "radix-ui";
 import { useTranslations } from "next-intl";
 
 // local dependencies
 import styles from "./Contact.module.scss";
 import { contacts } from "@/content/contacts";
 import SectionTitle from "@/components/SectionTitle/SectionTitle";
+import ContactDialog from "@/components/ContactDialog/ContactDialog";
 
 export default function Contact() {
     const t = useTranslations("Contact");
     const tBtn = useTranslations("ButtonLink");
+    const [emailOpen, setEmailOpen] = useState(false);
 
     return (
         <section id="contact" className={styles.section}>
@@ -19,6 +25,27 @@ export default function Contact() {
                     <p className={styles.lead}>{t("lead")}</p>
                 </div>
                 <div className={styles.links}>
+                    <button
+                        type="button"
+                        className={styles.emailMeBtn}
+                        onClick={() => setEmailOpen(true)}
+                    >
+                        <svg
+                            aria-hidden
+                            width={18}
+                            height={18}
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth={2}
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                        >
+                            <rect x="3" y="5" width="18" height="14" rx="2" />
+                            <path d="M3 7l9 6 9-6" />
+                        </svg>
+                        {t("emailMe")}
+                    </button>
                     <a
                         href={contacts.telegram}
                         target="_blank"
@@ -92,6 +119,11 @@ export default function Contact() {
                     </a>
                 </div>
             </div>
+            <Dialog.Root open={emailOpen} onOpenChange={setEmailOpen}>
+                <Dialog.Portal>
+                    <ContactDialog />
+                </Dialog.Portal>
+            </Dialog.Root>
         </section>
     );
 }
