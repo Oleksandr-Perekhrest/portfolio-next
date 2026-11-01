@@ -106,7 +106,8 @@
   "Contact": {
     "label": "Контакти",
     "title": "Зв’язок",
-    "lead": "Відкритий до пропозицій на frontend- і full-stack-позиції. Зв’яжіться зі мною зручним для вас способом.",
+    "lead": "Відкритий до пропозицій на frontend- і full-stack-позиції.",
+    "reachOut": "Зв’яжіться зі мною зручним для вас способом.",
     "emailMe": "Написати мені",
     "linkedin": "Профіль у LinkedIn",
     "github": "Профіль на GitHub",
@@ -131,7 +132,7 @@
     "successTitle": "Повідомлення надіслано",
     "successText": "Дякую! Скоро відповім.",
     "unavailable": "Форма тимчасово недоступна. Напишіть мені в <link>Telegram</link>.",
-    "hint": "Зручніше в месенджері? Telegram: <link>{handle}</link>",
+    "hint": "Зручніше в месенджері? <link>Telegram</link>",
     "close": "Закрити"
   }
 }

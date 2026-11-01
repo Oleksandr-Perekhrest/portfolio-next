@@ -9,6 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 // local dependencies
 import { contacts } from "@/content/contacts";
 import styles from "./ContactForm.module.scss";
+import TelegramIcon from "@/components/icons/TelegramIcon";
 import {
     contactSchema,
     type ContactErrorCode,
@@ -17,6 +18,7 @@ import {
 
 export default function ContactForm() {
     const t = useTranslations("ContactForm");
+    const tBtn = useTranslations("ButtonLink");
 
     const {
         register,
@@ -175,7 +177,6 @@ export default function ContactForm() {
 
             <p className={styles.hint}>
                 {t.rich("hint", {
-                    handle: contacts.telegramHandle,
                     link: (children) => (
                         <a
                             href={contacts.telegram}
@@ -183,7 +184,11 @@ export default function ContactForm() {
                             rel="noopener noreferrer"
                             className={styles.hintLink}
                         >
+                            <TelegramIcon size={16} />
                             {children}
+                            <span className={styles.srOnly}>
+                                {tBtn("newTab")}
+                            </span>
                         </a>
                     ),
                 })}

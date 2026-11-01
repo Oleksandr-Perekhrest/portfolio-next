@@ -106,7 +106,8 @@
   "Contact": {
     "label": "Contact",
     "title": "Get in touch",
-    "lead": "Open to frontend and full-stack roles. Reach out whichever way suits you best.",
+    "lead": "Open to frontend and full-stack roles.",
+    "reachOut": "Reach out whichever way suits you best.",
     "emailMe": "Email me",
     "linkedin": "LinkedIn profile",
     "github": "GitHub profile",
@@ -131,7 +132,7 @@
     "successTitle": "Message sent",
     "successText": "Thanks! I'll get back to you soon.",
     "unavailable": "The form is temporarily unavailable. Message me on <link>Telegram</link>.",
-    "hint": "Prefer messengers? Telegram: <link>{handle}</link>",
+    "hint": "Prefer messengers? <link>Telegram</link>",
     "close": "Close"
   }
 }

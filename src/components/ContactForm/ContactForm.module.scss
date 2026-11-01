@@ -117,9 +117,16 @@
 }
 
 .hintLink {
+    display: inline-flex;
+    gap: var(--space-1);
+    align-items: center;
     color: var(--color-accent-text);
     text-decoration: underline;
     text-underline-offset: 2px;
 
     @include focus-ring;
+}
+
+.srOnly {
+    @include visually-hidden;
 }

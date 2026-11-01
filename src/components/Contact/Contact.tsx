@@ -8,6 +8,7 @@ import { useTranslations } from "next-intl";
 // local dependencies
 import styles from "./Contact.module.scss";
 import { contacts } from "@/content/contacts";
+import TelegramIcon from "@/components/icons/TelegramIcon";
 import SectionTitle from "@/components/SectionTitle/SectionTitle";
 import ContactDialog from "@/components/ContactDialog/ContactDialog";
 
@@ -22,7 +23,11 @@ export default function Contact() {
             <div className={styles.card}>
                 <div className={styles.textCol}>
                     <h3 className={styles.title}>{t("title")}</h3>
-                    <p className={styles.lead}>{t("lead")}</p>
+                    <p className={styles.lead}>
+                        {t("lead")}
+                        <br />
+                        {t("reachOut")}
+                    </p>
                 </div>
                 <div className={styles.links}>
                     <button
@@ -52,20 +57,7 @@ export default function Contact() {
                         rel="noopener noreferrer"
                         className={styles.iconLink}
                     >
-                        <svg
-                            aria-hidden
-                            width={18}
-                            height={18}
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth={2}
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                        >
-                            <path d="M21 4L3 11l6 2 2 6 3-4 5 4 2-15z" />
-                            <path d="M9 13l8-6" />
-                        </svg>
+                        <TelegramIcon />
                         <span className={styles.srOnly}>
                             {t("telegram")} {tBtn("newTab")}
                         </span>
