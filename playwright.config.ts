@@ -31,6 +31,7 @@ export default defineConfig({
         command: "pnpm build && pnpm start -p 3100",
         url: "http://localhost:3100/en",
         timeout: 180_000,
-        reuseExistingServer: !isCI,
+        // a leftover server on 3100 would silently serve a stale build
+        reuseExistingServer: false,
     },
 });
