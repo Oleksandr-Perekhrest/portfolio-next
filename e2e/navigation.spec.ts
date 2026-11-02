@@ -40,9 +40,8 @@ test.describe("navigation", () => {
         await page.evaluate(() =>
             window.scrollTo({ top: 1500, behavior: "instant" }),
         );
-        // Wait for scroll to fully settle: two rAF-separated reads must agree and be > 0.
-        // CSS scroll-behavior:smooth can override behavior:"instant" in some engines,
-        // so a simple scrollY > 0 check may fire while the animation is still running.
+        // Flaked once in a full-suite WebKit run; did not reproduce in 30 isolated runs.
+        // The test waits for a settled scroll and the compact header before clicking.
         await expect
             .poll(
                 () =>

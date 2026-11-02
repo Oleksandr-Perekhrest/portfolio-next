@@ -27,11 +27,25 @@ export default defineConfig({
             use: { ...devices["Pixel 7"] },
         },
     ],
-    webServer: {
-        command: "pnpm build && pnpm start -p 3100",
-        url: "http://localhost:3100/en",
-        timeout: 180_000,
-        // a leftover server on 3100 would silently serve a stale build
-        reuseExistingServer: false,
-    },
+    // Two-server array keeps E2E from sending real emails:
+    // the mock intercepts all Resend API calls before the app server starts.
+    webServer: [
+        {
+            command: "node e2e/mock-resend.ts",
+            url: "http://localhost:3101/__health",
+            reuseExistingServer: false,
+        },
+        {
+            command: "pnpm build && pnpm start -p 3100",
+            url: "http://localhost:3100/en",
+            timeout: 180_000,
+            // a leftover server on 3100 would silently serve a stale build
+            reuseExistingServer: false,
+            env: {
+                RESEND_BASE_URL: "http://localhost:3101",
+                RESEND_API_KEY: "re_e2e_test",
+                CONTACT_TO_EMAIL: "owner@example.test",
+            },
+        },
+    ],
 });
