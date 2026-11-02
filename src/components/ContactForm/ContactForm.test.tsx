@@ -18,8 +18,24 @@ import {
 
 // local dependencies
 import Contact from "../Contact/Contact";
+import { contacts } from "@/content/contacts";
 import { renderWithIntl } from "@/test/renderWithIntl";
 import { sendContactMessage, type ContactResult } from "@/lib/contact/actions";
+
+async function openAndFill() {
+    renderWithIntl(<Contact />);
+    fireEvent.click(screen.getByRole("button", { name: "Email me" }));
+    await waitFor(() => screen.getByRole("dialog"));
+    fireEvent.change(screen.getByRole("textbox", { name: "Name" }), {
+        target: { value: "Alice" },
+    });
+    fireEvent.change(screen.getByRole("textbox", { name: "Email" }), {
+        target: { value: "alice@example.com" },
+    });
+    fireEvent.change(screen.getByRole("textbox", { name: "Message" }), {
+        target: { value: "Hello, I have a role for you." },
+    });
+}
 
 describe("ContactForm", () => {
     beforeEach(() => {
@@ -147,21 +163,6 @@ describe("ContactForm", () => {
     });
 
     describe("submission", () => {
-        async function openAndFill() {
-            renderWithIntl(<Contact />);
-            fireEvent.click(screen.getByRole("button", { name: "Email me" }));
-            await waitFor(() => screen.getByRole("dialog"));
-            fireEvent.change(screen.getByRole("textbox", { name: "Name" }), {
-                target: { value: "Alice" },
-            });
-            fireEvent.change(screen.getByRole("textbox", { name: "Email" }), {
-                target: { value: "alice@example.com" },
-            });
-            fireEvent.change(screen.getByRole("textbox", { name: "Message" }), {
-                target: { value: "Hello, I have a role for you." },
-            });
-        }
-
         it("valid submit calls sendContactMessage once with correct payload", async () => {
             jest.mocked(sendContactMessage).mockResolvedValueOnce({
                 status: "success",
@@ -187,7 +188,7 @@ describe("ContactForm", () => {
             });
         });
 
-        it("while pending shows ‘Sending…’ and disables fields; resolves to success view", async () => {
+        it("while pending shows 'Sending…' and disables fields; resolves to success view", async () => {
             let resolve!: (value: ContactResult) => void;
             const pending = new Promise<ContactResult>((res) => {
                 resolve = res;
@@ -269,6 +270,108 @@ describe("ContactForm", () => {
                     expect.objectContaining({ website: "spam" }),
                 ),
             );
+        });
+    });
+
+    describe("errors", () => {
+        it("unavailable status: alert with Telegram link, values stay, button disabled", async () => {
+            jest.mocked(sendContactMessage).mockResolvedValueOnce({
+                status: "unavailable",
+            });
+            await openAndFill();
+            fireEvent.click(
+                screen.getByRole("button", { name: "Send message" }),
+            );
+
+            await waitFor(() =>
+                expect(screen.getByRole("alert")).toBeInTheDocument(),
+            );
+
+            const alert = screen.getByRole("alert");
+            expect(alert).toHaveTextContent(
+                /The form is temporarily unavailable\. Message me on Telegram/,
+            );
+
+            const link = within(alert).getByRole("link", { name: /Telegram/ });
+            expect(link).toHaveAttribute("href", contacts.telegram);
+            expect(link).toHaveAttribute("target", "_blank");
+
+            expect(screen.getByRole("textbox", { name: "Name" })).toHaveValue(
+                "Alice",
+            );
+            expect(screen.getByRole("textbox", { name: "Email" })).toHaveValue(
+                "alice@example.com",
+            );
+            expect(
+                screen.getByRole("textbox", { name: "Message" }),
+            ).toHaveValue("Hello, I have a role for you.");
+
+            expect(
+                screen.getByRole("button", { name: "Send message" }),
+            ).toBeDisabled();
+        });
+
+        it("network error: shows the unavailability alert", async () => {
+            jest.mocked(sendContactMessage).mockRejectedValueOnce(
+                new Error("Network failure"),
+            );
+            await openAndFill();
+            fireEvent.click(
+                screen.getByRole("button", { name: "Send message" }),
+            );
+
+            await waitFor(() =>
+                expect(screen.getByRole("alert")).toBeInTheDocument(),
+            );
+            expect(screen.getByRole("alert")).toHaveTextContent(
+                /The form is temporarily unavailable\. Message me on Telegram/,
+            );
+        });
+
+        it("after unavailable, close and reopen: alert persists without extra submission", async () => {
+            jest.mocked(sendContactMessage).mockResolvedValueOnce({
+                status: "unavailable",
+            });
+            await openAndFill();
+            fireEvent.click(
+                screen.getByRole("button", { name: "Send message" }),
+            );
+            await waitFor(() =>
+                expect(screen.getByRole("alert")).toBeInTheDocument(),
+            );
+
+            fireEvent.click(screen.getByRole("button", { name: "Close" }));
+            fireEvent.click(screen.getByRole("button", { name: "Email me" }));
+            await waitFor(() => screen.getByRole("dialog"));
+
+            expect(screen.getByRole("alert")).toBeInTheDocument();
+            expect(
+                screen.getByRole("button", { name: "Send message" }),
+            ).toBeDisabled();
+            expect(jest.mocked(sendContactMessage)).toHaveBeenCalledTimes(1);
+        });
+
+        it("server invalid email: error under field, aria-invalid and focus, no alert", async () => {
+            jest.mocked(sendContactMessage).mockResolvedValueOnce({
+                status: "invalid",
+                fieldErrors: { email: ["emailInvalid"] },
+            });
+            await openAndFill();
+            fireEvent.click(
+                screen.getByRole("button", { name: "Send message" }),
+            );
+
+            await waitFor(() =>
+                expect(
+                    screen.getByText("Enter a valid email address"),
+                ).toBeInTheDocument(),
+            );
+
+            const emailInput = screen.getByRole("textbox", { name: "Email" });
+            expect(emailInput).toHaveAttribute("aria-invalid", "true");
+            await waitFor(() => expect(emailInput).toHaveFocus());
+
+            expect(screen.queryByRole("alert")).not.toBeInTheDocument();
         });
     });
 });
