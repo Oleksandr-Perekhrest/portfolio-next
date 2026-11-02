@@ -5,6 +5,7 @@ import { readFile } from "node:fs/promises";
 import { getTranslations } from "next-intl/server";
 
 // local dependencies
+import { siteUrl } from "@/lib/site";
 import { routing } from "@/i18n/routing";
 import enMessages from "../../../messages/en.json";
 import ukMessages from "../../../messages/uk.json";
@@ -50,7 +51,7 @@ export default async function Image({
     const brandName = tHeader("brand.name");
     const heroTitle = tHero("title");
     const keywords = tHero("keywords");
-    const domain = "o-perekhrest.vercel.app";
+    const domain = new URL(siteUrl).host;
 
     return new ImageResponse(
         <div

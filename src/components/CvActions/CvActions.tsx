@@ -48,7 +48,9 @@ export default function CvActions() {
                 <Dialog.Portal>
                     <CvDialog
                         pdfPath={pdfPath}
-                        // No Dialog.Trigger here — focus return must be manual
+                        // On mobile the "View CV" link is a plain anchor that opens the PDF
+                        // in a new tab, so Dialog.Trigger cannot be used. Radix only returns
+                        // focus to a Trigger on close, so focus is returned manually via the ref.
                         onCloseAutoFocus={(e) => {
                             e.preventDefault();
                             viewCvRef.current?.focus();
