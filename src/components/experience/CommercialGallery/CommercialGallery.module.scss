@@ -48,7 +48,7 @@
 .stack {
     @include text(tag);
 
-    color: color-mix(in srgb, var(--color-on-accent) 80%, transparent);
+    color: color-mix(in srgb, var(--color-on-accent) 90%, transparent);
 }
 
 .bottomRow {

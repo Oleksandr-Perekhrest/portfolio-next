@@ -1,4 +1,7 @@
 {
+  "Layout": {
+    "skipLink": "Перейти до вмісту"
+  },
   "Metadata": {
     "title": "Олександр Перехрест — Web Engineer",
     "description": "Олександр Перехрест — веб-інженер: React, Next.js, Node.js і React Native. Проєкти, досвід і контакти."

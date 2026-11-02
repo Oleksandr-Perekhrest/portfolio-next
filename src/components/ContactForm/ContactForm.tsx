@@ -31,7 +31,7 @@ export default function ContactForm({ isUnavailable, onUnavailable }: Props) {
 
     const [startedAt] = useState(() => Date.now());
     const [succeeded, setSucceeded] = useState(false);
-    const closeRef = useRef<HTMLButtonElement>(null);
+    const successRef = useRef<HTMLDivElement>(null);
 
     const [isSending, setIsSending] = useState(false);
 
@@ -47,7 +47,7 @@ export default function ContactForm({ isUnavailable, onUnavailable }: Props) {
 
     useEffect(() => {
         if (succeeded) {
-            closeRef.current?.focus();
+            successRef.current?.focus();
         }
     }, [succeeded]);
 
@@ -94,7 +94,7 @@ export default function ContactForm({ isUnavailable, onUnavailable }: Props) {
 
     if (succeeded) {
         return (
-            <div className={styles.success} role="status">
+            <div className={styles.success}>
                 <div className={styles.successCircle}>
                     <svg
                         aria-hidden
@@ -110,9 +110,15 @@ export default function ContactForm({ isUnavailable, onUnavailable }: Props) {
                         <path d="M5 12l5 5L20 7" />
                     </svg>
                 </div>
-                <p className={styles.successTitle}>{t("successTitle")}</p>
-                <p className={styles.successText}>{t("successText")}</p>
-                <Dialog.Close ref={closeRef} className={styles.close}>
+                <div
+                    ref={successRef}
+                    tabIndex={-1}
+                    className={styles.successMessage}
+                >
+                    <p className={styles.successTitle}>{t("successTitle")}</p>
+                    <p className={styles.successText}>{t("successText")}</p>
+                </div>
+                <Dialog.Close className={styles.close}>
                     {t("close")}
                 </Dialog.Close>
             </div>
