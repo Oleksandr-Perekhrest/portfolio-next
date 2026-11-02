@@ -61,6 +61,7 @@ export default async function LocaleLayout({
     // request.ts validates the locale and calls notFound() for unknown values;
     // getLocale() propagates that error or returns the validated locale.
     const locale = await getLocale();
+    const t = await getTranslations("Layout");
 
     return (
         <html
@@ -73,9 +74,17 @@ export default async function LocaleLayout({
                 <script dangerouslySetInnerHTML={{ __html: themeScript }} />
             </head>
             <body>
+                <span id="top" aria-hidden="true" />
+                <a href="#main-content" className={styles.skipLink}>
+                    {t("skipLink")}
+                </a>
                 <NextIntlClientProvider>
                     <Header />
-                    <main id="top" className={styles.main}>
+                    <main
+                        id="main-content"
+                        tabIndex={-1}
+                        className={styles.main}
+                    >
                         {children}
                     </main>
                     <Footer />

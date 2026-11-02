@@ -1,4 +1,7 @@
 {
+  "Layout": {
+    "skipLink": "Skip to content"
+  },
   "Metadata": {
     "title": "Oleksandr Perekhrest — Web Engineer",
     "description": "Oleksandr Perekhrest — web engineer working with React, Next.js, Node.js and React Native. Projects, experience and contacts."
