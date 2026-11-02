@@ -31,7 +31,7 @@ export default defineConfig({
     // the mock intercepts all Resend API calls before the app server starts.
     webServer: [
         {
-            command: "node e2e/mock-resend.ts",
+            command: "node e2e/mock-resend.mts",
             url: "http://localhost:3101/__health",
             reuseExistingServer: false,
         },

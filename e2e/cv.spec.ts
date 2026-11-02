@@ -79,16 +79,16 @@ test.describe("CV", () => {
         );
 
         await page.goto("/en");
-        // Headless Chromium has no PDF viewer — the PDF becomes a download and the
-        // new tab stays at about:blank, so we wait for the PDF request instead of
-        // asserting the new page URL.
-        const [request] = await Promise.all([
+        // Headless Chromium has no PDF viewer — the popup stays at about:blank and
+        // the PDF becomes a download. The popup's first navigation request has no
+        // frame yet, so the test asserts the popup event plus the PDF request.
+        await Promise.all([
+            page.waitForEvent("popup"),
             context.waitForEvent("request", (r) =>
                 r.url().includes(EN_PDF_PATH),
             ),
             page.getByRole("link", { name: "View CV" }).click(),
         ]);
-        expect(request.frame().page()).not.toBe(page);
 
         // No dialog on the original page
         await expect(page.getByRole("dialog")).not.toBeVisible();
