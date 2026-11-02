@@ -17,27 +17,6 @@ const loadContactDialog = () =>
 
 const ContactDialogLazy = dynamic(loadContactDialog, { ssr: false });
 
-type ContactDialogProps = {
-    isUnavailable: boolean;
-    onUnavailable: () => void;
-};
-
-// Thin wrapper that prevents next/dynamic's useImperativeHandle({ retry }) from
-// reaching Radix Presence, which expects a DOM element ref, not { retry }.
-// In React 19, ref is a regular prop; spreading {...props} would forward it to
-// the dynamic component, which would expose { retry } instead of a DOM element.
-function ContactDialogMount({
-    isUnavailable,
-    onUnavailable,
-}: ContactDialogProps) {
-    return (
-        <ContactDialogLazy
-            isUnavailable={isUnavailable}
-            onUnavailable={onUnavailable}
-        />
-    );
-}
-
 export default function Contact() {
     const t = useTranslations("Contact");
     const tBtn = useTranslations("ButtonLink");
@@ -147,14 +126,12 @@ export default function Contact() {
                 </div>
             </div>
             <Dialog.Root open={emailOpen} onOpenChange={setEmailOpen}>
-                <Dialog.Portal>
-                    {hasOpened && (
-                        <ContactDialogMount
-                            isUnavailable={isUnavailable}
-                            onUnavailable={() => setIsUnavailable(true)}
-                        />
-                    )}
-                </Dialog.Portal>
+                {hasOpened && (
+                    <ContactDialogLazy
+                        isUnavailable={isUnavailable}
+                        onUnavailable={() => setIsUnavailable(true)}
+                    />
+                )}
             </Dialog.Root>
         </section>
     );

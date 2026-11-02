@@ -17,7 +17,7 @@ export default function ContactDialog({ isUnavailable, onUnavailable }: Props) {
     const t = useTranslations("ContactForm");
 
     return (
-        <>
+        <Dialog.Portal>
             <Dialog.Overlay className={styles.veil} />
             <Dialog.Content className={styles.panel}>
                 <div className={styles.header}>
@@ -51,6 +51,6 @@ export default function ContactDialog({ isUnavailable, onUnavailable }: Props) {
                     onUnavailable={onUnavailable}
                 />
             </Dialog.Content>
-        </>
+        </Dialog.Portal>
     );
 }
