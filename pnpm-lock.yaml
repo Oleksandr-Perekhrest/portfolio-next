@@ -171,10 +171,10 @@ importers:
         version: 7.0.0(react-hook-form@7.91.0(@types/react@19.3.0)(react@19.3.0))(zod@4.6.7)
       next:
         specifier: 16.4.3
-        version: 16.4.3(@babel/core@7.29.7(supports-color@7.2.0))(@types/node@24.19.2)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(sass@1.107.0)
+        version: 16.4.3(@babel/core@7.29.7(supports-color@7.2.0))(@playwright/test@1.64.1)(@types/node@24.19.2)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(sass@1.107.0)
       next-intl:
         specifier: ^4.14.9
-        version: 4.14.9(@swc/helpers@0.5.23)(@types/react@19.3.0)(next@16.4.3(@babel/core@7.29.7(supports-color@7.2.0))(@types/node@24.19.2)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(sass@1.107.0))(react@19.3.0)
+        version: 4.14.9(@swc/helpers@0.5.23)(@types/react@19.3.0)(next@16.4.3(@babel/core@7.29.7(supports-color@7.2.0))(@playwright/test@1.64.1)(@types/node@24.19.2)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(sass@1.107.0))(react@19.3.0)
       radix-ui:
         specifier: ^1.8.1
         version: 1.8.1(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
@@ -203,6 +203,9 @@ importers:
       '@jest/globals':
         specifier: ^30.5.2
         version: 30.5.2(supports-color@7.2.0)
+      '@playwright/test':
+        specifier: ^1.64.1
+        version: 1.64.1
       '@testing-library/dom':
         specifier: ^10.4.2
         version: 10.4.2
@@ -1103,6 +1106,11 @@ packages:
   '@pkgr/core@0.3.6':
     resolution: {integrity: sha512-SEeaJLb3qBNF/OaXnaR1NmmBbFYk1zC0ZH/52fATcRPLFg/p791YrcyFFy44Bo9sLaGuSuLp5Q6axbb/O+v/RA==}
     engines: {node: ^14.18.0 || >=16.0.0}
+
+  '@playwright/test@1.64.1':
+    resolution: {integrity: sha512-IaYGml/nSOiZWROfPtuIL7neuu9qDOZ3TNvNljUIrhDMxiGTgPjzj/g9p9RxpS2tSepPDRY+UwAaEeiKtUvIAg==}
+    engines: {node: '>=20'}
+    hasBin: true
 
   '@radix-ui/number@1.1.3':
     resolution: {integrity: sha512-Road2bidD0uu/1BGDOWNdPI06g0lIRy6IF9GZcIrDK2KGItfor8IQwQa+yM2ERgHM1MmHxaxpTzk0/Jp42lNfA==}
@@ -3695,6 +3703,16 @@ packages:
     resolution: {integrity: sha512-HRDzbaKjC+AOWVXxAU/x54COGeIv9eb+6CkDSQoNTt4XyWoIJvuPsXizxu/Fr23EiekbtZwmh1IcIG/l/a10GQ==}
     engines: {node: '>=8'}
 
+  playwright-core@1.64.1:
+    resolution: {integrity: sha512-BC4s8y6SEVA6Q1rSxZTto8hI1KUI3xXlHGZgvGqP4IqPdI/a6FX9H29IDNz7vKo9l21b6LfYosScPL6M3xxyDQ==}
+    engines: {node: '>=20'}
+    hasBin: true
+
+  playwright@1.64.1:
+    resolution: {integrity: sha512-HCrVhHr5QQuwYoswEUGTb7gGp522yflbv/ST8nF4sFWGuLjQCt17Q/EubpGGSNKYn1tsTCPZxqHhHCfVURu7UA==}
+    engines: {node: '>=20'}
+    hasBin: true
+
   po-parser@2.2.0:
     resolution: {integrity: sha512-NdTrKgh0oO7+y+RFX8KKhOB438x/j94UGXEFzl/7pHH0JjWSn42iJ9tgmPksIO6n1JKDHmNDcejPJfKspljB9g==}
 
@@ -5136,6 +5154,10 @@ snapshots:
     optional: true
 
   '@pkgr/core@0.3.6': {}
+
+  '@playwright/test@1.64.1':
+    dependencies:
+      playwright: 1.64.1
 
   '@radix-ui/number@1.1.3': {}
 
@@ -7932,7 +7954,7 @@ snapshots:
 
   next-intl-swc-plugin-extractor@4.14.9: {}
 
-  next-intl@4.14.9(@swc/helpers@0.5.23)(@types/react@19.3.0)(next@16.4.3(@babel/core@7.29.7(supports-color@7.2.0))(@types/node@24.19.2)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(sass@1.107.0))(react@19.3.0):
+  next-intl@4.14.9(@swc/helpers@0.5.23)(@types/react@19.3.0)(next@16.4.3(@babel/core@7.29.7(supports-color@7.2.0))(@playwright/test@1.64.1)(@types/node@24.19.2)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(sass@1.107.0))(react@19.3.0):
     dependencies:
       '@eloqnt/config': 0.1.1
       '@eloqnt/format-json': 0.1.0
@@ -7942,7 +7964,7 @@ snapshots:
       '@swc/core': 1.16.20(@swc/helpers@0.5.23)
       icu-minify: 4.14.9
       negotiator: 1.1.0
-      next: 16.4.3(@babel/core@7.29.7(supports-color@7.2.0))(@types/node@24.19.2)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(sass@1.107.0)
+      next: 16.4.3(@babel/core@7.29.7(supports-color@7.2.0))(@playwright/test@1.64.1)(@types/node@24.19.2)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(sass@1.107.0)
       next-intl-swc-plugin-extractor: 4.14.9
       react: 19.3.0
       use-intl: 4.14.9(@types/react@19.3.0)(react@19.3.0)
@@ -7951,7 +7973,7 @@ snapshots:
     transitivePeerDependencies:
       - '@swc/helpers'
 
-  next@16.4.3(@babel/core@7.29.7(supports-color@7.2.0))(@types/node@24.19.2)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(sass@1.107.0):
+  next@16.4.3(@babel/core@7.29.7(supports-color@7.2.0))(@playwright/test@1.64.1)(@types/node@24.19.2)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(sass@1.107.0):
     dependencies:
       '@next/env': 16.4.3
       '@swc/helpers': 0.5.23
@@ -7970,6 +7992,7 @@ snapshots:
       '@next/swc-linux-x64-musl': 16.4.3
       '@next/swc-win32-arm64-msvc': 16.4.3
       '@next/swc-win32-x64-msvc': 16.4.3
+      '@playwright/test': 1.64.1
       sass: 1.107.0
       sharp: 0.35.5(@types/node@24.19.2)
     transitivePeerDependencies:
@@ -8122,6 +8145,12 @@ snapshots:
   pkg-dir@4.2.0:
     dependencies:
       find-up: 4.1.0
+
+  playwright-core@1.64.1: {}
+
+  playwright@1.64.1:
+    dependencies:
+      playwright-core: 1.64.1
 
   po-parser@2.2.0: {}
 

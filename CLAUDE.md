@@ -22,6 +22,7 @@ pnpm format         # Prettier write (whole project)
 pnpm format:check   # Prettier check (CI / pre-push)
 pnpm test           # Jest (single run)
 pnpm test:watch     # Jest in watch mode
+pnpm test:e2e       # Playwright E2E tests (builds + starts prod server on :3100)
 ```
 
 ## Next.js version warning

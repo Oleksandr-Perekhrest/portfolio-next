@@ -1,6 +1,6 @@
 // outsource dependencies
 import { useTranslations } from "next-intl";
-import type { ReactNode, MouseEventHandler } from "react";
+import type { Ref, ReactNode, MouseEventHandler } from "react";
 
 // local dependencies
 import styles from "./ButtonLink.module.scss";
@@ -12,6 +12,7 @@ type ButtonLinkProps = {
     external?: boolean;
     download?: boolean | string;
     onClick?: MouseEventHandler<HTMLAnchorElement>;
+    ref?: Ref<HTMLAnchorElement>;
     children: ReactNode;
 };
 
@@ -22,6 +23,7 @@ export default function ButtonLink({
     external = false,
     download,
     onClick,
+    ref,
     children,
 }: ButtonLinkProps) {
     const t = useTranslations("ButtonLink");
@@ -29,6 +31,7 @@ export default function ButtonLink({
     return (
         <a
             href={href}
+            ref={ref}
             className={`${styles.base} ${styles[variant]}${size === "sm" ? ` ${styles.sm}` : ""}`}
             {...(external && { target: "_blank", rel: "noopener noreferrer" })}
             {...(download !== undefined && { download })}

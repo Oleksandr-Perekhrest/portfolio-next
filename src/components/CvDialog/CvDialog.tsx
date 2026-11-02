@@ -9,9 +9,10 @@ import styles from "./CvDialog.module.scss";
 
 type CvDialogProps = {
     pdfPath: string;
+    onCloseAutoFocus?: (event: Event) => void;
 };
 
-export default function CvDialog({ pdfPath }: CvDialogProps) {
+export default function CvDialog({ pdfPath, onCloseAutoFocus }: CvDialogProps) {
     const t = useTranslations("Hero");
     const tExp = useTranslations("Experience");
 
@@ -21,6 +22,7 @@ export default function CvDialog({ pdfPath }: CvDialogProps) {
             <Dialog.Content
                 className={styles.panel}
                 aria-describedby={undefined}
+                onCloseAutoFocus={onCloseAutoFocus}
             >
                 <div className={styles.header}>
                     <Dialog.Title className={styles.title}>
