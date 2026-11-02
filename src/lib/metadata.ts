@@ -1,3 +1,6 @@
+// outsource dependencies
+import type { MetadataRoute } from "next";
+
 export const ogLocaleMap: Record<string, string> = {
     en: "en_US",
     uk: "uk_UA",
@@ -14,7 +17,7 @@ export function buildAlternates(locale: string, locales: readonly string[]) {
 export function buildSitemapEntries(
     siteUrl: string,
     locales: readonly string[],
-): import("next").MetadataRoute.Sitemap {
+): MetadataRoute.Sitemap {
     return locales.map((locale) => {
         const { canonical, languages } = buildAlternates(locale, locales);
         return {
