@@ -70,3 +70,5 @@ jobs:
         uses: treosh/lighthouse-ci-action@12.6.2
         with:
           configPath: lighthouserc.json
+          uploadArtifacts: true
+          temporaryPublicStorage: true
