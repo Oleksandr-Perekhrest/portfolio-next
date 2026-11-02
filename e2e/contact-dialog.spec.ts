@@ -54,5 +54,20 @@ test.describe("contact dialog", () => {
         await expect
             .poll(() => page.evaluate(() => window.scrollY))
             .toBe(scrollYBefore);
+        // Control: close dialog, wheel again — scroll must respond, proving wheel
+        // events work in this project and the locked case above is meaningful.
+        await page.keyboard.press("Escape");
+        await expect(page.getByRole("dialog")).not.toBeVisible();
+        // The contact section is near the page bottom, so scrollYBefore is
+        // already the maximum; scroll up first to create room for wheel(0,500).
+        await page.mouse.wheel(0, -600);
+        await expect
+            .poll(() => page.evaluate(() => window.scrollY))
+            .toBeLessThan(scrollYBefore);
+        const scrollYUp = await page.evaluate(() => window.scrollY);
+        await page.mouse.wheel(0, 500);
+        await expect
+            .poll(() => page.evaluate(() => window.scrollY))
+            .toBeGreaterThan(scrollYUp);
     });
 });

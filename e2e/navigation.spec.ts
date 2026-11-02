@@ -40,11 +40,33 @@ test.describe("navigation", () => {
         await page.evaluate(() =>
             window.scrollTo({ top: 1500, behavior: "instant" }),
         );
+        // Wait for scroll to fully settle: two rAF-separated reads must agree and be > 0.
+        // CSS scroll-behavior:smooth can override behavior:"instant" in some engines,
+        // so a simple scrollY > 0 check may fire while the animation is still running.
         await expect
-            .poll(() => page.evaluate(() => window.scrollY), {
-                message: "page must be scrolled down before clicking brand",
-            })
-            .toBeGreaterThan(0);
+            .poll(
+                () =>
+                    page.evaluate(
+                        () =>
+                            new Promise<number | null>((resolve) => {
+                                const a = window.scrollY;
+                                requestAnimationFrame(() =>
+                                    resolve(
+                                        window.scrollY === a && a > 0
+                                            ? a
+                                            : null,
+                                    ),
+                                );
+                            }),
+                    ),
+                { message: "scroll must settle before clicking brand" },
+            )
+            .not.toBeNull();
+        // Wait for header compact transition to finish (driven by scroll position).
+        await expect(page.getByRole("banner")).toHaveAttribute(
+            "data-compact",
+            "true",
+        );
         await page.getByRole("link", { name: "Oleksandr Perekhrest" }).click();
         await expect(page).toHaveURL(/\/en#top$/);
         // smooth-scroll: wait for animation to settle rather than checking immediately
