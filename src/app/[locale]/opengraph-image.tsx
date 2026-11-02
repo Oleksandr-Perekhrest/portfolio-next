@@ -16,6 +16,9 @@ const geistBold = await readFile(
     join(process.cwd(), "assets/og/Geist-Bold.ttf"),
 );
 
+// getTranslations cannot be called here: generateImageMetadata acts like
+// generateStaticParams and next/root-params has no parent context at that
+// point, crashing the build. Read messages JSON directly instead.
 const altByLocale: Record<(typeof routing.locales)[number], string> = {
     en: enMessages.Metadata.title,
     uk: ukMessages.Metadata.title,
@@ -63,10 +66,9 @@ export default async function Image({
         >
             <div
                 style={{
-                    fontSize: 16,
+                    fontSize: 32,
                     fontWeight: 400,
                     color: "#666666",
-                    display: "flex",
                 }}
             >
                 {brandName}
@@ -82,23 +84,21 @@ export default async function Image({
             >
                 <div
                     style={{
-                        fontSize: 80,
+                        fontSize: 96,
                         fontWeight: 700,
                         color: "#1a1a1a",
-                        letterSpacing: "-3.2px",
+                        letterSpacing: "-3.84px",
                         lineHeight: 1,
-                        display: "flex",
                     }}
                 >
                     {heroTitle}
                 </div>
                 <div
                     style={{
-                        fontSize: 20,
+                        fontSize: 36,
                         fontWeight: 400,
                         color: "#4d4d4d",
                         marginTop: 24,
-                        display: "flex",
                     }}
                 >
                     {keywords}
@@ -114,18 +114,17 @@ export default async function Image({
             >
                 <div
                     style={{
-                        width: 48,
-                        height: 4,
+                        width: 64,
+                        height: 6,
                         backgroundColor: "#0a66c2",
-                        borderRadius: 2,
+                        borderRadius: 3,
                     }}
                 />
                 <div
                     style={{
-                        fontSize: 16,
+                        fontSize: 28,
                         fontWeight: 400,
                         color: "#666666",
-                        display: "flex",
                     }}
                 >
                     {domain}
