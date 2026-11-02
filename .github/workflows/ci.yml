@@ -43,3 +43,30 @@ jobs:
 
       - name: Build
         run: pnpm build
+
+  lighthouse:
+    name: lighthouse
+    needs: checks
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: pnpm/action-setup@v6
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm build
+
+      - name: Lighthouse CI
+        uses: treosh/lighthouse-ci-action@12.6.2
+        with:
+          configPath: lighthouserc.json
