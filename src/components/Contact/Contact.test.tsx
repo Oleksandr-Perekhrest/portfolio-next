@@ -91,6 +91,9 @@ describe("Contact", () => {
             expect(screen.queryByLabelText("Name")).not.toBeInTheDocument();
             expect(screen.queryByLabelText("Email")).not.toBeInTheDocument();
             expect(screen.queryByLabelText("Message")).not.toBeInTheDocument();
+            const trigger = screen.getByRole("button", { name: /email me/i });
+            expect(trigger).toHaveAttribute("aria-haspopup", "dialog");
+            expect(trigger).toHaveAttribute("aria-expanded", "false");
         });
 
         it("clicking 'Email me' opens the dialog with form fields", async () => {
@@ -115,8 +118,7 @@ describe("Contact", () => {
             await waitFor(() =>
                 expect(screen.queryByRole("dialog")).not.toBeInTheDocument(),
             );
-            // focus-return is skipped: Radix schedules it via requestAnimationFrame,
-            // which jsdom does not service, so the assertion never resolves.
+            await waitFor(() => expect(trigger).toHaveFocus());
 
             fireEvent.click(trigger);
             await screen.findByRole("dialog", { name: /email me/i });
