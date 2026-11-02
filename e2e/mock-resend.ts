@@ -1,3 +1,7 @@
+// POST /emails trigger: if the subject contains "MockFail", the body is stored
+// but the server responds 429 (rate_limit_exceeded) instead of 200, letting
+// tests assert both that the request was received and that the app handles failure.
+
 // outsource dependencies
 import { randomUUID } from "node:crypto";
 import { createServer } from "node:http";
@@ -22,7 +26,22 @@ const server = createServer(
 
         if (method === "POST" && url === "/emails") {
             const raw = await readBody(req);
-            emails.push(JSON.parse(raw) as EmailBody);
+            const body = JSON.parse(raw) as EmailBody;
+            emails.push(body);
+            if (
+                typeof body.subject === "string" &&
+                body.subject.includes("MockFail")
+            ) {
+                res.writeHead(429, { "Content-Type": "application/json" });
+                res.end(
+                    JSON.stringify({
+                        statusCode: 429,
+                        name: "rate_limit_exceeded",
+                        message: "Too many requests",
+                    }),
+                );
+                return;
+            }
             res.writeHead(200, { "Content-Type": "application/json" });
             res.end(JSON.stringify({ id: randomUUID() }));
             return;
