@@ -30,7 +30,10 @@ export async function generateMetadata({
     params: Promise<{ locale: (typeof routing.locales)[number] }>;
 }): Promise<Metadata> {
     const { locale } = await params;
-    const t = await getTranslations({ locale, namespace: "Metadata" });
+    const [t, tHeader] = await Promise.all([
+        getTranslations({ locale, namespace: "Metadata" }),
+        getTranslations({ locale, namespace: "Header" }),
+    ]);
     const { canonical, languages } = buildAlternates(locale, routing.locales);
     const ogLoc = ogLocaleMap[locale] ?? locale;
     const altLocale = (routing.locales as readonly string[])
@@ -49,6 +52,12 @@ export async function generateMetadata({
             locale: ogLoc,
             alternateLocale: altLocale,
             type: "website",
+            siteName: tHeader("brand.name"),
+        },
+        twitter: {
+            card: "summary_large_image",
+            title: t("title"),
+            description: t("description"),
         },
     };
 }

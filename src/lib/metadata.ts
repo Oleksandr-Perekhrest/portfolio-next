@@ -10,3 +10,7 @@ export function buildAlternates(locale: string, locales: readonly string[]) {
     }
     return { canonical: `/${locale}`, languages };
 }
+
+export function buildSitemapUrl(siteUrl: string, locale: string): string {
+    return `${siteUrl}/${locale}`;
+}
