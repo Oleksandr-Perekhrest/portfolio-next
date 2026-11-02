@@ -1,7 +1,5 @@
 // outsource dependencies
-import { join } from "node:path";
 import { ImageResponse } from "next/og";
-import { readFile } from "node:fs/promises";
 import { getTranslations } from "next-intl/server";
 
 // local dependencies
@@ -9,13 +7,7 @@ import { siteUrl } from "@/lib/site";
 import { routing } from "@/i18n/routing";
 import enMessages from "../../../messages/en.json";
 import ukMessages from "../../../messages/uk.json";
-
-const geistRegular = await readFile(
-    join(process.cwd(), "assets/og/Geist-Regular.ttf"),
-);
-const geistBold = await readFile(
-    join(process.cwd(), "assets/og/Geist-Bold.ttf"),
-);
+import { geistBold, geistRegular } from "@/lib/og/fonts";
 
 // getTranslations cannot be called here: generateImageMetadata acts like
 // generateStaticParams and next/root-params has no parent context at that
