@@ -45,6 +45,9 @@ test.describe("theme switch – light system preference", () => {
             "data-theme",
             "dark",
         );
+        await expect(
+            page.getByRole("switch", { name: "Dark theme" }),
+        ).toBeChecked();
     });
 
     test("switching locale does not reset dark theme", async ({ page }) => {
