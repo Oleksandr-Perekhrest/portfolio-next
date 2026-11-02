@@ -10,6 +10,10 @@ import { renderWithIntl } from "@/test/renderWithIntl";
 const project = projects[0]!;
 
 describe("ProjectGallery (single project)", () => {
+    it("projects[0] is the expected project (guard against data reordering)", () => {
+        expect(project.id).toBe("authkit");
+    });
+
     it('shows "Featured project" label', () => {
         renderWithIntl(<ProjectGallery />);
         expect(screen.getByText("Featured project")).toBeInTheDocument();
