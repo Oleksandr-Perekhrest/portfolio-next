@@ -3,6 +3,7 @@
 // outsource dependencies
 import { useState } from "react";
 import { Dialog } from "radix-ui";
+import dynamic from "next/dynamic";
 import { useTranslations } from "next-intl";
 
 // local dependencies
@@ -10,13 +11,44 @@ import styles from "./Contact.module.scss";
 import { contacts } from "@/content/contacts";
 import TelegramIcon from "@/components/icons/TelegramIcon";
 import SectionTitle from "@/components/SectionTitle/SectionTitle";
-import ContactDialog from "@/components/ContactDialog/ContactDialog";
+
+const loadContactDialog = () =>
+    import("@/components/ContactDialog/ContactDialog");
+
+const ContactDialogLazy = dynamic(loadContactDialog, { ssr: false });
+
+type ContactDialogProps = {
+    isUnavailable: boolean;
+    onUnavailable: () => void;
+};
+
+// Thin wrapper that prevents next/dynamic's useImperativeHandle({ retry }) from
+// reaching Radix Presence, which expects a DOM element ref, not { retry }.
+// In React 19, ref is a regular prop; spreading {...props} would forward it to
+// the dynamic component, which would expose { retry } instead of a DOM element.
+function ContactDialogMount({
+    isUnavailable,
+    onUnavailable,
+}: ContactDialogProps) {
+    return (
+        <ContactDialogLazy
+            isUnavailable={isUnavailable}
+            onUnavailable={onUnavailable}
+        />
+    );
+}
 
 export default function Contact() {
     const t = useTranslations("Contact");
     const tBtn = useTranslations("ButtonLink");
     const [emailOpen, setEmailOpen] = useState(false);
+    const [hasOpened, setHasOpened] = useState(false);
     const [isUnavailable, setIsUnavailable] = useState(false);
+
+    function handleEmailMeClick() {
+        setHasOpened(true);
+        setEmailOpen(true);
+    }
 
     return (
         <section id="contact" className={styles.section}>
@@ -34,7 +66,9 @@ export default function Contact() {
                     <button
                         type="button"
                         className={styles.emailMeBtn}
-                        onClick={() => setEmailOpen(true)}
+                        onClick={handleEmailMeClick}
+                        onPointerEnter={loadContactDialog}
+                        onFocus={loadContactDialog}
                     >
                         <svg
                             aria-hidden
@@ -114,10 +148,12 @@ export default function Contact() {
             </div>
             <Dialog.Root open={emailOpen} onOpenChange={setEmailOpen}>
                 <Dialog.Portal>
-                    <ContactDialog
-                        isUnavailable={isUnavailable}
-                        onUnavailable={() => setIsUnavailable(true)}
-                    />
+                    {hasOpened && (
+                        <ContactDialogMount
+                            isUnavailable={isUnavailable}
+                            onUnavailable={() => setIsUnavailable(true)}
+                        />
+                    )}
                 </Dialog.Portal>
             </Dialog.Root>
         </section>
