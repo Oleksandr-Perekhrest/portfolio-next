@@ -143,4 +143,19 @@ describe("CvActions", () => {
             expect(screen.queryByRole("dialog")).not.toBeInTheDocument(),
         );
     });
+
+    it("closing the dialog on desktop returns focus to the View CV link", async () => {
+        renderWithIntl(<CvActions />);
+        fireEvent.click(screen.getByRole("link", { name: /View CV/ }));
+        await waitFor(() =>
+            expect(
+                screen.getByRole("dialog", { name: "CV" }),
+            ).toBeInTheDocument(),
+        );
+        fireEvent.keyDown(document.body, { key: "Escape" });
+        await waitFor(() =>
+            expect(screen.queryByRole("dialog")).not.toBeInTheDocument(),
+        );
+        expect(screen.getByRole("link", { name: /View CV/ })).toHaveFocus();
+    });
 });

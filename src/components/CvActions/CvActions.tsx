@@ -1,8 +1,8 @@
 "use client";
 
 // outsource dependencies
-import { useState } from "react";
 import { Dialog } from "radix-ui";
+import { useRef, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 
 // local dependencies
@@ -15,6 +15,7 @@ export default function CvActions() {
     const t = useTranslations("Hero");
     const pdfPath = getCvPath(useLocale());
     const [cvOpen, setCvOpen] = useState(false);
+    const viewCvRef = useRef<HTMLAnchorElement>(null);
 
     return (
         <>
@@ -22,6 +23,7 @@ export default function CvActions() {
                 href={pdfPath}
                 variant="secondary"
                 external
+                ref={viewCvRef}
                 onClick={(e) => {
                     if (
                         window.matchMedia(`(width >= ${breakpoints.tablet}px)`)
@@ -44,7 +46,14 @@ export default function CvActions() {
             </ButtonLink>
             <Dialog.Root open={cvOpen} onOpenChange={setCvOpen}>
                 <Dialog.Portal>
-                    <CvDialog pdfPath={pdfPath} />
+                    <CvDialog
+                        pdfPath={pdfPath}
+                        // No Dialog.Trigger here — focus return must be manual
+                        onCloseAutoFocus={(e) => {
+                            e.preventDefault();
+                            viewCvRef.current?.focus();
+                        }}
+                    />
                 </Dialog.Portal>
             </Dialog.Root>
         </>
