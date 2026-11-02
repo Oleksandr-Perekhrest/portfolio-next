@@ -1,6 +1,6 @@
 // outsource dependencies
-import { screen, cleanup } from "@testing-library/react";
 import { it, expect, describe, afterEach } from "@jest/globals";
+import { screen, cleanup, waitFor, fireEvent } from "@testing-library/react";
 
 // local dependencies
 import Contact from "./Contact";
@@ -81,6 +81,45 @@ describe("Contact", () => {
                     name: "GitHub profile (opens in a new tab)",
                 }),
             ).toBeInTheDocument();
+        });
+    });
+
+    describe("lazy dialog", () => {
+        it("dialog and form fields are absent before any interaction", () => {
+            renderWithIntl(<Contact />);
+            expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+            expect(screen.queryByLabelText("Name")).not.toBeInTheDocument();
+            expect(screen.queryByLabelText("Email")).not.toBeInTheDocument();
+            expect(screen.queryByLabelText("Message")).not.toBeInTheDocument();
+        });
+
+        it("clicking 'Email me' opens the dialog with form fields", async () => {
+            renderWithIntl(<Contact />);
+            fireEvent.click(screen.getByRole("button", { name: /email me/i }));
+            await screen.findByRole("dialog", { name: /email me/i });
+            expect(screen.getByLabelText("Name")).toBeInTheDocument();
+            expect(screen.getByLabelText("Email")).toBeInTheDocument();
+            expect(screen.getByLabelText("Message")).toBeInTheDocument();
+        });
+
+        it("closing with Escape removes dialog; reopening shows it again", async () => {
+            renderWithIntl(<Contact />);
+            const trigger = screen.getByRole("button", { name: /email me/i });
+            fireEvent.click(trigger);
+            await screen.findByRole("dialog", { name: /email me/i });
+
+            fireEvent.keyDown(document.activeElement ?? document.body, {
+                key: "Escape",
+                code: "Escape",
+            });
+            await waitFor(() =>
+                expect(screen.queryByRole("dialog")).not.toBeInTheDocument(),
+            );
+            // focus-return is skipped: Radix schedules it via requestAnimationFrame,
+            // which jsdom does not service, so the assertion never resolves.
+
+            fireEvent.click(trigger);
+            await screen.findByRole("dialog", { name: /email me/i });
         });
     });
 
