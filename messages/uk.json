@@ -106,9 +106,33 @@
   "Contact": {
     "label": "Контакти",
     "title": "Зв’язок",
-    "lead": "Відкритий до пропозицій на frontend- і full-stack-позиції. Пишіть у LinkedIn або Telegram.",
+    "lead": "Відкритий до пропозицій на frontend- і full-stack-позиції.",
+    "reachOut": "Зв’яжіться зі мною зручним для вас способом.",
+    "emailMe": "Написати мені",
     "linkedin": "Профіль у LinkedIn",
     "github": "Профіль на GitHub",
     "telegram": "Telegram"
+  },
+  "ContactForm": {
+    "title": "Написати мені",
+    "description": "Я відповім на пошту, яку ви вкажете нижче.",
+    "name": "Ім’я",
+    "namePlaceholder": "Ваше ім’я",
+    "email": "Пошта",
+    "emailPlaceholder": "you@company.com",
+    "message": "Повідомлення",
+    "messagePlaceholder": "Розкажіть про вакансію чи проєкт",
+    "submit": "Надіслати повідомлення",
+    "sending": "Надсилаю…",
+    "errors": {
+      "nameInvalid": "Вкажіть ім’я (до 100 символів)",
+      "emailInvalid": "Вкажіть коректну адресу пошти",
+      "messageLength": "Повідомлення має містити від 10 до 2000 символів"
+    },
+    "successTitle": "Повідомлення надіслано",
+    "successText": "Дякую! Скоро відповім.",
+    "unavailable": "Форма тимчасово недоступна. Напишіть мені в <link>Telegram</link>.",
+    "hint": "Зручніше в месенджері? <link>Telegram</link>",
+    "close": "Закрити"
   }
 }

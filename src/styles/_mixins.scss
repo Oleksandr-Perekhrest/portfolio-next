@@ -39,6 +39,29 @@
     border: 0;
 }
 
+// ── Primary button colours ────────────────────────────────────────────────────
+// Shared by ButtonLink (.primary variant) and any standalone <button> that
+// needs the same accent look. Covers only colours and interaction states —
+// structural properties (size, padding, radius) stay in each component.
+
+@mixin btn-primary-colors {
+    background: var(--color-accent);
+    color: var(--color-on-accent);
+
+    &:hover,
+    &:active {
+        background: var(--color-accent-hover);
+    }
+
+    &:active {
+        transform: translateY(1px);
+
+        @media (prefers-reduced-motion: reduce) {
+            transform: none;
+        }
+    }
+}
+
 // ── Type scale ───────────────────────────────────────────────────────────────
 
 @mixin text($style) {

@@ -1,14 +1,22 @@
+"use client";
+
 // outsource dependencies
+import { useState } from "react";
+import { Dialog } from "radix-ui";
 import { useTranslations } from "next-intl";
 
 // local dependencies
 import styles from "./Contact.module.scss";
 import { contacts } from "@/content/contacts";
+import TelegramIcon from "@/components/icons/TelegramIcon";
 import SectionTitle from "@/components/SectionTitle/SectionTitle";
+import ContactDialog from "@/components/ContactDialog/ContactDialog";
 
 export default function Contact() {
     const t = useTranslations("Contact");
     const tBtn = useTranslations("ButtonLink");
+    const [emailOpen, setEmailOpen] = useState(false);
+    const [isUnavailable, setIsUnavailable] = useState(false);
 
     return (
         <section id="contact" className={styles.section}>
@@ -16,14 +24,17 @@ export default function Contact() {
             <div className={styles.card}>
                 <div className={styles.textCol}>
                     <h3 className={styles.title}>{t("title")}</h3>
-                    <p className={styles.lead}>{t("lead")}</p>
+                    <p className={styles.lead}>
+                        {t("lead")}
+                        <br />
+                        {t("reachOut")}
+                    </p>
                 </div>
                 <div className={styles.links}>
-                    <a
-                        href={contacts.telegram}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={styles.iconLink}
+                    <button
+                        type="button"
+                        className={styles.emailMeBtn}
+                        onClick={() => setEmailOpen(true)}
                     >
                         <svg
                             aria-hidden
@@ -36,9 +47,18 @@ export default function Contact() {
                             strokeLinecap="round"
                             strokeLinejoin="round"
                         >
-                            <path d="M21 4L3 11l6 2 2 6 3-4 5 4 2-15z" />
-                            <path d="M9 13l8-6" />
+                            <rect x="3" y="5" width="18" height="14" rx="2" />
+                            <path d="M3 7l9 6 9-6" />
                         </svg>
+                        {t("emailMe")}
+                    </button>
+                    <a
+                        href={contacts.telegram}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={styles.iconLink}
+                    >
+                        <TelegramIcon />
                         <span className={styles.srOnly}>
                             {t("telegram")} {tBtn("newTab")}
                         </span>
@@ -92,6 +112,14 @@ export default function Contact() {
                     </a>
                 </div>
             </div>
+            <Dialog.Root open={emailOpen} onOpenChange={setEmailOpen}>
+                <Dialog.Portal>
+                    <ContactDialog
+                        isUnavailable={isUnavailable}
+                        onUnavailable={() => setIsUnavailable(true)}
+                    />
+                </Dialog.Portal>
+            </Dialog.Root>
         </section>
     );
 }

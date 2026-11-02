@@ -1,0 +1,12 @@
+// local dependencies
+@use "styles" as *;
+
+.errorMsg {
+    display: flex;
+    gap: var(--space-1);
+    align-items: center;
+
+    @include text(small);
+
+    color: var(--color-error);
+}

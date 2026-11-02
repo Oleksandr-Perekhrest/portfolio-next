@@ -1,0 +1,210 @@
+// local dependencies
+@use "styles" as *;
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.honeypot {
+    position: absolute;
+    top: 0;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}
+
+.fieldset {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    padding: 0;
+    margin: 0;
+    border: 0;
+    min-width: 0;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+}
+
+.label {
+    @include text(small);
+
+    font-weight: 600;
+    color: var(--color-ink);
+}
+
+.input {
+    width: 100%;
+    height: var(--space-12);
+    padding: 0 14px;
+    color: var(--color-ink);
+    background: var(--color-surface);
+    border: 1px solid var(--color-line-strong);
+    border-radius: var(--radius-md);
+    transition: border-color var(--duration-fast);
+    appearance: none;
+
+    @include text(body);
+
+    &::placeholder {
+        color: var(--color-muted);
+    }
+
+    &:hover {
+        border-color: var(--color-ink-mid);
+    }
+
+    &:focus {
+        outline: none;
+        border: 2px solid var(--color-accent-text);
+    }
+
+    &:disabled {
+        background: var(--color-chip);
+        border-color: var(--color-line);
+        color: var(--color-muted);
+        cursor: not-allowed;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        transition: none;
+    }
+}
+
+.inputError {
+    border: 2px solid var(--color-error);
+
+    &:focus {
+        border-color: var(--color-error);
+    }
+}
+
+.textarea {
+    height: auto;
+    padding: 12px 14px;
+    resize: vertical;
+}
+
+.submitBtn {
+    display: flex;
+    gap: var(--space-2);
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: var(--space-12);
+    border: none;
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    transition: background-color var(--duration-fast);
+
+    @include text(button);
+    @include btn-primary-colors;
+    @include focus-ring;
+
+    &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        transition: none;
+    }
+}
+
+.hint {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1);
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    color: var(--color-muted);
+
+    @include text(small);
+}
+
+.hintLink {
+    display: inline-flex;
+    gap: var(--space-1);
+    align-items: center;
+    color: var(--color-accent-text);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+
+    @include focus-ring;
+}
+
+.unavailable {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1);
+    align-items: center;
+    margin: 0;
+    color: var(--color-error);
+
+    @include text(small);
+}
+
+.unavailableLink {
+    color: var(--color-error);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+
+    @include focus-ring;
+}
+
+.success {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 32px 0;
+}
+
+.successCircle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    border-radius: var(--radius-full);
+    background: var(--color-accent);
+    color: var(--color-on-accent);
+}
+
+.successTitle {
+    margin: 0;
+    color: var(--color-ink);
+
+    @include text(card-title);
+}
+
+.successText {
+    margin: 0;
+    color: var(--color-muted);
+
+    @include text(body);
+}
+
+.close {
+    height: 44px;
+    padding: 0 20px;
+    border: 1px solid var(--color-line-strong);
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+    color: var(--color-ink);
+    cursor: pointer;
+
+    @include text(button);
+    @include focus-ring;
+}
+
+.srOnly {
+    @include visually-hidden;
+}

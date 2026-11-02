@@ -76,6 +76,17 @@ Skip a script only if it does not exist yet, and say so in the report.
 
 - **i18n-keys** (`.claude/skills/i18n-keys/SKILL.md`): follow when adding or changing any user-visible text, aria-label, alt, title, placeholder, metadata, or translation keys.
 
+## Environment variables
+
+Copy `.env.example` to `.env.local` and fill in the values before running locally.
+
+| Variable           | Description                                    |
+| ------------------ | ---------------------------------------------- |
+| `RESEND_API_KEY`   | Resend API key for sending contact form emails |
+| `CONTACT_TO_EMAIL` | Recipient address for contact form submissions |
+
+The build succeeds without these variables because they are read inside the server action, not at module level.
+
 ## Rules for the agent
 
 - Do NOT commit, push, create branches, or open PRs — the developer does that.

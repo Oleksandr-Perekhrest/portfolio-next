@@ -1,0 +1,91 @@
+// local dependencies
+@use "styles" as *;
+
+.veil {
+    position: fixed;
+    inset: 0;
+    z-index: 20;
+    background: var(--color-veil);
+    -webkit-backdrop-filter: var(--blur-layer);
+    backdrop-filter: var(--blur-layer);
+    box-shadow: var(--shadow-vignette);
+    opacity: 1;
+    transition: opacity var(--duration-slow) var(--ease-standard);
+
+    &[data-state="closed"] {
+        opacity: 0;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        transition: none;
+    }
+}
+
+.panel {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    z-index: 21;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    width: min(90vw, 560px);
+    max-height: 90dvh;
+    overflow-y: auto;
+    gap: var(--space-6);
+    padding: var(--space-8);
+    border-radius: var(--radius-2xl);
+    background: var(--color-surface);
+    box-shadow: var(--shadow-modal);
+
+    @include below(mobile) {
+        padding: var(--space-5);
+    }
+}
+
+.header {
+    display: flex;
+    gap: var(--space-4);
+    align-items: flex-start;
+    justify-content: space-between;
+}
+
+.headerText {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+}
+
+.title {
+    @include text(card-title-lg);
+
+    margin: 0;
+    color: var(--color-ink);
+}
+
+.description {
+    @include text(body);
+
+    margin: 0;
+    color: var(--color-muted);
+}
+
+.closeBtn {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border: 1px solid var(--color-line-strong);
+    border-radius: var(--radius-full);
+    background: var(--color-surface);
+    color: var(--color-ink);
+    cursor: pointer;
+
+    @include focus-ring;
+
+    &:hover {
+        background: var(--color-chip);
+    }
+}

@@ -50,6 +50,26 @@
     align-items: center;
 }
 
+.emailMeBtn {
+    display: inline-flex;
+    gap: var(--space-2);
+    align-items: center;
+    height: var(--space-12);
+    padding: 0 22px;
+    border: none;
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    transition: background-color var(--duration-fast);
+
+    @include text(button);
+    @include btn-primary-colors;
+    @include focus-ring;
+
+    @media (prefers-reduced-motion: reduce) {
+        transition: none;
+    }
+}
+
 .iconLink {
     display: inline-flex;
     align-items: center;
