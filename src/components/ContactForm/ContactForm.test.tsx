@@ -225,7 +225,7 @@ describe("ContactForm", () => {
             ).toBeInTheDocument();
         });
 
-        it("success: hides form fields and focuses Close button", async () => {
+        it("success: hides form fields and focuses the success message", async () => {
             jest.mocked(sendContactMessage).mockResolvedValueOnce({
                 status: "success",
             });
@@ -242,12 +242,17 @@ describe("ContactForm", () => {
             ).not.toBeInTheDocument();
 
             await waitFor(() =>
-                expect(
-                    within(screen.getByRole("status")).getByRole("button", {
-                        name: "Close",
-                    }),
-                ).toHaveFocus(),
+                expect(document.activeElement).toHaveTextContent(
+                    "Message sent",
+                ),
             );
+            expect(document.activeElement).toHaveTextContent(
+                /get back to you soon/,
+            );
+            // The text "Close" button must exist and be outside the focused element
+            const closeBtn = screen.getByText("Close");
+            expect(closeBtn).toBeInTheDocument();
+            expect(document.activeElement!.contains(closeBtn)).toBe(false);
         });
 
         it("honeypot: sets website to the spam value before submitting", async () => {
