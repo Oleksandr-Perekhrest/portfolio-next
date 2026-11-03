@@ -43,7 +43,7 @@ export default function CommercialGallery() {
                     return (
                         <div
                             key={item.id}
-                            className={active ? styles.item : styles.itemHidden}
+                            className={`${styles.item}${active ? "" : ` ${styles.hidden}`}`}
                             data-testid="commercial-item"
                             aria-hidden={active ? undefined : true}
                             inert={active ? undefined : true}
