@@ -14,11 +14,15 @@
 .topRow {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
 }
 
 .label {
     @include text(tag);
+}
+
+.counter {
+    white-space: nowrap;
 }
 
 .nda {
@@ -43,10 +47,16 @@
 
 .item {
     grid-area: 1 / 1;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
 }
 
 .itemHidden {
     grid-area: 1 / 1;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
     visibility: hidden;
 }
 

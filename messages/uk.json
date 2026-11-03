@@ -55,7 +55,7 @@
   "Experience": {
     "title": "Досвід",
     "featured": "Обраний проєкт",
-    "projectCounter": "Проєкт {current} / {total}",
+    "projectCounter": "Проєкт <counter>{current} / {total}</counter>",
     "prevProject": "Попередній проєкт",
     "nextProject": "Наступний проєкт",
     "demo": "Демо",
@@ -68,7 +68,7 @@
       }
     },
     "commercial": {
-      "label": "Комерційний досвід · {current} / {total}",
+      "label": "Комерційний досвід · <counter>{current} / {total}</counter>",
       "nda": "NDA",
       "ndaHint": "Під NDA: без назв компаній і скриншотів",
       "prev": "Попередній",

@@ -33,9 +33,9 @@ describe("Experience", () => {
             }),
         ).toBeInTheDocument();
 
-        expect(
-            screen.getByText(`Commercial · 1 / ${commercial.length}`),
-        ).toBeInTheDocument();
+        expect(screen.getByTestId("commercial-label")).toHaveTextContent(
+            `Commercial · 1 / ${commercial.length}`,
+        );
 
         expect(
             screen.getByRole("heading", { level: 3, name: "Languages" }),

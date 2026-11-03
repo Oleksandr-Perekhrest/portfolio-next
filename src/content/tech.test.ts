@@ -2,113 +2,92 @@
 import { it, expect, describe } from "@jest/globals";
 
 // local dependencies
-import { techs, getCloud, getTileSummary } from "./tech";
+import { techs, getCloud, type Tech, getTileSummary } from "./tech";
 
-describe("getTileSummary", () => {
-    it("frontend: first 5 by level, restCount = 13 area + 3 shared", () => {
-        const result = getTileSummary("frontend");
-        expect(result.names).toEqual([
-            "React",
-            "Next.js",
-            "TypeScript",
-            "Redux",
-            "React Native",
-        ]);
-        expect(result.restCount).toBe(16);
+// Small fixture: 4 frontend (mixed levels, out of order), 3 backend, 2 shared.
+// Literal expected values below are correct because this fixture never changes.
+const FX: readonly Tech[] = [
+    { name: "CSS", area: "frontend", level: 3 },
+    { name: "TypeScript", area: "frontend", level: 2 },
+    { name: "React", area: "frontend", level: 1 },
+    { name: "Jest", area: "frontend", level: 4 },
+    { name: "Docker", area: "backend", level: 3 },
+    { name: "Node.js", area: "backend", level: 1 },
+    { name: "Express", area: "backend", level: 2 },
+    { name: "Git", area: "shared" },
+    { name: "Cursor", area: "shared" },
+];
+
+describe("getTileSummary — fixture", () => {
+    it("frontend: sorts by level, returns top-N names", () => {
+        const r = getTileSummary("frontend", 2, FX);
+        expect(r.names).toEqual(["React", "TypeScript"]);
+        expect(r.restCount).toBe(4); // (4 area - 2 limit) + 2 shared
     });
 
-    it("backend: first 5 by level, restCount = 8 area + 3 shared", () => {
-        const result = getTileSummary("backend");
-        expect(result.names).toEqual([
-            "Node.js",
-            "Express",
-            "Prisma",
-            "PostgreSQL",
-            "Docker",
-        ]);
-        expect(result.restCount).toBe(11);
+    it("frontend: limit larger than area size → all names, restCount = shared only", () => {
+        const r = getTileSummary("frontend", 10, FX);
+        expect(r.names).toEqual(["React", "TypeScript", "CSS", "Jest"]);
+        expect(r.restCount).toBe(2); // max(0, 4-10) + 2 shared
     });
 
-    it("backend with limit 50: all 13 names returned, restCount = 3 (shared only)", () => {
-        const result = getTileSummary("backend", 50);
-        expect(result.names).toEqual([
-            "Node.js",
-            "Express",
-            "Prisma",
-            "PostgreSQL",
-            "Docker",
-            "REST API",
-            "zod",
-            "Vitest",
-            "Supertest",
-            "GitHub Actions",
-            "Google OAuth",
-            "Vercel",
-            "Render",
-        ]);
-        expect(result.restCount).toBe(3);
+    it("backend: sorts by level, returns top-N names", () => {
+        const r = getTileSummary("backend", 2, FX);
+        expect(r.names).toEqual(["Node.js", "Express"]);
+        expect(r.restCount).toBe(3); // (3 area - 2 limit) + 2 shared
     });
 });
 
-describe("getCloud", () => {
-    it("backend cloud contains Git (shared item)", () => {
-        const cloud = getCloud("backend");
-        expect(cloud.map((t) => t.name)).toContain("Git");
-    });
-
-    it("backend cloud contains no frontend items", () => {
-        const cloud = getCloud("backend");
-        expect(cloud.every((t) => t.area !== "frontend")).toBe(true);
-    });
-
-    it("tech names are unique", () => {
-        const allNames = Array.from(techs).map((t) => t.name);
-        expect(new Set(allNames).size).toBe(allNames.length);
-    });
-
-    it("frontend cloud: first item is React", () => {
-        const cloud = getCloud("frontend");
-        expect(cloud[0]?.name).toBe("React");
-    });
-
-    it("frontend cloud: area item levels are non-decreasing", () => {
-        const cloud = getCloud("frontend");
-        const areaItems = cloud.filter((t) => t.area !== "shared");
-        for (let i = 1; i < areaItems.length; i++) {
-            const prev = areaItems[i - 1]!;
-            const curr = areaItems[i]!;
-            expect((curr as { level: number }).level).toBeGreaterThanOrEqual(
-                (prev as { level: number }).level,
-            );
-        }
-    });
-
-    it("frontend cloud: last three items are Git, Claude Code, Cursor", () => {
-        const cloud = getCloud("frontend");
-        expect(cloud.slice(-3).map((t) => t.name)).toEqual([
+describe("getCloud — fixture", () => {
+    it("frontend: area items sorted by level, shared appended at the end", () => {
+        const names = getCloud("frontend", FX).map((t) => t.name);
+        expect(names).toEqual([
+            "React",
+            "TypeScript",
+            "CSS",
+            "Jest",
             "Git",
-            "Claude Code",
             "Cursor",
         ]);
     });
 
-    it("frontend cloud: length is 18 + 3 = 21", () => {
-        const cloud = getCloud("frontend");
-        expect(cloud).toHaveLength(21);
+    it("backend: area items sorted by level, shared appended at the end", () => {
+        const names = getCloud("backend", FX).map((t) => t.name);
+        expect(names).toEqual([
+            "Node.js",
+            "Express",
+            "Docker",
+            "Git",
+            "Cursor",
+        ]);
+    });
+
+    it("backend cloud: no frontend items", () => {
+        expect(
+            getCloud("backend", FX).every((t) => t.area !== "frontend"),
+        ).toBe(true);
+    });
+
+    it("frontend cloud: no backend items", () => {
+        expect(
+            getCloud("frontend", FX).every((t) => t.area !== "backend"),
+        ).toBe(true);
     });
 });
 
-describe("icon coverage", () => {
-    it("every frontend/backend item with level 1–2 has an icon", () => {
-        const lowLevel = Array.from(techs).filter((t) => {
-            if (t.area === "shared") return false;
-            return t.level <= 2;
-        });
-        expect(lowLevel.length).toBeGreaterThan(0);
+describe("techs — invariants", () => {
+    it("tech names are unique", () => {
+        const names = Array.from(techs).map((t) => t.name);
+        expect(new Set(names).size).toBe(names.length);
+    });
+
+    it("every level 1–2 frontend/backend item has an icon", () => {
+        const lowLevel = Array.from(techs).filter(
+            (t) => t.area !== "shared" && t.level <= 2,
+        );
+        expect(lowLevel.length).toBeGreaterThan(0); // control: list is non-empty
         for (const item of lowLevel) {
-            if (item.area !== "shared") {
-                expect(item.icon).toBeDefined();
-            }
+            if (item.area !== "shared") expect(item.icon).toBeDefined();
         }
     });
 
@@ -120,5 +99,16 @@ describe("icon coverage", () => {
                 expect(t.icon).toBeUndefined();
             }
         }
+    });
+
+    it("at least one level-1 item in each area", () => {
+        const frontendL1 = Array.from(techs).filter(
+            (t) => t.area === "frontend" && t.level === 1,
+        );
+        const backendL1 = Array.from(techs).filter(
+            (t) => t.area === "backend" && t.level === 1,
+        );
+        expect(frontendL1.length).toBeGreaterThan(0);
+        expect(backendL1.length).toBeGreaterThan(0);
     });
 });

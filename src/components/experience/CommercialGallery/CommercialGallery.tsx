@@ -17,10 +17,17 @@ export default function CommercialGallery() {
     return (
         <div className={styles.card} data-testid="commercial-card">
             <div className={styles.topRow}>
-                <span className={styles.label} aria-live="polite">
-                    {t("commercial.label", {
+                <span
+                    className={styles.label}
+                    aria-live="polite"
+                    data-testid="commercial-label"
+                >
+                    {t.rich("commercial.label", {
                         current: index + 1,
                         total: count,
+                        counter: (chunks) => (
+                            <span className={styles.counter}>{chunks}</span>
+                        ),
                     })}
                 </span>
                 <span className={styles.nda} title={t("commercial.ndaHint")}>
