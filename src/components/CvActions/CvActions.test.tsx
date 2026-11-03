@@ -14,8 +14,8 @@ import CvActions from "./CvActions";
 import { breakpoints } from "@/lib/breakpoints";
 import { renderWithIntl } from "@/test/renderWithIntl";
 
-const EN_PDF = "/cv/CV-Perekhrest-Oleksandr-Web-Developer-EN.pdf";
-const UK_PDF = "/cv/CV-Perekhrest-Oleksandr-Web-Developer-UA.pdf";
+const EN_PDF = "/cv/CV-Perekhrest-Oleksandr-Web-Engineer-EN.pdf";
+const UK_PDF = "/cv/CV-Perekhrest-Oleksandr-Web-Engineer-UA.pdf";
 
 function mockMatchMedia(matches: boolean): void {
     Object.defineProperty(window, "matchMedia", {

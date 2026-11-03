@@ -3,9 +3,9 @@ import { readFileSync } from "node:fs";
 import { test, expect } from "@playwright/test";
 
 // Paths and filenames from src/content/cv.ts
-const EN_PDF_PATH = "/cv/CV-Perekhrest-Oleksandr-Web-Developer-EN.pdf";
-const EN_PDF_FILENAME = "CV-Perekhrest-Oleksandr-Web-Developer-EN.pdf";
-const UK_PDF_FILENAME = "CV-Perekhrest-Oleksandr-Web-Developer-UA.pdf";
+const EN_PDF_PATH = "/cv/CV-Perekhrest-Oleksandr-Web-Engineer-EN.pdf";
+const EN_PDF_FILENAME = "CV-Perekhrest-Oleksandr-Web-Engineer-EN.pdf";
+const UK_PDF_FILENAME = "CV-Perekhrest-Oleksandr-Web-Engineer-UA.pdf";
 
 test.describe("CV", () => {
     test("Download PDF on /en triggers download with the EN filename", async ({
