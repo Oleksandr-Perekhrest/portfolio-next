@@ -55,7 +55,7 @@
   "Experience": {
     "title": "Experience",
     "featured": "Featured project",
-    "projectCounter": "Project {current} / {total}",
+    "projectCounter": "Project <counter>{current} / {total}</counter>",
     "prevProject": "Previous project",
     "nextProject": "Next project",
     "demo": "Live demo",
@@ -68,14 +68,15 @@
       }
     },
     "commercial": {
-      "label": "Commercial · {current} / {total}",
+      "label": "Commercial · <counter>{current} / {total}</counter>",
       "nda": "NDA",
       "ndaHint": "Under NDA: no company names or screenshots",
       "prev": "Previous",
       "next": "Next",
       "items": {
         "healthcare": "Healthcare platform",
-        "hr": "Internal HR system"
+        "hrm": "HRM system",
+        "mobileRedesign": "Pixel-perfect app redesign"
       }
     },
     "languages": {

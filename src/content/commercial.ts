@@ -22,8 +22,13 @@ export const commercial = [
         stack: ["React", "React Native", "Redux"],
     },
     {
-        id: "hr",
+        id: "hrm",
         role: "fullstack",
-        stack: ["Node.js", "Prisma", "PostgreSQL"],
+        stack: ["Next.js", "Node.js", "Prisma", "PostgreSQL"],
+    },
+    {
+        id: "mobileRedesign",
+        role: "frontend",
+        stack: ["React Native", "NativeWind", "Figma"],
     },
 ] as const satisfies readonly CommercialProject[];

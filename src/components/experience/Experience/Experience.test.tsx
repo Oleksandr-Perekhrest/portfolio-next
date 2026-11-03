@@ -4,6 +4,7 @@ import { it, expect, describe } from "@jest/globals";
 
 // local dependencies
 import Experience from "./Experience";
+import { commercial } from "@/content/commercial";
 import { renderWithIntl } from "@/test/renderWithIntl";
 
 describe("Experience", () => {
@@ -32,7 +33,9 @@ describe("Experience", () => {
             }),
         ).toBeInTheDocument();
 
-        expect(screen.getByText("Commercial · 1 / 2")).toBeInTheDocument();
+        expect(screen.getByTestId("commercial-label")).toHaveTextContent(
+            `Commercial · 1 / ${commercial.length}`,
+        );
 
         expect(
             screen.getByRole("heading", { level: 3, name: "Languages" }),

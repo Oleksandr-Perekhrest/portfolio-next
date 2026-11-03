@@ -46,6 +46,7 @@ export const techs: readonly Tech[] = [
     { name: "CRA", area: "frontend", level: 4 },
     { name: "i18next", area: "frontend", level: 4 },
     { name: "next-intl", area: "frontend", level: 4 },
+    { name: "NativeWind", area: "frontend", level: 4 },
     { name: "Node.js", area: "backend", level: 1, icon: siNodedotjs },
     { name: "Express", area: "backend", level: 2, icon: siExpress },
     { name: "Prisma", area: "backend", level: 2, icon: siPrisma },
@@ -64,11 +65,14 @@ export const techs: readonly Tech[] = [
     { name: "Cursor", area: "shared" },
 ];
 
-export function getCloud(area: "frontend" | "backend"): readonly Tech[] {
-    const areaItems = techs.filter(
+export function getCloud(
+    area: "frontend" | "backend",
+    list: readonly Tech[] = techs,
+): readonly Tech[] {
+    const areaItems = list.filter(
         (t): t is FrontendTech | BackendTech => t.area === area,
     );
-    const sharedItems = techs.filter((t) => t.area === "shared");
+    const sharedItems = list.filter((t) => t.area === "shared");
     const sorted = [...areaItems].sort((a, b) => a.level - b.level);
     return [...sorted, ...sharedItems];
 }
@@ -76,13 +80,14 @@ export function getCloud(area: "frontend" | "backend"): readonly Tech[] {
 export function getTileSummary(
     area: "frontend" | "backend",
     limit = 5,
+    list: readonly Tech[] = techs,
 ): { names: string[]; restCount: number } {
-    const areaItems = techs.filter(
+    const areaItems = list.filter(
         (t): t is FrontendTech | BackendTech => t.area === area,
     );
     const sorted = [...areaItems].sort((a, b) => a.level - b.level);
     const names = sorted.slice(0, limit).map((t) => t.name);
-    const sharedCount = techs.filter((t) => t.area === "shared").length;
+    const sharedCount = list.filter((t) => t.area === "shared").length;
     return {
         names,
         restCount: Math.max(0, areaItems.length - limit) + sharedCount,

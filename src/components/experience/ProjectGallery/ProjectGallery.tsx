@@ -24,9 +24,14 @@ export default function ProjectGallery() {
             <div className={styles.topRow}>
                 <span className={styles.label} aria-live="polite">
                     {isMultiple
-                        ? t("projectCounter", {
+                        ? t.rich("projectCounter", {
                               current: index + 1,
                               total: count,
+                              counter: (chunks) => (
+                                  <span className={styles.counter}>
+                                      {chunks}
+                                  </span>
+                              ),
                           })
                         : t("featured")}
                 </span>

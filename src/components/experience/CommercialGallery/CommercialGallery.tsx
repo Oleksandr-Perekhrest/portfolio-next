@@ -13,17 +13,21 @@ export default function CommercialGallery() {
     const t = useTranslations("Experience");
     const count = commercial.length;
     const { index, canPrev, canNext, prev, next } = useGallery(count);
-    const item = commercial[index] ?? commercial[0];
-
-    if (!item) return null;
 
     return (
-        <div className={styles.card}>
+        <div className={styles.card} data-testid="commercial-card">
             <div className={styles.topRow}>
-                <span className={styles.label} aria-live="polite">
-                    {t("commercial.label", {
+                <span
+                    className={styles.label}
+                    aria-live="polite"
+                    data-testid="commercial-label"
+                >
+                    {t.rich("commercial.label", {
                         current: index + 1,
                         total: count,
+                        counter: (chunks) => (
+                            <span className={styles.counter}>{chunks}</span>
+                        ),
                     })}
                 </span>
                 <span className={styles.nda} title={t("commercial.ndaHint")}>
@@ -33,9 +37,30 @@ export default function CommercialGallery() {
                     </span>
                 </span>
             </div>
-            <p className={styles.domain}>{t(`commercial.items.${item.id}`)}</p>
-            <p className={styles.role}>{roleLabels[item.role]}</p>
-            <p className={styles.stack}>{item.stack.join(" · ")}</p>
+            <div className={styles.items}>
+                {commercial.map((item, i) => {
+                    const active = i === index;
+                    return (
+                        <div
+                            key={item.id}
+                            className={`${styles.item}${active ? "" : ` ${styles.hidden}`}`}
+                            data-testid="commercial-item"
+                            aria-hidden={active ? undefined : true}
+                            inert={active ? undefined : true}
+                        >
+                            <p className={styles.domain}>
+                                {t(`commercial.items.${item.id}`)}
+                            </p>
+                            <p className={styles.role}>
+                                {roleLabels[item.role]}
+                            </p>
+                            <p className={styles.stack}>
+                                {item.stack.join(" · ")}
+                            </p>
+                        </div>
+                    );
+                })}
+            </div>
             <div className={styles.bottomRow}>
                 <div className={styles.dots} aria-hidden="true">
                     {Array.from({ length: count }, (_, i) => (

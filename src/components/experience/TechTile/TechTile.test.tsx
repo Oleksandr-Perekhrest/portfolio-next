@@ -11,6 +11,7 @@ import {
 // local dependencies
 import TechTile from "./TechTile";
 import { renderWithIntl } from "@/test/renderWithIntl";
+import { getCloud, getTileSummary } from "@/content/tech";
 
 describe("TechTile (frontend)", () => {
     it('has accessible name "Show all Frontend technologies"', () => {
@@ -22,19 +23,17 @@ describe("TechTile (frontend)", () => {
         ).toBeInTheDocument();
     });
 
-    it('shows top-5 summary and "+ 16 more"', () => {
+    it("shows top-5 summary and rest count", () => {
+        const { names, restCount } = getTileSummary("frontend");
         renderWithIntl(<TechTile area="frontend" />);
-        expect(
-            screen.getByText(
-                "React · Next.js · TypeScript · Redux · React Native",
-            ),
-        ).toBeInTheDocument();
-        expect(screen.getByText("+ 16 more")).toBeInTheDocument();
+        expect(screen.getByText(names.join(" · "))).toBeInTheDocument();
+        expect(screen.getByText(`+ ${restCount} more`)).toBeInTheDocument();
     });
 
-    it('uk locale shows "+ ще 16"', () => {
+    it("uk locale shows rest count in Ukrainian", () => {
+        const { restCount } = getTileSummary("frontend");
         renderWithIntl(<TechTile area="frontend" />, { locale: "uk" });
-        expect(screen.getByText("+ ще 16")).toBeInTheDocument();
+        expect(screen.getByText(`+ ще ${restCount}`)).toBeInTheDocument();
     });
 
     it('clicking the tile opens a dialog named "Frontend"', () => {
@@ -48,7 +47,9 @@ describe("TechTile (frontend)", () => {
         ).toBeInTheDocument();
     });
 
-    it('dialog contains a list named "Frontend technologies" with 21 items including "Git"', () => {
+    it("dialog contains all cloud items including shared techs", () => {
+        const cloud = getCloud("frontend");
+        const sharedItems = cloud.filter((t) => t.area === "shared");
         renderWithIntl(<TechTile area="frontend" />);
         fireEvent.click(
             screen.getByRole("button", {
@@ -59,8 +60,12 @@ describe("TechTile (frontend)", () => {
             name: "Frontend technologies",
         });
         const items = within(list).getAllByRole("listitem");
-        expect(items).toHaveLength(21);
-        expect(items.some((li) => li.textContent === "Git")).toBe(true);
+        expect(items).toHaveLength(cloud.length);
+        for (const shared of sharedItems) {
+            expect(items.some((li) => li.textContent === shared.name)).toBe(
+                true,
+            );
+        }
     });
 
     it("Escape closes the dialog and returns focus to the tile", async () => {
