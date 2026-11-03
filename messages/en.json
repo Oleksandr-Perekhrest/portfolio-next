@@ -75,7 +75,8 @@
       "next": "Next",
       "items": {
         "healthcare": "Healthcare platform",
-        "hr": "Internal HR system"
+        "hrm": "HRM system",
+        "mobileRedesign": "Pixel-perfect mobile app redesign"
       }
     },
     "languages": {

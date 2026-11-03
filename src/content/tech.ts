@@ -46,6 +46,7 @@ export const techs: readonly Tech[] = [
     { name: "CRA", area: "frontend", level: 4 },
     { name: "i18next", area: "frontend", level: 4 },
     { name: "next-intl", area: "frontend", level: 4 },
+    { name: "NativeWind", area: "frontend", level: 4 },
     { name: "Node.js", area: "backend", level: 1, icon: siNodedotjs },
     { name: "Express", area: "backend", level: 2, icon: siExpress },
     { name: "Prisma", area: "backend", level: 2, icon: siPrisma },

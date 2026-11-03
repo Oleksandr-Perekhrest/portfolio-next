@@ -75,7 +75,8 @@
       "next": "Наступний",
       "items": {
         "healthcare": "Медична платформа",
-        "hr": "Внутрішня HR-система"
+        "hrm": "HRM-система",
+        "mobileRedesign": "Pixel-perfect редизайн мобільного застосунку"
       }
     },
     "languages": {
