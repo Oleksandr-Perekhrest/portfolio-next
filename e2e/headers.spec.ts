@@ -2,7 +2,7 @@
 import { test, expect } from "@playwright/test";
 
 // CV PDF path — from src/content/cv.ts (en locale)
-const EN_PDF_PATH = "/cv/CV-Perekhrest-Oleksandr-Web-Developer-EN.pdf";
+const EN_PDF_PATH = "/cv/CV-Perekhrest-Oleksandr-Web-Engineer-EN.pdf";
 
 test.describe("Security headers", () => {
     // Headers are browser-independent; running in all projects would triple
