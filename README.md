@@ -30,7 +30,7 @@ Bilingual (EN/UK) personal portfolio of a Web Engineer built with Next.js App Ro
 
 - **Bilingual routing** — EN and UK locales with `localePrefix: "always"` and automatic locale detection; handled by `next-intl` in [src/proxy.ts](src/proxy.ts).
 - **Flash-free light/dark theme** — inline `<script>` in `<head>` reads `localStorage` and falls back to `prefers-color-scheme`, setting `data-theme` before first paint ([src/lib/theme.ts](src/lib/theme.ts)).
-- **SCSS design tokens** — token maps in [src/styles/_tokens.scss](src/styles/_tokens.scss) emitted as CSS custom properties; components only use `var(--)`, never hard-coded values.
+- **SCSS design tokens** — token maps in [src/styles/_tokens.scss](src/styles/_tokens.scss) emitted as CSS custom properties; colors, typography, and spacing all come from tokens via `var(--)`, never hard-coded.
 - **Radix dialogs with focus management** — CV viewer (iframe on desktop, direct link on mobile) and contact form use Radix `Dialog` with manual `onCloseAutoFocus` to return focus correctly.
 - **Contact form with anti-spam** — React Hook Form + zod on the client, server action in [src/lib/contact/actions.ts](src/lib/contact/actions.ts); honeypot `website` field and a 3-second minimum fill time silently reject bots; form degrades gracefully when env vars are absent.
 - **CV viewer with mobile fallback** — on tablet and wider, "View CV" opens a Radix dialog with an embedded iframe; on mobile, the same link opens the PDF in a new tab.
@@ -39,7 +39,7 @@ Bilingual (EN/UK) personal portfolio of a Web Engineer built with Next.js App Ro
 
 ## Key decisions
 
-- [src/proxy.ts](src/proxy.ts) instead of `middleware.ts` — Next.js 16 renamed the middleware convention; `createNextIntlPlugin()` wires it automatically.
+- [src/proxy.ts](src/proxy.ts) instead of `middleware.ts` — Next.js 16 picks up `src/proxy.ts` by file convention; it exports `next-intl`'s `createMiddleware(routing)` directly.
 - [src/app/\[locale\]/opengraph-image.tsx](src/app/%5Blocale%5D/opengraph-image.tsx) and [src/app/icon.tsx](src/app/icon.tsx) — OG image and favicon generated at build time via `ImageResponse`; no static assets to maintain.
 - [src/components/experience/CommercialGallery/CommercialGallery.module.scss](src/components/experience/CommercialGallery/CommercialGallery.module.scss) — all carousel items share `grid-area: 1/1` and hidden items use `visibility: hidden` (not `display: none`), so the card height is always that of the tallest item.
 - [src/content/\*.test.ts](src/content) — tests derive all expectations from content data arrays; adding a project, tech, or commercial entry automatically validates key parity without updating any test counts.
@@ -136,7 +136,16 @@ Add an entry to [src/content/tech.ts](src/content/tech.ts):
 
 ### c. Personal project
 
-1. Add an entry to [src/content/projects.ts](src/content/projects.ts):
+1. Extend the `id` union in the `Project` type in [src/content/projects.ts](src/content/projects.ts) — it is a string literal union, not derived from messages:
+
+   ```ts
+   export type Project = {
+     id: "authkit" | "myRepo";
+     // ...
+   };
+   ```
+
+2. Add an entry to the `projects` array in the same file:
 
    ```ts
    {
@@ -148,7 +157,7 @@ Add an entry to [src/content/tech.ts](src/content/tech.ts):
    }
    ```
 
-2. Add a description in both message files under `Experience.projects.<id>.description`.
+3. Add a description in both message files under `Experience.projects.<id>.description`.
 
 > **Known limitation:** ProjectGallery does not use the stacked-grid layout yet, so adding a second project may change the card height when the user navigates between items.
 
@@ -158,7 +167,11 @@ Add an entry to [src/content/tech.ts](src/content/tech.ts):
    - `CV-Perekhrest-Oleksandr-Web-Engineer-EN.pdf`
    - `CV-Perekhrest-Oleksandr-Web-Engineer-UA.pdf`
 
-2. If you rename the files, update the paths in [src/content/cv.ts](src/content/cv.ts).
+2. If you rename the files, update the paths in every place that references the current names (confirmed with `git grep`):
+   - [src/content/cv.ts](src/content/cv.ts) — the path map
+   - [src/components/CvActions/CvActions.test.tsx](src/components/CvActions/CvActions.test.tsx) — expected paths in unit tests
+   - [e2e/cv.spec.ts](e2e/cv.spec.ts) — path and filename constants
+   - [e2e/headers.spec.ts](e2e/headers.spec.ts) — `EN_PDF_PATH` constant
 
 The test in [src/content/cv.test.ts](src/content/cv.test.ts) checks that every locale has a path and that the file exists in `public/`.
 
@@ -187,7 +200,7 @@ Add these environment variables in the Vercel project settings:
 ## Next steps
 
 - Register a custom domain, then configure a Resend sending domain and update `siteUrl` in [src/lib/site.ts](src/lib/site.ts).
-- Add a Content-Security-Policy header with nonces (requires Next.js middleware support).
+- Add a Content-Security-Policy with nonces generated in [src/proxy.ts](src/proxy.ts).
 - Apply the stacked-grid layout to ProjectGallery when a second project is added.
 
 ## Contacts
