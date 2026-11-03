@@ -37,6 +37,19 @@
     @include visually-hidden;
 }
 
+.items {
+    display: grid;
+}
+
+.item {
+    grid-area: 1 / 1;
+}
+
+.itemHidden {
+    grid-area: 1 / 1;
+    visibility: hidden;
+}
+
 .domain {
     @include text(card-title);
 }

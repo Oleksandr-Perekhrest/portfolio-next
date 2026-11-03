@@ -1,6 +1,6 @@
 // outsource dependencies
 import { it, expect, describe } from "@jest/globals";
-import { screen, fireEvent } from "@testing-library/react";
+import { screen, within, fireEvent } from "@testing-library/react";
 
 // local dependencies
 import en from "../../../../messages/en.json";
@@ -15,6 +15,17 @@ const firstTitle = en.Experience.commercial.items[first.id];
 const lastTitle = en.Experience.commercial.items[last.id];
 const firstStack = [...first.stack].join(" · ");
 
+// Returns the single active item (the one without aria-hidden).
+// data-testid="commercial-item" is used here because items are plain <div>s
+// with no semantic role, so there is no accessible query that identifies them
+// as a group distinct from each other without DOM traversal.
+function activeItem() {
+    const all = screen.getAllByTestId("commercial-item");
+    const active = all.filter((el) => !el.hasAttribute("aria-hidden"));
+    expect(active).toHaveLength(1);
+    return active[0]!;
+}
+
 describe("CommercialGallery", () => {
     it("data is non-trivial", () => {
         expect(commercial.length).toBeGreaterThan(1);
@@ -25,9 +36,12 @@ describe("CommercialGallery", () => {
         expect(
             screen.getByText(`Commercial · 1 / ${total}`),
         ).toBeInTheDocument();
-        expect(screen.getByText(firstTitle)).toBeInTheDocument();
-        expect(screen.getByText(roleLabels[first.role])).toBeInTheDocument();
-        expect(screen.getByText(firstStack)).toBeInTheDocument();
+        const active = activeItem();
+        expect(within(active).getByText(firstTitle)).toBeInTheDocument();
+        expect(
+            within(active).getByText(roleLabels[first.role]),
+        ).toBeInTheDocument();
+        expect(within(active).getByText(firstStack)).toBeInTheDocument();
         expect(screen.getByRole("button", { name: "Previous" })).toBeDisabled();
     });
 
@@ -36,7 +50,7 @@ describe("CommercialGallery", () => {
         for (let i = 0; i < total - 1; i++) {
             fireEvent.click(screen.getByRole("button", { name: "Next" }));
         }
-        expect(screen.getByText(lastTitle)).toBeInTheDocument();
+        expect(within(activeItem()).getByText(lastTitle)).toBeInTheDocument();
         expect(
             screen.getByText(`Commercial · ${total} / ${total}`),
         ).toBeInTheDocument();
@@ -47,7 +61,7 @@ describe("CommercialGallery", () => {
         renderWithIntl(<CommercialGallery />);
         fireEvent.click(screen.getByRole("button", { name: "Next" }));
         fireEvent.click(screen.getByRole("button", { name: "Previous" }));
-        expect(screen.getByText(firstTitle)).toBeInTheDocument();
+        expect(within(activeItem()).getByText(firstTitle)).toBeInTheDocument();
         expect(
             screen.getByText(`Commercial · 1 / ${total}`),
         ).toBeInTheDocument();
