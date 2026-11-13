@@ -154,10 +154,20 @@ Add an entry to [src/content/tech.ts](src/content/tech.ts):
      repoUrl: "https://github.com/...",
      demoUrl: "https://...",
      stack: ["Next.js", "PostgreSQL"],
+     image: "/projects/my-repo.webp",
    }
    ```
 
-3. Add a description in both message files under `Experience.projects.<id>.description`.
+3. Add a screenshot to `public/projects/` — **1280 × 800 px, WebP, 16:10, light theme** (`my-repo.webp`).
+
+4. Add a description and image alt text in both message files under `Experience.projects.<id>`:
+
+   ```json
+   "myRepo": {
+     "description": "…",
+     "imageAlt": "…"
+   }
+   ```
 
 ### d. CV PDFs
 

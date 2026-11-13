@@ -18,6 +18,7 @@ const SINGLE: readonly Project[] = [
         repoUrl: "https://github.com/Oleksandr-Perekhrest/authkit-next-express",
         demoUrl: "https://authkit-web.vercel.app",
         stack: ["Next.js", "Express", "PostgreSQL", "Docker"],
+        image: "/projects/authkit.webp",
     },
 ];
 
@@ -29,6 +30,7 @@ const DOUBLE: readonly Project[] = [
         repoUrl: "https://github.com/Oleksandr-Perekhrest/inventory-react-rtk",
         demoUrl: "https://warehouse-manager-demo.vercel.app",
         stack: ["React", "Vite", "Redux Toolkit", "RTK Query"],
+        image: "/projects/inventory.webp",
     },
 ];
 
@@ -92,6 +94,24 @@ describe("ProjectGallery (single project)", () => {
         expect(link).toHaveAttribute("target", "_blank");
         expect(link).toHaveAttribute("rel", "noopener noreferrer");
     });
+
+    it("renders the project screenshot with its localized alt text (en)", () => {
+        renderWithIntl(<ProjectGallery projects={SINGLE} />);
+        expect(
+            screen.getByRole("img", {
+                name: "AuthKit home page with sign-up and login actions and feature cards",
+            }),
+        ).toBeInTheDocument();
+    });
+
+    it("renders the project screenshot with its localized alt text (uk)", () => {
+        renderWithIntl(<ProjectGallery projects={SINGLE} />, { locale: "uk" });
+        expect(
+            screen.getByRole("img", {
+                name: "Головна сторінка AuthKit з кнопками реєстрації та входу і картками можливостей",
+            }),
+        ).toBeInTheDocument();
+    });
 });
 
 describe("ProjectGallery (multiple projects)", () => {
@@ -137,5 +157,20 @@ describe("ProjectGallery (multiple projects)", () => {
 
         expect(firstHeading.closest('[aria-hidden="true"]')).not.toBeNull();
         expect(secondHeading.closest("[aria-hidden]")).toBeNull();
+    });
+
+    it("each project card renders an image with its localized alt text", () => {
+        renderWithIntl(<ProjectGallery projects={DOUBLE} />);
+        expect(
+            screen.getByRole("img", {
+                name: "AuthKit home page with sign-up and login actions and feature cards",
+            }),
+        ).toBeInTheDocument();
+        expect(
+            screen.getByRole("img", {
+                name: "Inventory Manager catalog with the category tree and products table",
+                hidden: true,
+            }),
+        ).toBeInTheDocument();
     });
 });

@@ -1,6 +1,7 @@
 "use client";
 
 // outsource dependencies
+import Image from "next/image";
 import { useTranslations } from "next-intl";
 
 // local dependencies
@@ -64,27 +65,14 @@ export default function ProjectGallery({
                             <p className={styles.description}>
                                 {t(`projects.${project.id}.description`)}
                             </p>
-                            <div className={styles.imagePlaceholder}>
-                                <svg
-                                    aria-hidden
-                                    width={24}
-                                    height={24}
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    strokeWidth={1.5}
-                                >
-                                    <rect
-                                        x="3"
-                                        y="3"
-                                        width="18"
-                                        height="18"
-                                        rx="2"
-                                        ry="2"
-                                    />
-                                    <circle cx="8.5" cy="8.5" r="1.5" />
-                                    <polyline points="21 15 16 10 5 21" />
-                                </svg>
+                            <div className={styles.imageFrame}>
+                                <Image
+                                    src={project.image}
+                                    alt={t(`projects.${project.id}.imageAlt`)}
+                                    fill
+                                    sizes="(max-width: 900px) 100vw, 552px"
+                                    style={{ objectFit: "cover" }}
+                                />
                             </div>
                             <ul className={styles.tags}>
                                 {project.stack.map((tag) => (

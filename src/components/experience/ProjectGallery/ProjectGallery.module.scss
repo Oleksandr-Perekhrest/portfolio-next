@@ -59,16 +59,12 @@
     color: var(--color-muted);
 }
 
-.imagePlaceholder {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex: 1 1 auto;
-    min-height: 180px;
+.imageFrame {
+    position: relative;
+    aspect-ratio: 16 / 10;
     border-radius: var(--radius-lg);
-    background: var(--color-chip);
     border: 1px solid var(--color-line);
-    color: var(--color-muted);
+    overflow: hidden;
 }
 
 .tags {

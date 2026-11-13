@@ -64,10 +64,12 @@
     "showAll": "Показати всі {area}-технології",
     "projects": {
       "authkit": {
-        "description": "Повноцінна автентифікація: фронтенд на Next.js, API на Express, PostgreSQL із Prisma, Google OAuth. Docker, CI, unit- та інтеграційні тести, деплой на Vercel і Render."
+        "description": "Повноцінна автентифікація: фронтенд на Next.js, API на Express, PostgreSQL із Prisma, Google OAuth. Docker, CI, unit- та інтеграційні тести, деплой на Vercel і Render.",
+        "imageAlt": "Головна сторінка AuthKit з кнопками реєстрації та входу і картками можливостей"
       },
       "inventory": {
-        "description": "SPA-адмінка складу: React 19 і Vite, Redux Toolkit з RTK Query, дерево категорій з drag-and-drop, багатокроковий wizard приймання. API замокано через MSW, unit- та E2E-тести, деплой на Vercel."
+        "description": "SPA-адмінка складу: React 19 і Vite, Redux Toolkit з RTK Query, дерево категорій з drag-and-drop, багатокроковий wizard приймання. API замокано через MSW, unit- та E2E-тести, деплой на Vercel.",
+        "imageAlt": "Каталог Inventory Manager з деревом категорій і таблицею товарів"
       }
     },
     "commercial": {
