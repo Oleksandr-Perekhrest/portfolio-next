@@ -159,8 +159,6 @@ Add an entry to [src/content/tech.ts](src/content/tech.ts):
 
 3. Add a description in both message files under `Experience.projects.<id>.description`.
 
-> **Known limitation:** ProjectGallery does not use the stacked-grid layout yet, so adding a second project may change the card height when the user navigates between items.
-
 ### d. CV PDFs
 
 1. Drop the PDF files in `public/cv/` following the naming convention already in use:
@@ -195,13 +193,11 @@ Add these environment variables in the Vercel project settings:
 - The contact form sends from Resend's shared test address `onboarding@resend.dev` because a custom sending domain is not yet configured.
 - There is no rate limiting on the contact server action.
 - No Content-Security-Policy header is set.
-- ProjectGallery does not use the stacked-grid layout, so the card height may change when navigating between projects if more than one project is added.
 
 ## Next steps
 
 - Register a custom domain, then configure a Resend sending domain and update `siteUrl` in [src/lib/site.ts](src/lib/site.ts).
 - Add a Content-Security-Policy with nonces generated in [src/proxy.ts](src/proxy.ts).
-- Apply the stacked-grid layout to ProjectGallery when a second project is added.
 
 ## Contacts
 

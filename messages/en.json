@@ -65,6 +65,9 @@
     "projects": {
       "authkit": {
         "description": "Full-stack authentication: Next.js frontend, Express API, PostgreSQL with Prisma, Google OAuth. Docker, CI, unit and integration tests, deployed to Vercel and Render."
+      },
+      "inventory": {
+        "description": "Warehouse admin SPA: React 19 and Vite, Redux Toolkit with RTK Query, drag-and-drop category tree, multi-step receiving wizard. MSW-mocked API, unit and E2E tests, deployed to Vercel."
       }
     },
     "commercial": {
