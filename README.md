@@ -154,12 +154,20 @@ Add an entry to [src/content/tech.ts](src/content/tech.ts):
      repoUrl: "https://github.com/...",
      demoUrl: "https://...",
      stack: ["Next.js", "PostgreSQL"],
+     image: "/projects/my-repo.webp",
    }
    ```
 
-3. Add a description in both message files under `Experience.projects.<id>.description`.
+3. Add a screenshot to `public/projects/` — **1280 × 800 px, WebP, 16:10, light theme** (`my-repo.webp`).
 
-> **Known limitation:** ProjectGallery does not use the stacked-grid layout yet, so adding a second project may change the card height when the user navigates between items.
+4. Add a description and image alt text in both message files under `Experience.projects.<id>`:
+
+   ```json
+   "myRepo": {
+     "description": "…",
+     "imageAlt": "…"
+   }
+   ```
 
 ### d. CV PDFs
 
@@ -195,13 +203,11 @@ Add these environment variables in the Vercel project settings:
 - The contact form sends from Resend's shared test address `onboarding@resend.dev` because a custom sending domain is not yet configured.
 - There is no rate limiting on the contact server action.
 - No Content-Security-Policy header is set.
-- ProjectGallery does not use the stacked-grid layout, so the card height may change when navigating between projects if more than one project is added.
 
 ## Next steps
 
 - Register a custom domain, then configure a Resend sending domain and update `siteUrl` in [src/lib/site.ts](src/lib/site.ts).
 - Add a Content-Security-Policy with nonces generated in [src/proxy.ts](src/proxy.ts).
-- Apply the stacked-grid layout to ProjectGallery when a second project is added.
 
 ## Contacts
 

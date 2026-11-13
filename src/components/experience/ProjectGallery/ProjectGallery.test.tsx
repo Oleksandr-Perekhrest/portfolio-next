@@ -1,13 +1,38 @@
 // outsource dependencies
-import { screen } from "@testing-library/react";
 import { it, expect, describe } from "@jest/globals";
+import { screen, fireEvent } from "@testing-library/react";
 
 // local dependencies
-import { projects } from "@/content/projects";
 import ProjectGallery from "./ProjectGallery";
 import { renderWithIntl } from "@/test/renderWithIntl";
+import { projects, type Project } from "@/content/projects";
 
+// Captured before any per-test override so the guard and href assertions stay
+// anchored to the actual content file, not the mock data.
 const project = projects[0]!;
+
+const SINGLE: readonly Project[] = [
+    {
+        id: "authkit",
+        name: "authkit-next-express",
+        repoUrl: "https://github.com/Oleksandr-Perekhrest/authkit-next-express",
+        demoUrl: "https://authkit-web.vercel.app",
+        stack: ["Next.js", "Express", "PostgreSQL", "Docker"],
+        image: "/projects/authkit.webp",
+    },
+];
+
+const DOUBLE: readonly Project[] = [
+    ...SINGLE,
+    {
+        id: "inventory",
+        name: "inventory-react-rtk",
+        repoUrl: "https://github.com/Oleksandr-Perekhrest/inventory-react-rtk",
+        demoUrl: "https://warehouse-manager-demo.vercel.app",
+        stack: ["React", "Vite", "Redux Toolkit", "RTK Query"],
+        image: "/projects/inventory.webp",
+    },
+];
 
 describe("ProjectGallery (single project)", () => {
     it("projects[0] is the expected project (guard against data reordering)", () => {
@@ -15,12 +40,12 @@ describe("ProjectGallery (single project)", () => {
     });
 
     it('shows "Featured project" label', () => {
-        renderWithIntl(<ProjectGallery />);
+        renderWithIntl(<ProjectGallery projects={SINGLE} />);
         expect(screen.getByText("Featured project")).toBeInTheDocument();
     });
 
     it("shows no Previous/Next project buttons", () => {
-        renderWithIntl(<ProjectGallery />);
+        renderWithIntl(<ProjectGallery projects={SINGLE} />);
         expect(
             screen.queryByRole("button", { name: "Previous project" }),
         ).not.toBeInTheDocument();
@@ -29,15 +54,20 @@ describe("ProjectGallery (single project)", () => {
         ).not.toBeInTheDocument();
     });
 
+    it("shows no dots", () => {
+        renderWithIntl(<ProjectGallery projects={SINGLE} />);
+        expect(document.querySelector('div[aria-hidden="true"]')).toBeNull();
+    });
+
     it("description text is present", () => {
-        renderWithIntl(<ProjectGallery />);
+        renderWithIntl(<ProjectGallery projects={SINGLE} />);
         expect(
             screen.getByText(/Full-stack authentication/),
         ).toBeInTheDocument();
     });
 
     it("stack tags are rendered as list items", () => {
-        renderWithIntl(<ProjectGallery />);
+        renderWithIntl(<ProjectGallery projects={SINGLE} />);
         const items = screen.getAllByRole("listitem");
         const texts = items.map((li) => li.textContent);
         for (const tag of project.stack) {
@@ -46,7 +76,7 @@ describe("ProjectGallery (single project)", () => {
     });
 
     it('"Live demo" link has correct href, target, rel, and accessible name', () => {
-        renderWithIntl(<ProjectGallery />);
+        renderWithIntl(<ProjectGallery projects={SINGLE} />);
         const link = screen.getByRole("link", {
             name: "Live demo (opens in a new tab)",
         });
@@ -56,12 +86,91 @@ describe("ProjectGallery (single project)", () => {
     });
 
     it('"GitHub" link has correct href, target, rel, and accessible name', () => {
-        renderWithIntl(<ProjectGallery />);
+        renderWithIntl(<ProjectGallery projects={SINGLE} />);
         const link = screen.getByRole("link", {
             name: "GitHub (opens in a new tab)",
         });
         expect(link).toHaveAttribute("href", project.repoUrl);
         expect(link).toHaveAttribute("target", "_blank");
         expect(link).toHaveAttribute("rel", "noopener noreferrer");
+    });
+
+    it("renders the project screenshot with its localized alt text (en)", () => {
+        renderWithIntl(<ProjectGallery projects={SINGLE} />);
+        expect(
+            screen.getByRole("img", {
+                name: "AuthKit home page with sign-up and login actions and feature cards",
+            }),
+        ).toBeInTheDocument();
+    });
+
+    it("renders the project screenshot with its localized alt text (uk)", () => {
+        renderWithIntl(<ProjectGallery projects={SINGLE} />, { locale: "uk" });
+        expect(
+            screen.getByRole("img", {
+                name: "Головна сторінка AuthKit з кнопками реєстрації та входу і картками можливостей",
+            }),
+        ).toBeInTheDocument();
+    });
+});
+
+describe("ProjectGallery (multiple projects)", () => {
+    it("shows counter label on the first item", () => {
+        renderWithIntl(<ProjectGallery projects={DOUBLE} />);
+        expect(
+            document.querySelector('[aria-live="polite"]'),
+        ).toHaveTextContent(`Project 1 / ${DOUBLE.length}`);
+    });
+
+    it("Previous is disabled on the first item", () => {
+        renderWithIntl(<ProjectGallery projects={DOUBLE} />);
+        expect(
+            screen.getByRole("button", { name: "Previous project" }),
+        ).toBeDisabled();
+    });
+
+    it("Next moves to the second item", () => {
+        renderWithIntl(<ProjectGallery projects={DOUBLE} />);
+        fireEvent.click(screen.getByRole("button", { name: "Next project" }));
+        expect(
+            document.querySelector('[aria-live="polite"]'),
+        ).toHaveTextContent(`Project 2 / ${DOUBLE.length}`);
+    });
+
+    it("only the active item is visible; inactive has aria-hidden and inert", () => {
+        renderWithIntl(<ProjectGallery projects={DOUBLE} />);
+        const firstHeading = screen.getByRole("heading", {
+            name: DOUBLE[0]!.name,
+        });
+        // hidden: true is required because the inactive item carries aria-hidden="true"
+        const secondHeading = screen.getByRole("heading", {
+            name: DOUBLE[1]!.name,
+            hidden: true,
+        });
+
+        // Active item's wrapper must not carry aria-hidden
+        expect(firstHeading.closest("[aria-hidden]")).toBeNull();
+        // Inactive item's wrapper must carry aria-hidden="true"
+        expect(secondHeading.closest('[aria-hidden="true"]')).not.toBeNull();
+
+        fireEvent.click(screen.getByRole("button", { name: "Next project" }));
+
+        expect(firstHeading.closest('[aria-hidden="true"]')).not.toBeNull();
+        expect(secondHeading.closest("[aria-hidden]")).toBeNull();
+    });
+
+    it("each project card renders an image with its localized alt text", () => {
+        renderWithIntl(<ProjectGallery projects={DOUBLE} />);
+        expect(
+            screen.getByRole("img", {
+                name: "AuthKit home page with sign-up and login actions and feature cards",
+            }),
+        ).toBeInTheDocument();
+        expect(
+            screen.getByRole("img", {
+                name: "Inventory Manager catalog with the category tree and products table",
+                hidden: true,
+            }),
+        ).toBeInTheDocument();
     });
 });
