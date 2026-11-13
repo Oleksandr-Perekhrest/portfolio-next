@@ -1,16 +1,15 @@
 // outsource dependencies
+import { it, expect, describe } from "@jest/globals";
 import { screen, fireEvent } from "@testing-library/react";
-import { it, expect, describe, afterEach, beforeEach } from "@jest/globals";
 
 // local dependencies
 import ProjectGallery from "./ProjectGallery";
-import type { Project } from "@/content/projects";
-import * as ProjectsModule from "@/content/projects";
 import { renderWithIntl } from "@/test/renderWithIntl";
+import { projects, type Project } from "@/content/projects";
 
 // Captured before any per-test override so the guard and href assertions stay
 // anchored to the actual content file, not the mock data.
-const project = ProjectsModule.projects[0]!;
+const project = projects[0]!;
 
 const SINGLE: readonly Project[] = [
     {
@@ -33,34 +32,18 @@ const DOUBLE: readonly Project[] = [
     },
 ];
 
-type Setter = (d: readonly Project[] | undefined) => void;
-
-function setProjects(data: readonly Project[] | undefined) {
-    (globalThis as unknown as { __setMockProjects: Setter }).__setMockProjects(
-        data,
-    );
-}
-
-afterEach(() => {
-    setProjects(undefined);
-});
-
 describe("ProjectGallery (single project)", () => {
-    beforeEach(() => {
-        setProjects(SINGLE);
-    });
-
     it("projects[0] is the expected project (guard against data reordering)", () => {
         expect(project.id).toBe("authkit");
     });
 
     it('shows "Featured project" label', () => {
-        renderWithIntl(<ProjectGallery />);
+        renderWithIntl(<ProjectGallery projects={SINGLE} />);
         expect(screen.getByText("Featured project")).toBeInTheDocument();
     });
 
     it("shows no Previous/Next project buttons", () => {
-        renderWithIntl(<ProjectGallery />);
+        renderWithIntl(<ProjectGallery projects={SINGLE} />);
         expect(
             screen.queryByRole("button", { name: "Previous project" }),
         ).not.toBeInTheDocument();
@@ -70,19 +53,19 @@ describe("ProjectGallery (single project)", () => {
     });
 
     it("shows no dots", () => {
-        renderWithIntl(<ProjectGallery />);
+        renderWithIntl(<ProjectGallery projects={SINGLE} />);
         expect(document.querySelector('div[aria-hidden="true"]')).toBeNull();
     });
 
     it("description text is present", () => {
-        renderWithIntl(<ProjectGallery />);
+        renderWithIntl(<ProjectGallery projects={SINGLE} />);
         expect(
             screen.getByText(/Full-stack authentication/),
         ).toBeInTheDocument();
     });
 
     it("stack tags are rendered as list items", () => {
-        renderWithIntl(<ProjectGallery />);
+        renderWithIntl(<ProjectGallery projects={SINGLE} />);
         const items = screen.getAllByRole("listitem");
         const texts = items.map((li) => li.textContent);
         for (const tag of project.stack) {
@@ -91,7 +74,7 @@ describe("ProjectGallery (single project)", () => {
     });
 
     it('"Live demo" link has correct href, target, rel, and accessible name', () => {
-        renderWithIntl(<ProjectGallery />);
+        renderWithIntl(<ProjectGallery projects={SINGLE} />);
         const link = screen.getByRole("link", {
             name: "Live demo (opens in a new tab)",
         });
@@ -101,7 +84,7 @@ describe("ProjectGallery (single project)", () => {
     });
 
     it('"GitHub" link has correct href, target, rel, and accessible name', () => {
-        renderWithIntl(<ProjectGallery />);
+        renderWithIntl(<ProjectGallery projects={SINGLE} />);
         const link = screen.getByRole("link", {
             name: "GitHub (opens in a new tab)",
         });
@@ -112,26 +95,22 @@ describe("ProjectGallery (single project)", () => {
 });
 
 describe("ProjectGallery (multiple projects)", () => {
-    beforeEach(() => {
-        setProjects(DOUBLE);
-    });
-
     it("shows counter label on the first item", () => {
-        renderWithIntl(<ProjectGallery />);
+        renderWithIntl(<ProjectGallery projects={DOUBLE} />);
         expect(
             document.querySelector('[aria-live="polite"]'),
         ).toHaveTextContent(`Project 1 / ${DOUBLE.length}`);
     });
 
     it("Previous is disabled on the first item", () => {
-        renderWithIntl(<ProjectGallery />);
+        renderWithIntl(<ProjectGallery projects={DOUBLE} />);
         expect(
             screen.getByRole("button", { name: "Previous project" }),
         ).toBeDisabled();
     });
 
     it("Next moves to the second item", () => {
-        renderWithIntl(<ProjectGallery />);
+        renderWithIntl(<ProjectGallery projects={DOUBLE} />);
         fireEvent.click(screen.getByRole("button", { name: "Next project" }));
         expect(
             document.querySelector('[aria-live="polite"]'),
@@ -139,7 +118,7 @@ describe("ProjectGallery (multiple projects)", () => {
     });
 
     it("only the active item is visible; inactive has aria-hidden and inert", () => {
-        renderWithIntl(<ProjectGallery />);
+        renderWithIntl(<ProjectGallery projects={DOUBLE} />);
         const firstHeading = screen.getByRole("heading", {
             name: DOUBLE[0]!.name,
         });

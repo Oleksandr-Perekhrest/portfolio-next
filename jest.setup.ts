@@ -36,30 +36,6 @@ if (typeof window !== "undefined") {
     }));
 }
 
-// @/content/projects is mocked here so ProjectGallery tests can control the
-// data per test via globalThis.__setMockProjects without re-requiring the module.
-// The getter is lazy: changing the override before a render is enough.
-let _projectsOverride: readonly unknown[] | undefined;
-
-(
-    globalThis as unknown as {
-        __setMockProjects(d: readonly unknown[] | undefined): void;
-    }
-).__setMockProjects = (d) => {
-    _projectsOverride = d;
-};
-
-jest.mock("@/content/projects", () => {
-    const actual = jest.requireActual(
-        "@/content/projects",
-    ) as typeof import("@/content/projects");
-    return {
-        get projects() {
-            return _projectsOverride ?? actual.projects;
-        },
-    };
-});
-
 // LocaleSwitch uses usePathname and getPathname (both unavailable in jsdom).
 // not-found.tsx still uses Link. All three are mocked here:
 //   - usePathname: returns "/" (single static root page).

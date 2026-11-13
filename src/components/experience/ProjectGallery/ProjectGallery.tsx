@@ -5,12 +5,16 @@ import { useTranslations } from "next-intl";
 
 // local dependencies
 import { useGallery } from "../useGallery";
-import { projects } from "@/content/projects";
 import GalleryNav from "../GalleryNav/GalleryNav";
 import styles from "./ProjectGallery.module.scss";
 import ButtonLink from "@/components/ButtonLink/ButtonLink";
+import { type Project, projects as defaultProjects } from "@/content/projects";
 
-export default function ProjectGallery() {
+export default function ProjectGallery({
+    projects = defaultProjects,
+}: {
+    projects?: readonly Project[];
+} = {}) {
     const t = useTranslations("Experience");
     const count = projects.length;
     const { index, canPrev, canNext, prev, next } = useGallery(count);
