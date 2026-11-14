@@ -30,15 +30,11 @@
 
 .title {
     @include text(hero);
-
-    font-size: rem(64px);
-    line-height: rem(64px);
 }
 
 .keywords {
     @include text(keywords);
 
-    font-size: rem(16px);
     color: var(--color-ink);
 }
 
@@ -46,6 +42,7 @@
     @include text(lead);
 
     font-size: rem(18px);
+    line-height: rem(27px);
     max-width: 640px;
     color: var(--color-muted);
 }
