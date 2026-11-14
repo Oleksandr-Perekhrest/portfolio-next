@@ -19,7 +19,10 @@ describe("About", () => {
 
         it("h3 contains a button whose name includes 'Long story short'", () => {
             renderWithIntl(<About />);
-            const heading = screen.getByRole("heading", { level: 3 });
+            const heading = screen.getByRole("heading", {
+                level: 3,
+                name: /Long story short/,
+            });
             const button = screen.getByRole("button", {
                 name: /Long story short/,
             });

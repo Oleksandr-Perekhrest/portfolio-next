@@ -17,6 +17,24 @@ export default function About() {
         <section id="about" className={styles.section}>
             <SectionTitle>{t("label")}</SectionTitle>
             <div className={styles.card}>
+                <div className={styles.languages}>
+                    <h3 className={styles.languagesHeading}>
+                        {t("languages.title")}
+                    </h3>
+                    <ul className={styles.languagesList}>
+                        {languages.map(({ code, level }) => (
+                            <li key={code} className={styles.languagesItem}>
+                                {t(`languages.${code}`)}
+                                {" — "}
+                                <span className={styles.languagesLevel}>
+                                    {level === "native"
+                                        ? t("languages.native")
+                                        : level}
+                                </span>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
                 <Collapsible.Root>
                     <h3 className={styles.heading}>
                         <Collapsible.Trigger className={styles.trigger}>
@@ -73,23 +91,6 @@ export default function About() {
                         </div>
                     </Collapsible.Content>
                 </Collapsible.Root>
-                <div className={styles.languages}>
-                    <span className={styles.languagesLabel}>
-                        {t("languages.title")}
-                    </span>
-                    <ul className={styles.languagesList}>
-                        {languages.map(({ code, level }, i) => (
-                            <li key={code} className={styles.languagesItem}>
-                                {i > 0 && <span aria-hidden> · </span>}
-                                {t(`languages.${code}`)}
-                                {" — "}
-                                {level === "native"
-                                    ? t("languages.native")
-                                    : level}
-                            </li>
-                        ))}
-                    </ul>
-                </div>
             </div>
         </section>
     );
