@@ -152,9 +152,9 @@ describe("About", () => {
             const texts = Array.from(list?.querySelectorAll("li") ?? []).map(
                 (li) => li.textContent?.trim(),
             );
-            expect(texts).toContain("українська — рідна");
-            expect(texts).toContain("англійська — B2");
-            expect(texts).toContain("чеська — C1");
+            expect(texts).toContain("Українська — рідна");
+            expect(texts).toContain("Англійська — B2");
+            expect(texts).toContain("Чеська — C1");
         });
 
         it("accordion trigger accessible name does not contain the language names", () => {
