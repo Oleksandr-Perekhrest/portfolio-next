@@ -24,12 +24,14 @@ export default function About() {
                     <ul className={styles.languagesList}>
                         {languages.map(({ code, level }) => (
                             <li key={code} className={styles.languagesItem}>
-                                {t(`languages.${code}`)}
-                                {" — "}
-                                <span className={styles.languagesLevel}>
-                                    {level === "native"
-                                        ? t("languages.native")
-                                        : level}
+                                <span>
+                                    {t(`languages.${code}`)}
+                                    {" — "}
+                                    <span className={styles.languagesLevel}>
+                                        {level === "native"
+                                            ? t("languages.native")
+                                            : level}
+                                    </span>
                                 </span>
                             </li>
                         ))}
