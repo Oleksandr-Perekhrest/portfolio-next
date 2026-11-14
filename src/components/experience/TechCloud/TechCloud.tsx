@@ -7,6 +7,7 @@ import { useTranslations } from "next-intl";
 // local dependencies
 import { getCloud } from "@/content/tech";
 import styles from "./TechCloud.module.scss";
+import { useCloudLayout } from "./useCloudLayout";
 
 type TechCloudProps = {
     area: "frontend" | "backend";
@@ -24,6 +25,7 @@ export default function TechCloud({ area }: TechCloudProps) {
     const title = area === "frontend" ? "Frontend" : "Backend";
 
     const items = getCloud(area);
+    const { bodyRef, listRef, state } = useCloudLayout();
 
     return (
         <>
@@ -53,9 +55,11 @@ export default function TechCloud({ area }: TechCloudProps) {
                         </svg>
                     </Dialog.Close>
                 </div>
-                <div className={styles.body}>
+                <div className={styles.body} ref={bodyRef}>
                     <ul
+                        ref={listRef}
                         className={styles.list}
+                        data-cloud-state={state}
                         aria-label={t("cloud.list", { area: title })}
                     >
                         {items.map((item) => {
