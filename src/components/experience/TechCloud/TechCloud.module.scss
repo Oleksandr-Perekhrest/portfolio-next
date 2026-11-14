@@ -3,6 +3,16 @@
 
 // local dependencies
 @use "styles" as *;
+@use "styles/tokens";
+
+@mixin text-scaled($style) {
+    $def: map.get(tokens.$type-styles, $style);
+    $size: map.get($def, size);
+    $lh: map.get($def, lh);
+
+    font-size: calc(#{rem($size)} * var(--cloud-scale));
+    line-height: calc(#{rem($lh)} * var(--cloud-scale));
+}
 
 .overlayBg {
     position: fixed;
@@ -78,6 +88,8 @@
 }
 
 .list {
+    --cloud-scale: 1;
+
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-4) var(--space-6);
@@ -93,6 +105,29 @@
     }
 
     @media (width >= #{map.get($breakpoints, tablet)}) {
+        &[data-cloud-state="pending"],
+        &[data-cloud-state="measured"] {
+            .level1 {
+                @include text-scaled(section-title);
+            }
+
+            .level2 {
+                @include text-scaled(card-title-lg);
+            }
+
+            .level3 {
+                @include text-scaled(card-title);
+            }
+
+            .level4 {
+                @include text-scaled(small);
+            }
+
+            .shared {
+                @include text-scaled(tag);
+            }
+        }
+
         &[data-cloud-state="measured"] {
             position: absolute;
             inset: 0;
