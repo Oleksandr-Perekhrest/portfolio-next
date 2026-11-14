@@ -4,6 +4,7 @@ import { screen, cleanup, fireEvent } from "@testing-library/react";
 
 // local dependencies
 import About from "./About";
+import { languages } from "@/content/languages";
 import { renderWithIntl } from "@/test/renderWithIntl";
 
 describe("About", () => {
@@ -90,6 +91,82 @@ describe("About", () => {
         it("last journey step shows 'Зараз'", () => {
             renderWithIntl(<About />, { locale: "uk" });
             expect(screen.getByText("Зараз")).toBeInTheDocument();
+        });
+    });
+
+    describe("Languages section", () => {
+        it("languages heading 'Languages' is visible while accordion is collapsed (en)", () => {
+            renderWithIntl(<About />);
+            expect(
+                screen.getByRole("heading", { level: 3, name: "Languages" }),
+            ).toBeInTheDocument();
+        });
+
+        it("languages heading 'Мови' is visible while accordion is collapsed (uk)", () => {
+            renderWithIntl(<About />, { locale: "uk" });
+            expect(
+                screen.getByRole("heading", { level: 3, name: "Мови" }),
+            ).toBeInTheDocument();
+        });
+
+        it("language list has one listitem per entry in languages.ts", () => {
+            renderWithIntl(<About />);
+            // The about card has two lists: languages and journey (inside collapsible forceMount).
+            // Find the ul inside the languages section by its heading.
+            const heading = screen.getByRole("heading", {
+                level: 3,
+                name: "Languages",
+            });
+            const listEl = heading.nextElementSibling;
+            expect(listEl).not.toBeNull();
+            const items = listEl
+                ? Array.from(listEl.querySelectorAll("li"))
+                : [];
+            expect(items).toHaveLength(languages.length);
+        });
+
+        it("each language item text is exactly '<Name> — <level>' with single spaces (en)", () => {
+            renderWithIntl(<About />);
+            const heading = screen.getByRole("heading", {
+                level: 3,
+                name: "Languages",
+            });
+            const list = heading.nextElementSibling;
+            expect(list).not.toBeNull();
+            const texts = Array.from(list?.querySelectorAll("li") ?? []).map(
+                (li) => li.textContent?.trim(),
+            );
+            expect(texts).toContain("Ukrainian — native");
+            expect(texts).toContain("English — B2");
+            expect(texts).toContain("Czech — C1");
+        });
+
+        it("each language item text is exactly '<Name> — <level>' with single spaces (uk)", () => {
+            renderWithIntl(<About />, { locale: "uk" });
+            const heading = screen.getByRole("heading", {
+                level: 3,
+                name: "Мови",
+            });
+            const list = heading.nextElementSibling;
+            expect(list).not.toBeNull();
+            const texts = Array.from(list?.querySelectorAll("li") ?? []).map(
+                (li) => li.textContent?.trim(),
+            );
+            expect(texts).toContain("українська — рідна");
+            expect(texts).toContain("англійська — B2");
+            expect(texts).toContain("чеська — C1");
+        });
+
+        it("accordion trigger accessible name does not contain the language names", () => {
+            renderWithIntl(<About />);
+            const trigger = screen.getByRole("button", {
+                name: /Long story short/,
+            });
+            const name =
+                trigger.getAttribute("aria-label") ?? trigger.textContent ?? "";
+            expect(name).not.toMatch(/Ukrainian/);
+            expect(name).not.toMatch(/English/);
+            expect(name).not.toMatch(/Czech/);
         });
     });
 });

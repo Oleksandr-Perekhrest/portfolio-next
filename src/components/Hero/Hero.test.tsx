@@ -35,4 +35,18 @@ describe("Hero", () => {
         const link = screen.getByRole("link", { name: /Contact me/ });
         expect(link).toHaveAttribute("href", "#contact");
     });
+
+    it("View CV link is present", () => {
+        renderWithIntl(<Hero />);
+        expect(
+            screen.getByRole("link", { name: /View CV/ }),
+        ).toBeInTheDocument();
+    });
+
+    it("Download PDF link is present", () => {
+        renderWithIntl(<Hero />);
+        expect(
+            screen.getByRole("link", { name: /Download PDF/ }),
+        ).toBeInTheDocument();
+    });
 });

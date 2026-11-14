@@ -20,13 +20,26 @@ type CommercialSlide = { kind: "commercial"; item: CommercialProject };
 type PersonalSlide = { kind: "personal"; project: Project };
 type Slide = CommercialSlide | PersonalSlide;
 
-const slides: readonly Slide[] = [
-    ...commercial.map((item) => ({ kind: "commercial" as const, item })),
-    ...projects.map((project) => ({ kind: "personal" as const, project })),
-];
+type ProjectGalleryProps = {
+    commercialItems?: readonly CommercialProject[];
+    personalProjects?: readonly Project[];
+};
 
-export default function ProjectGallery() {
+export default function ProjectGallery({
+    commercialItems = commercial,
+    personalProjects = projects,
+}: ProjectGalleryProps) {
     const t = useTranslations("Experience");
+    const slides: readonly Slide[] = [
+        ...commercialItems.map((item) => ({
+            kind: "commercial" as const,
+            item,
+        })),
+        ...personalProjects.map((project) => ({
+            kind: "personal" as const,
+            project,
+        })),
+    ];
     const count = slides.length;
     const { index, canPrev, canNext, prev, next } = useGallery(count);
     const isMultiple = count > 1;
@@ -37,7 +50,7 @@ export default function ProjectGallery() {
     if (!activeSlide) return null;
 
     return (
-        <div className={styles.card}>
+        <div className={styles.card} data-testid="project-gallery">
             <div className={styles.topRow}>
                 <div className={styles.topLeft}>
                     <span className={styles.label} aria-live="polite">
@@ -144,6 +157,7 @@ export default function ProjectGallery() {
                                         <div
                                             className={styles.dots}
                                             aria-hidden="true"
+                                            data-testid="gallery-dots"
                                         >
                                             {Array.from(
                                                 { length: count },
@@ -218,6 +232,7 @@ export default function ProjectGallery() {
                                     <div
                                         className={styles.dots}
                                         aria-hidden="true"
+                                        data-testid="gallery-dots"
                                     >
                                         {Array.from(
                                             { length: count },

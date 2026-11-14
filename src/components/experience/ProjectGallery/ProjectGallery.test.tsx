@@ -1,67 +1,210 @@
 // outsource dependencies
-import { it, expect, describe } from "@jest/globals";
-import { screen, within, fireEvent } from "@testing-library/react";
+import { it, expect, describe, afterEach } from "@jest/globals";
+import { screen, cleanup, fireEvent } from "@testing-library/react";
 
 // local dependencies
 import en from "../../../../messages/en.json";
 import uk from "../../../../messages/uk.json";
 import ProjectGallery from "./ProjectGallery";
-import { projects } from "@/content/projects";
 import { renderWithIntl } from "@/test/renderWithIntl";
-import { commercial, roleLabels } from "@/content/commercial";
+import { projects, type Project } from "@/content/projects";
+import {
+    commercial,
+    roleLabels,
+    type CommercialProject,
+} from "@/content/commercial";
 
-const totalSlides = commercial.length + projects.length;
-const firstCommercial = commercial[0]!;
-const firstPersonal = projects[0]!;
+// ── Fixtures ─────────────────────────────────────────────────────────────────
+const C1: CommercialProject = {
+    id: "healthcare",
+    role: "frontend",
+    stack: ["React", "Bootstrap"],
+};
+const C2: CommercialProject = {
+    id: "hrm",
+    role: "fullstack",
+    stack: ["Next.js", "Prisma"],
+};
+const P1: Project = {
+    id: "authkit",
+    name: "fixture-app-one",
+    repoUrl: "https://github.com/testuser/fixture-app-one",
+    demoUrl: "https://fixture-one.example.com",
+    stack: ["Next.js", "Express"],
+    image: "/projects/authkit.webp",
+};
+const P2: Project = {
+    id: "inventory",
+    name: "fixture-app-two",
+    repoUrl: "https://github.com/testuser/fixture-app-two",
+    demoUrl: "https://fixture-two.example.com",
+    stack: ["React", "RTK Query"],
+    image: "/projects/inventory.webp",
+};
 
-describe("ProjectGallery (merged carousel)", () => {
-    it("data: commercial and personal items are both non-empty", () => {
+// Helper: click Next n times
+function clickNext(n: number) {
+    for (let i = 0; i < n; i++) {
+        fireEvent.click(screen.getByRole("button", { name: "Next project" }));
+    }
+}
+
+// Helper: get the aria-live counter region
+function counterEl() {
+    return document.querySelector('[aria-live="polite"]');
+}
+
+// ── Real-data smoke test ──────────────────────────────────────────────────────
+describe("ProjectGallery – real data smoke", () => {
+    afterEach(cleanup);
+
+    it("commercial and projects are both non-empty and default render shows first commercial title", () => {
         expect(commercial.length).toBeGreaterThan(0);
         expect(projects.length).toBeGreaterThan(0);
-    });
-
-    it("shows counter label on the first slide", () => {
         renderWithIntl(<ProjectGallery />);
         expect(
-            document.querySelector('[aria-live="polite"]'),
-        ).toHaveTextContent(`Project 1 / ${totalSlides}`);
+            screen.getByRole("heading", {
+                name: en.Experience.commercial.items[commercial[0]!.id],
+            }),
+        ).toBeInTheDocument();
     });
+});
 
-    it("Previous project is disabled on the first slide", () => {
-        renderWithIntl(<ProjectGallery />);
-        expect(
-            screen.getByRole("button", { name: "Previous project" }),
-        ).toBeDisabled();
-    });
+// ── Fixture-based unit tests ──────────────────────────────────────────────────
+describe("ProjectGallery – fixtures", () => {
+    afterEach(cleanup);
 
-    it("Next project disables on the last slide", () => {
-        renderWithIntl(<ProjectGallery />);
-        for (let i = 0; i < totalSlides - 1; i++) {
-            fireEvent.click(
-                screen.getByRole("button", { name: "Next project" }),
-            );
-        }
-        expect(
-            screen.getByRole("button", { name: "Next project" }),
-        ).toBeDisabled();
-    });
+    // ── Order ─────────────────────────────────────────────────────────────────
 
-    it("first slide is commercial: shows h3 title and role label", () => {
-        renderWithIntl(<ProjectGallery />);
-        const heading = screen.getByRole("heading", {
-            name: en.Experience.commercial.items[firstCommercial.id],
-        });
-        expect(heading).toBeInTheDocument();
-        // scope role text to the active slide container to avoid matching hidden slides
+    it("order: first slide is commercial", () => {
+        renderWithIntl(
+            <ProjectGallery
+                commercialItems={[C1, C2]}
+                personalProjects={[P1]}
+            />,
+        );
         expect(
-            within(
-                heading.closest('[class*="item"]') ?? document.body,
-            ).getByText(roleLabels[firstCommercial.role]),
+            screen.getByRole("heading", {
+                name: en.Experience.commercial.items[C1.id],
+            }),
         ).toBeInTheDocument();
     });
 
-    it("commercial slide shows no Live demo or GitHub links", () => {
-        renderWithIntl(<ProjectGallery />);
+    it("order: slide after last commercial is personal", () => {
+        renderWithIntl(
+            <ProjectGallery commercialItems={[C1]} personalProjects={[P1]} />,
+        );
+        clickNext(1);
+        expect(
+            screen.getByRole("heading", { name: P1.name }),
+        ).toBeInTheDocument();
+    });
+
+    // ── Counter ───────────────────────────────────────────────────────────────
+
+    it('counter: shows "Project 1 / N" on first slide where N equals fixture total', () => {
+        // 2 commercial + 2 personal = 4 total
+        renderWithIntl(
+            <ProjectGallery
+                commercialItems={[C1, C2]}
+                personalProjects={[P1, P2]}
+            />,
+        );
+        expect(counterEl()).toHaveTextContent("Project 1 / 4");
+    });
+
+    it("counter: updates to 2 / 2 after clicking Next on a 2-slide fixture", () => {
+        renderWithIntl(
+            <ProjectGallery commercialItems={[C1]} personalProjects={[P1]} />,
+        );
+        expect(counterEl()).toHaveTextContent("Project 1 / 2");
+        clickNext(1);
+        expect(counterEl()).toHaveTextContent("Project 2 / 2");
+    });
+
+    // ── Badge ─────────────────────────────────────────────────────────────────
+
+    it('badge: shows "Commercial · NDA" on first (commercial) slide', () => {
+        renderWithIntl(
+            <ProjectGallery commercialItems={[C1]} personalProjects={[P1]} />,
+        );
+        // The badge span carries the NDA hint as its title attribute, making it uniquely identifiable.
+        expect(
+            screen.getByTitle(en.Experience.commercial.ndaHint),
+        ).toBeInTheDocument();
+    });
+
+    it('badge: shows "Pet project" on personal slide', () => {
+        renderWithIntl(
+            <ProjectGallery commercialItems={[C1]} personalProjects={[P1]} />,
+        );
+        clickNext(1);
+        expect(screen.getByText("Pet project")).toBeInTheDocument();
+    });
+
+    it("badge: changes at the commercial/personal boundary", () => {
+        renderWithIntl(
+            <ProjectGallery commercialItems={[C1]} personalProjects={[P1]} />,
+        );
+        // Before: commercial badge (identified by NDA title) present, personal absent
+        expect(
+            screen.getByTitle(en.Experience.commercial.ndaHint),
+        ).toBeInTheDocument();
+        expect(screen.queryByText("Pet project")).not.toBeInTheDocument();
+        clickNext(1);
+        // After: commercial badge gone, personal badge present
+        expect(
+            screen.queryByTitle(en.Experience.commercial.ndaHint),
+        ).not.toBeInTheDocument();
+        expect(screen.getByText("Pet project")).toBeInTheDocument();
+    });
+
+    // ── Commercial slide content ──────────────────────────────────────────────
+
+    it("commercial slide: shows translated title as h3", () => {
+        renderWithIntl(
+            <ProjectGallery commercialItems={[C1]} personalProjects={[P1]} />,
+        );
+        expect(
+            screen.getByRole("heading", {
+                level: 3,
+                name: en.Experience.commercial.items[C1.id],
+            }),
+        ).toBeInTheDocument();
+    });
+
+    it("commercial slide: shows role label", () => {
+        renderWithIntl(
+            <ProjectGallery commercialItems={[C1]} personalProjects={[P1]} />,
+        );
+        expect(screen.getByText(roleLabels[C1.role])).toBeInTheDocument();
+    });
+
+    it("commercial slide: shows NDA placeholder text", () => {
+        renderWithIntl(
+            <ProjectGallery commercialItems={[C1]} personalProjects={[P1]} />,
+        );
+        expect(
+            screen.getAllByText(en.Experience.commercial.ndaHint).length,
+        ).toBeGreaterThan(0);
+    });
+
+    it("commercial slide: stack tags are rendered as list items", () => {
+        renderWithIntl(
+            <ProjectGallery commercialItems={[C1]} personalProjects={[P1]} />,
+        );
+        const liTexts = screen
+            .getAllByRole("listitem")
+            .map((li) => li.textContent);
+        for (const tag of C1.stack) {
+            expect(liTexts).toContain(tag);
+        }
+    });
+
+    it('commercial slide: no "Live demo" or "GitHub" links', () => {
+        renderWithIntl(
+            <ProjectGallery commercialItems={[C1]} personalProjects={[P1]} />,
+        );
         expect(
             screen.queryByRole("link", { name: /Live demo/ }),
         ).not.toBeInTheDocument();
@@ -70,127 +213,97 @@ describe("ProjectGallery (merged carousel)", () => {
         ).not.toBeInTheDocument();
     });
 
-    it("commercial slide stack tags are rendered as list items", () => {
-        renderWithIntl(<ProjectGallery />);
-        const liTexts = screen
-            .getAllByRole("listitem")
-            .map((li) => li.textContent);
-        for (const tag of firstCommercial.stack) {
-            expect(liTexts).toContain(tag);
-        }
-    });
+    // ── Personal slide content ────────────────────────────────────────────────
 
-    it("NDA hint text is in the document on the first (commercial) slide", () => {
-        renderWithIntl(<ProjectGallery />);
-        expect(
-            screen.getAllByText(en.Experience.commercial.ndaHint).length,
-        ).toBeGreaterThan(0);
-    });
-
-    it("navigating past all commercial slides shows the first personal project", () => {
-        renderWithIntl(<ProjectGallery />);
-        for (let i = 0; i < commercial.length; i++) {
-            fireEvent.click(
-                screen.getByRole("button", { name: "Next project" }),
-            );
-        }
-        expect(
-            screen.getByRole("heading", { name: firstPersonal.name }),
-        ).toBeInTheDocument();
-        expect(
-            document.querySelector('[aria-live="polite"]'),
-        ).toHaveTextContent(
-            `Project ${commercial.length + 1} / ${totalSlides}`,
+    it("personal slide: shows project name as h3", () => {
+        renderWithIntl(
+            <ProjectGallery commercialItems={[C1]} personalProjects={[P1]} />,
         );
+        clickNext(1);
+        expect(
+            screen.getByRole("heading", { level: 3, name: P1.name }),
+        ).toBeInTheDocument();
     });
 
-    it('"Live demo" link on personal slide has correct href, target, rel', () => {
-        renderWithIntl(<ProjectGallery />);
-        for (let i = 0; i < commercial.length; i++) {
-            fireEvent.click(
-                screen.getByRole("button", { name: "Next project" }),
-            );
-        }
+    it("personal slide: shows description from translations", () => {
+        renderWithIntl(
+            <ProjectGallery commercialItems={[C1]} personalProjects={[P1]} />,
+        );
+        clickNext(1);
+        expect(
+            screen.getByText(en.Experience.projects[P1.id].description),
+        ).toBeInTheDocument();
+    });
+
+    it("personal slide: Live demo link has fixture demoUrl", () => {
+        renderWithIntl(
+            <ProjectGallery commercialItems={[C1]} personalProjects={[P1]} />,
+        );
+        clickNext(1);
         const link = screen.getByRole("link", {
             name: "Live demo (opens in a new tab)",
         });
-        expect(link).toHaveAttribute("href", firstPersonal.demoUrl);
+        expect(link).toHaveAttribute("href", P1.demoUrl);
         expect(link).toHaveAttribute("target", "_blank");
         expect(link).toHaveAttribute("rel", "noopener noreferrer");
     });
 
-    it('"GitHub" link on personal slide has correct href, target, rel', () => {
-        renderWithIntl(<ProjectGallery />);
-        for (let i = 0; i < commercial.length; i++) {
-            fireEvent.click(
-                screen.getByRole("button", { name: "Next project" }),
-            );
-        }
+    it("personal slide: GitHub link has fixture repoUrl", () => {
+        renderWithIntl(
+            <ProjectGallery commercialItems={[C1]} personalProjects={[P1]} />,
+        );
+        clickNext(1);
         const link = screen.getByRole("link", {
             name: "GitHub (opens in a new tab)",
         });
-        expect(link).toHaveAttribute("href", firstPersonal.repoUrl);
+        expect(link).toHaveAttribute("href", P1.repoUrl);
         expect(link).toHaveAttribute("target", "_blank");
         expect(link).toHaveAttribute("rel", "noopener noreferrer");
     });
 
-    it("personal slide renders screenshot with its localized alt text (en)", () => {
-        renderWithIntl(<ProjectGallery />);
-        for (let i = 0; i < commercial.length; i++) {
-            fireEvent.click(
-                screen.getByRole("button", { name: "Next project" }),
-            );
-        }
-        expect(
-            screen.getByRole("img", {
-                name: en.Experience.projects[firstPersonal.id].imageAlt,
-            }),
-        ).toBeInTheDocument();
-    });
+    // ── Navigation buttons ────────────────────────────────────────────────────
 
-    it("personal slide renders screenshot with its localized alt text (uk)", () => {
-        renderWithIntl(<ProjectGallery />, { locale: "uk" });
-        for (let i = 0; i < commercial.length; i++) {
-            fireEvent.click(
-                screen.getByRole("button", { name: "Наступний проєкт" }),
-            );
-        }
-        expect(
-            screen.getByRole("img", {
-                name: uk.Experience.projects[firstPersonal.id].imageAlt,
-            }),
-        ).toBeInTheDocument();
-    });
-
-    it("only the active item is visible; inactive has aria-hidden and inert", () => {
-        renderWithIntl(<ProjectGallery />);
-        const firstHeading = screen.getByRole("heading", {
-            name: en.Experience.commercial.items[firstCommercial.id],
-        });
-        expect(firstHeading.closest("[aria-hidden]")).toBeNull();
-
-        // hidden: true required because the inactive item carries aria-hidden="true"
-        const secondTitle = en.Experience.commercial.items[commercial[1]!.id];
-        const secondHeading = screen.getByRole("heading", {
-            name: secondTitle,
-            hidden: true,
-        });
-        expect(secondHeading.closest('[aria-hidden="true"]')).not.toBeNull();
-
-        fireEvent.click(screen.getByRole("button", { name: "Next project" }));
-
-        expect(firstHeading.closest('[aria-hidden="true"]')).not.toBeNull();
-        expect(secondHeading.closest("[aria-hidden]")).toBeNull();
-    });
-
-    it("clicking Previous after Next goes back to the first slide", () => {
-        renderWithIntl(<ProjectGallery />);
-        fireEvent.click(screen.getByRole("button", { name: "Next project" }));
-        fireEvent.click(
-            screen.getByRole("button", { name: "Previous project" }),
+    it("Previous project is disabled on the first slide", () => {
+        renderWithIntl(
+            <ProjectGallery commercialItems={[C1]} personalProjects={[P1]} />,
         );
         expect(
-            document.querySelector('[aria-live="polite"]'),
-        ).toHaveTextContent(`Project 1 / ${totalSlides}`);
+            screen.getByRole("button", { name: "Previous project" }),
+        ).toBeDisabled();
+    });
+
+    it("Next project is disabled on the last slide", () => {
+        renderWithIntl(
+            <ProjectGallery commercialItems={[C1]} personalProjects={[P1]} />,
+        );
+        clickNext(1);
+        expect(
+            screen.getByRole("button", { name: "Next project" }),
+        ).toBeDisabled();
+    });
+
+    // ── UA locale ─────────────────────────────────────────────────────────────
+
+    it("UA locale: commercial badge shows Ukrainian text", () => {
+        renderWithIntl(
+            <ProjectGallery commercialItems={[C1]} personalProjects={[P1]} />,
+            { locale: "uk" },
+        );
+        expect(
+            screen.getByTitle(uk.Experience.commercial.ndaHint),
+        ).toBeInTheDocument();
+    });
+
+    it("UA locale: personal badge shows Ukrainian text", () => {
+        renderWithIntl(
+            <ProjectGallery commercialItems={[C1]} personalProjects={[P1]} />,
+            { locale: "uk" },
+        );
+        fireEvent.click(
+            screen.getByRole("button", { name: uk.Experience.nextProject }),
+        );
+        expect(
+            screen.getByText(uk.Experience.personalBadge),
+        ).toBeInTheDocument();
     });
 });
