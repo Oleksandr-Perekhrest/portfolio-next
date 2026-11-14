@@ -30,9 +30,9 @@ describe("Hero", () => {
         ).toBeInTheDocument();
     });
 
-    it("link View projects has href #experience", () => {
+    it("link Contact me has href #contact", () => {
         renderWithIntl(<Hero />);
-        const link = screen.getByRole("link", { name: /View projects/ });
-        expect(link).toHaveAttribute("href", "#experience");
+        const link = screen.getByRole("link", { name: /Contact me/ });
+        expect(link).toHaveAttribute("href", "#contact");
     });
 });

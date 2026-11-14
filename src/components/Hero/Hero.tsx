@@ -12,12 +12,14 @@ export default function Hero() {
     return (
         <section className={styles.hero}>
             <div className={styles.inner}>
-                <h1 className={styles.title}>{t("title")}</h1>
-                <p className={styles.keywords}>{t("keywords")}</p>
-                <p className={styles.lead}>{t("lead")}</p>
+                <div className={styles.content}>
+                    <h1 className={styles.title}>{t("title")}</h1>
+                    <p className={styles.keywords}>{t("keywords")}</p>
+                    <p className={styles.lead}>{t("lead")}</p>
+                </div>
                 <div className={styles.actions}>
-                    <ButtonLink href="#experience" variant="primary">
-                        {t("projects")}
+                    <ButtonLink href="#contact" variant="primary">
+                        {t("contact")}
                         <svg
                             aria-hidden
                             width={16}
