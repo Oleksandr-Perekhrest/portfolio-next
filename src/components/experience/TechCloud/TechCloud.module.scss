@@ -1,3 +1,6 @@
+// outsource dependencies
+@use "sass:map";
+
 // local dependencies
 @use "styles" as *;
 
@@ -67,6 +70,7 @@
 }
 
 .body {
+    position: relative;
     display: flex;
     flex: 1 1 auto;
     align-items: center;
@@ -83,6 +87,27 @@
     margin: auto;
     padding: 0;
     list-style: none;
+
+    &[data-cloud-state="pending"] {
+        visibility: hidden;
+    }
+
+    @media (width >= #{map.get($breakpoints, tablet)}) {
+        &[data-cloud-state="measured"] {
+            position: absolute;
+            inset: 0;
+            display: block;
+            max-width: none;
+            margin: 0;
+
+            > .item {
+                position: absolute;
+                left: var(--x);
+                top: var(--y);
+                margin: 0;
+            }
+        }
+    }
 }
 
 .item {

@@ -21,6 +21,35 @@ if (typeof window !== "undefined") {
 
     window.IntersectionObserver =
         IntersectionObserverStub as unknown as typeof IntersectionObserver;
+
+    // jsdom does not implement window.matchMedia; useCloudLayout reads it to pick
+    // mobile vs. desktop layout. Default to no-match (mobile) so TechCloud renders
+    // the plain flex list; tests that need the desktop branch still mock it locally.
+    if (typeof window.matchMedia !== "function") {
+        Object.defineProperty(window, "matchMedia", {
+            writable: true,
+            configurable: true,
+            value: () => ({
+                matches: false,
+                media: "",
+                onchange: null,
+                addListener: () => {},
+                removeListener: () => {},
+                addEventListener: () => {},
+                removeEventListener: () => {},
+                dispatchEvent: () => false,
+            }),
+        });
+    }
+
+    // jsdom does not implement document.fonts; useCloudLayout awaits fonts.ready
+    // before measuring the cloud boxes.
+    if (typeof document.fonts === "undefined") {
+        Object.defineProperty(document, "fonts", {
+            configurable: true,
+            value: { ready: Promise.resolve() },
+        });
+    }
 }
 
 if (typeof window !== "undefined") {
