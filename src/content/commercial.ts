@@ -19,7 +19,7 @@ export const commercial = [
     {
         id: "healthcare",
         role: "frontend",
-        stack: ["React", "React Native", "Redux"],
+        stack: ["React", "React Native", "Redux", "Redux-Form", "Bootstrap"],
     },
     {
         id: "hrm",

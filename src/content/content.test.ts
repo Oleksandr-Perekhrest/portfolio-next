@@ -50,8 +50,8 @@ describe("journey message key parity", () => {
 
 describe("languages message key parity", () => {
     it("every language code has a key in en.json and uk.json", () => {
-        const enLangs = en.Experience.languages as Record<string, unknown>;
-        const ukLangs = uk.Experience.languages as Record<string, unknown>;
+        const enLangs = en.About.languages as Record<string, unknown>;
+        const ukLangs = uk.About.languages as Record<string, unknown>;
         for (const lang of languages) {
             expect(enLangs[lang.code]).toBeDefined();
             expect(ukLangs[lang.code]).toBeDefined();

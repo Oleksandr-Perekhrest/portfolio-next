@@ -118,7 +118,7 @@ Both variables are optional for local development; if absent the contact form re
    "items": { "myProject": "My project title" }
    ```
 
-The `id` type is derived from `en.json` at compile time, so TypeScript rejects an id that has no matching key. The content test in [src/content/content.test.ts](src/content/content.test.ts) verifies key parity with `uk.json`. Card height adapts automatically because all carousel items share the same grid cell.
+The `id` type is derived from `en.json` at compile time, so TypeScript rejects an id that has no matching key. The content test in [src/content/content.test.ts](src/content/content.test.ts) verifies key parity with `uk.json`. The item appears in the shared projects carousel, before the personal projects.
 
 ### b. Technology
 

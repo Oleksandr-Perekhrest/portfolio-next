@@ -42,7 +42,7 @@
     "title": "Web Engineer",
     "keywords": "Full-stack · React · Next.js · Node.js · React Native",
     "lead": "Створюю веб- і мобільні продукти від початку до кінця — від складних форм і порталів на React до API на Node.js, баз даних і деплою.",
-    "projects": "Проєкти",
+    "contact": "Зв’язатися",
     "cv": {
       "viewCv": "Переглянути CV",
       "downloadPdf": "Завантажити PDF",
@@ -62,6 +62,8 @@
     "github": "GitHub",
     "more": "+ ще {count}",
     "showAll": "Показати всі {area}-технології",
+    "commercialBadge": "Комерційний · NDA",
+    "personalBadge": "Пет-проєкт",
     "projects": {
       "authkit": {
         "description": "Повноцінна автентифікація: фронтенд на Next.js, API на Express, PostgreSQL із Prisma, Google OAuth. Docker, CI, unit- та інтеграційні тести, деплой на Vercel і Render.",
@@ -73,23 +75,12 @@
       }
     },
     "commercial": {
-      "label": "Комерційний досвід · <counter>{current} / {total}</counter>",
-      "nda": "NDA",
       "ndaHint": "Під NDA: без назв компаній і скриншотів",
-      "prev": "Попередній",
-      "next": "Наступний",
       "items": {
         "healthcare": "Медична платформа",
         "hrm": "HRM-система",
         "mobileRedesign": "Pixel-perfect редизайн додатка"
       }
-    },
-    "languages": {
-      "title": "Мови",
-      "native": "рідна",
-      "uk": "українська",
-      "en": "англійська",
-      "cs": "чеська"
     },
     "cloud": {
       "close": "Закрити",
@@ -102,6 +93,13 @@
     "summary": "Від кухні до веб-розробки",
     "intro": "В IT я прийшов у 2022 році після 18 років зовсім іншої роботи: кухні в Харкові, складська логістика й продажі в Празі. Керування кухнею і відділом продажів навчило мене того, що найбільше потрібно в продуктовій роботі: дедлайнів, процесів і спілкування з людьми. З 2023 року розробляю комерційні продукти на React і React Native, а тепер рухаюся у фулстек.",
     "now": "Зараз",
+    "languages": {
+      "title": "Мови",
+      "native": "рідна",
+      "uk": "Українська",
+      "en": "Англійська",
+      "cs": "Чеська"
+    },
     "journey": {
       "cook": "Кухар",
       "headChef": "Шеф-кухар",
