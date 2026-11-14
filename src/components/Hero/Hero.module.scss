@@ -54,17 +54,19 @@
     width: 200px;
 
     a {
+        justify-content: center;
         height: var(--tap-target);
         width: 100%;
     }
 
     @include below(tablet) {
-        flex-direction: row;
-        flex-wrap: wrap;
-        width: auto;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        width: 100%;
+        max-width: 480px;
 
-        a {
-            width: auto;
+        a:first-child {
+            grid-column: 1 / -1;
         }
     }
 }
