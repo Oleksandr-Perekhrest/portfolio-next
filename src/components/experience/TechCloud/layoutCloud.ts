@@ -4,6 +4,16 @@ export type CloudLayoutResult = { placements: CloudPlacement[]; fits: boolean };
 
 type Area = { width: number; height: number };
 type Options = { gap?: number; step?: number; spacing?: number };
+
+/**
+ * Radius of the Archimedean spiral at angle `theta`: one full turn moves the
+ * radius outwards by exactly `spacing` px. Kept separate from the angular step
+ * on purpose (see the test): deriving it from the step made layout ~12× slower.
+ */
+export function spiralRadius(theta: number, spacing: number): number {
+    return (spacing / (2 * Math.PI)) * theta;
+}
+
 /**
  * Places boxes in an Archimedean spiral centered in `area`.
  *
@@ -31,11 +41,6 @@ export function layoutCloud(
     const placements: CloudPlacement[] = [];
     const aspectRatio = area.width / area.height;
 
-    // Archimedean spiral coefficient: one full turn moves the radius outwards
-    // by `spacing` px. It is independent of the angular `step`, otherwise a
-    // small step makes the spiral grow so slowly that layout takes ~100 ms.
-    const a = spacing / (2 * Math.PI);
-
     for (let i = 0; i < boxes.length; i++) {
         const box = boxes[i];
         if (box === undefined) continue;
@@ -53,7 +58,7 @@ export function layoutCloud(
         let theta = 0;
 
         while (true) {
-            const r = a * theta;
+            const r = spiralRadius(theta, spacing);
             const cx = r * Math.cos(theta) * aspectRatio + area.width / 2;
             const cy = r * Math.sin(theta) + area.height / 2;
 
