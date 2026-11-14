@@ -62,6 +62,8 @@
     "github": "GitHub",
     "more": "+ {count} more",
     "showAll": "Show all {area} technologies",
+    "commercialBadge": "Commercial · NDA",
+    "personalBadge": "Pet project",
     "projects": {
       "authkit": {
         "description": "Full-stack authentication: Next.js frontend, Express API, PostgreSQL with Prisma, Google OAuth. Docker, CI, unit and integration tests, deployed to Vercel and Render.",
@@ -73,11 +75,7 @@
       }
     },
     "commercial": {
-      "label": "Commercial · <counter>{current} / {total}</counter>",
-      "nda": "NDA",
       "ndaHint": "Under NDA: no company names or screenshots",
-      "prev": "Previous",
-      "next": "Next",
       "items": {
         "healthcare": "Healthcare platform",
         "hrm": "HRM system",

@@ -1,156 +1,180 @@
 // outsource dependencies
 import { it, expect, describe } from "@jest/globals";
-import { screen, fireEvent } from "@testing-library/react";
+import { screen, within, fireEvent } from "@testing-library/react";
 
 // local dependencies
+import en from "../../../../messages/en.json";
+import uk from "../../../../messages/uk.json";
 import ProjectGallery from "./ProjectGallery";
+import { projects } from "@/content/projects";
 import { renderWithIntl } from "@/test/renderWithIntl";
-import { projects, type Project } from "@/content/projects";
+import { commercial, roleLabels } from "@/content/commercial";
 
-// Captured before any per-test override so the guard and href assertions stay
-// anchored to the actual content file, not the mock data.
-const project = projects[0]!;
+const totalSlides = commercial.length + projects.length;
+const firstCommercial = commercial[0]!;
+const firstPersonal = projects[0]!;
 
-const SINGLE: readonly Project[] = [
-    {
-        id: "authkit",
-        name: "authkit-next-express",
-        repoUrl: "https://github.com/Oleksandr-Perekhrest/authkit-next-express",
-        demoUrl: "https://authkit-web.vercel.app",
-        stack: ["Next.js", "Express", "PostgreSQL", "Docker"],
-        image: "/projects/authkit.webp",
-    },
-];
-
-const DOUBLE: readonly Project[] = [
-    ...SINGLE,
-    {
-        id: "inventory",
-        name: "inventory-react-rtk",
-        repoUrl: "https://github.com/Oleksandr-Perekhrest/inventory-react-rtk",
-        demoUrl: "https://warehouse-manager-demo.vercel.app",
-        stack: ["React", "Vite", "Redux Toolkit", "RTK Query"],
-        image: "/projects/inventory.webp",
-    },
-];
-
-describe("ProjectGallery (single project)", () => {
-    it("projects[0] is the expected project (guard against data reordering)", () => {
-        expect(project.id).toBe("authkit");
+describe("ProjectGallery (merged carousel)", () => {
+    it("data: commercial and personal items are both non-empty", () => {
+        expect(commercial.length).toBeGreaterThan(0);
+        expect(projects.length).toBeGreaterThan(0);
     });
 
-    it('shows "Featured project" label', () => {
-        renderWithIntl(<ProjectGallery projects={SINGLE} />);
-        expect(screen.getByText("Featured project")).toBeInTheDocument();
-    });
-
-    it("shows no Previous/Next project buttons", () => {
-        renderWithIntl(<ProjectGallery projects={SINGLE} />);
-        expect(
-            screen.queryByRole("button", { name: "Previous project" }),
-        ).not.toBeInTheDocument();
-        expect(
-            screen.queryByRole("button", { name: "Next project" }),
-        ).not.toBeInTheDocument();
-    });
-
-    it("shows no dots", () => {
-        renderWithIntl(<ProjectGallery projects={SINGLE} />);
-        expect(document.querySelector('div[aria-hidden="true"]')).toBeNull();
-    });
-
-    it("description text is present", () => {
-        renderWithIntl(<ProjectGallery projects={SINGLE} />);
-        expect(
-            screen.getByText(/Full-stack authentication/),
-        ).toBeInTheDocument();
-    });
-
-    it("stack tags are rendered as list items", () => {
-        renderWithIntl(<ProjectGallery projects={SINGLE} />);
-        const items = screen.getAllByRole("listitem");
-        const texts = items.map((li) => li.textContent);
-        for (const tag of project.stack) {
-            expect(texts).toContain(tag);
-        }
-    });
-
-    it('"Live demo" link has correct href, target, rel, and accessible name', () => {
-        renderWithIntl(<ProjectGallery projects={SINGLE} />);
-        const link = screen.getByRole("link", {
-            name: "Live demo (opens in a new tab)",
-        });
-        expect(link).toHaveAttribute("href", project.demoUrl);
-        expect(link).toHaveAttribute("target", "_blank");
-        expect(link).toHaveAttribute("rel", "noopener noreferrer");
-    });
-
-    it('"GitHub" link has correct href, target, rel, and accessible name', () => {
-        renderWithIntl(<ProjectGallery projects={SINGLE} />);
-        const link = screen.getByRole("link", {
-            name: "GitHub (opens in a new tab)",
-        });
-        expect(link).toHaveAttribute("href", project.repoUrl);
-        expect(link).toHaveAttribute("target", "_blank");
-        expect(link).toHaveAttribute("rel", "noopener noreferrer");
-    });
-
-    it("renders the project screenshot with its localized alt text (en)", () => {
-        renderWithIntl(<ProjectGallery projects={SINGLE} />);
-        expect(
-            screen.getByRole("img", {
-                name: "AuthKit home page with sign-up and login actions and feature cards",
-            }),
-        ).toBeInTheDocument();
-    });
-
-    it("renders the project screenshot with its localized alt text (uk)", () => {
-        renderWithIntl(<ProjectGallery projects={SINGLE} />, { locale: "uk" });
-        expect(
-            screen.getByRole("img", {
-                name: "Головна сторінка AuthKit з кнопками реєстрації та входу і картками можливостей",
-            }),
-        ).toBeInTheDocument();
-    });
-});
-
-describe("ProjectGallery (multiple projects)", () => {
-    it("shows counter label on the first item", () => {
-        renderWithIntl(<ProjectGallery projects={DOUBLE} />);
+    it("shows counter label on the first slide", () => {
+        renderWithIntl(<ProjectGallery />);
         expect(
             document.querySelector('[aria-live="polite"]'),
-        ).toHaveTextContent(`Project 1 / ${DOUBLE.length}`);
+        ).toHaveTextContent(`Project 1 / ${totalSlides}`);
     });
 
-    it("Previous is disabled on the first item", () => {
-        renderWithIntl(<ProjectGallery projects={DOUBLE} />);
+    it("Previous project is disabled on the first slide", () => {
+        renderWithIntl(<ProjectGallery />);
         expect(
             screen.getByRole("button", { name: "Previous project" }),
         ).toBeDisabled();
     });
 
-    it("Next moves to the second item", () => {
-        renderWithIntl(<ProjectGallery projects={DOUBLE} />);
-        fireEvent.click(screen.getByRole("button", { name: "Next project" }));
+    it("Next project disables on the last slide", () => {
+        renderWithIntl(<ProjectGallery />);
+        for (let i = 0; i < totalSlides - 1; i++) {
+            fireEvent.click(
+                screen.getByRole("button", { name: "Next project" }),
+            );
+        }
+        expect(
+            screen.getByRole("button", { name: "Next project" }),
+        ).toBeDisabled();
+    });
+
+    it("first slide is commercial: shows h3 title and role label", () => {
+        renderWithIntl(<ProjectGallery />);
+        const heading = screen.getByRole("heading", {
+            name: en.Experience.commercial.items[firstCommercial.id],
+        });
+        expect(heading).toBeInTheDocument();
+        // scope role text to the active slide container to avoid matching hidden slides
+        expect(
+            within(
+                heading.closest('[class*="item"]') ?? document.body,
+            ).getByText(roleLabels[firstCommercial.role]),
+        ).toBeInTheDocument();
+    });
+
+    it("commercial slide shows no Live demo or GitHub links", () => {
+        renderWithIntl(<ProjectGallery />);
+        expect(
+            screen.queryByRole("link", { name: /Live demo/ }),
+        ).not.toBeInTheDocument();
+        expect(
+            screen.queryByRole("link", { name: /GitHub/ }),
+        ).not.toBeInTheDocument();
+    });
+
+    it("commercial slide stack tags are rendered as list items", () => {
+        renderWithIntl(<ProjectGallery />);
+        const liTexts = screen
+            .getAllByRole("listitem")
+            .map((li) => li.textContent);
+        for (const tag of firstCommercial.stack) {
+            expect(liTexts).toContain(tag);
+        }
+    });
+
+    it("NDA hint text is in the document on the first (commercial) slide", () => {
+        renderWithIntl(<ProjectGallery />);
+        expect(
+            screen.getAllByText(en.Experience.commercial.ndaHint).length,
+        ).toBeGreaterThan(0);
+    });
+
+    it("navigating past all commercial slides shows the first personal project", () => {
+        renderWithIntl(<ProjectGallery />);
+        for (let i = 0; i < commercial.length; i++) {
+            fireEvent.click(
+                screen.getByRole("button", { name: "Next project" }),
+            );
+        }
+        expect(
+            screen.getByRole("heading", { name: firstPersonal.name }),
+        ).toBeInTheDocument();
         expect(
             document.querySelector('[aria-live="polite"]'),
-        ).toHaveTextContent(`Project 2 / ${DOUBLE.length}`);
+        ).toHaveTextContent(
+            `Project ${commercial.length + 1} / ${totalSlides}`,
+        );
+    });
+
+    it('"Live demo" link on personal slide has correct href, target, rel', () => {
+        renderWithIntl(<ProjectGallery />);
+        for (let i = 0; i < commercial.length; i++) {
+            fireEvent.click(
+                screen.getByRole("button", { name: "Next project" }),
+            );
+        }
+        const link = screen.getByRole("link", {
+            name: "Live demo (opens in a new tab)",
+        });
+        expect(link).toHaveAttribute("href", firstPersonal.demoUrl);
+        expect(link).toHaveAttribute("target", "_blank");
+        expect(link).toHaveAttribute("rel", "noopener noreferrer");
+    });
+
+    it('"GitHub" link on personal slide has correct href, target, rel', () => {
+        renderWithIntl(<ProjectGallery />);
+        for (let i = 0; i < commercial.length; i++) {
+            fireEvent.click(
+                screen.getByRole("button", { name: "Next project" }),
+            );
+        }
+        const link = screen.getByRole("link", {
+            name: "GitHub (opens in a new tab)",
+        });
+        expect(link).toHaveAttribute("href", firstPersonal.repoUrl);
+        expect(link).toHaveAttribute("target", "_blank");
+        expect(link).toHaveAttribute("rel", "noopener noreferrer");
+    });
+
+    it("personal slide renders screenshot with its localized alt text (en)", () => {
+        renderWithIntl(<ProjectGallery />);
+        for (let i = 0; i < commercial.length; i++) {
+            fireEvent.click(
+                screen.getByRole("button", { name: "Next project" }),
+            );
+        }
+        expect(
+            screen.getByRole("img", {
+                name: en.Experience.projects[firstPersonal.id].imageAlt,
+            }),
+        ).toBeInTheDocument();
+    });
+
+    it("personal slide renders screenshot with its localized alt text (uk)", () => {
+        renderWithIntl(<ProjectGallery />, { locale: "uk" });
+        for (let i = 0; i < commercial.length; i++) {
+            fireEvent.click(
+                screen.getByRole("button", { name: "Наступний проєкт" }),
+            );
+        }
+        expect(
+            screen.getByRole("img", {
+                name: uk.Experience.projects[firstPersonal.id].imageAlt,
+            }),
+        ).toBeInTheDocument();
     });
 
     it("only the active item is visible; inactive has aria-hidden and inert", () => {
-        renderWithIntl(<ProjectGallery projects={DOUBLE} />);
+        renderWithIntl(<ProjectGallery />);
         const firstHeading = screen.getByRole("heading", {
-            name: DOUBLE[0]!.name,
+            name: en.Experience.commercial.items[firstCommercial.id],
         });
-        // hidden: true is required because the inactive item carries aria-hidden="true"
+        expect(firstHeading.closest("[aria-hidden]")).toBeNull();
+
+        // hidden: true required because the inactive item carries aria-hidden="true"
+        const secondTitle = en.Experience.commercial.items[commercial[1]!.id];
         const secondHeading = screen.getByRole("heading", {
-            name: DOUBLE[1]!.name,
+            name: secondTitle,
             hidden: true,
         });
-
-        // Active item's wrapper must not carry aria-hidden
-        expect(firstHeading.closest("[aria-hidden]")).toBeNull();
-        // Inactive item's wrapper must carry aria-hidden="true"
         expect(secondHeading.closest('[aria-hidden="true"]')).not.toBeNull();
 
         fireEvent.click(screen.getByRole("button", { name: "Next project" }));
@@ -159,18 +183,14 @@ describe("ProjectGallery (multiple projects)", () => {
         expect(secondHeading.closest("[aria-hidden]")).toBeNull();
     });
 
-    it("each project card renders an image with its localized alt text", () => {
-        renderWithIntl(<ProjectGallery projects={DOUBLE} />);
+    it("clicking Previous after Next goes back to the first slide", () => {
+        renderWithIntl(<ProjectGallery />);
+        fireEvent.click(screen.getByRole("button", { name: "Next project" }));
+        fireEvent.click(
+            screen.getByRole("button", { name: "Previous project" }),
+        );
         expect(
-            screen.getByRole("img", {
-                name: "AuthKit home page with sign-up and login actions and feature cards",
-            }),
-        ).toBeInTheDocument();
-        expect(
-            screen.getByRole("img", {
-                name: "Inventory Manager catalog with the category tree and products table",
-                hidden: true,
-            }),
-        ).toBeInTheDocument();
+            document.querySelector('[aria-live="polite"]'),
+        ).toHaveTextContent(`Project 1 / ${totalSlides}`);
     });
 });

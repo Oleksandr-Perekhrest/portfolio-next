@@ -62,6 +62,8 @@
     "github": "GitHub",
     "more": "+ ще {count}",
     "showAll": "Показати всі {area}-технології",
+    "commercialBadge": "Комерційний · NDA",
+    "personalBadge": "Пет-проєкт",
     "projects": {
       "authkit": {
         "description": "Повноцінна автентифікація: фронтенд на Next.js, API на Express, PostgreSQL із Prisma, Google OAuth. Docker, CI, unit- та інтеграційні тести, деплой на Vercel і Render.",
@@ -73,11 +75,7 @@
       }
     },
     "commercial": {
-      "label": "Комерційний досвід · <counter>{current} / {total}</counter>",
-      "nda": "NDA",
       "ndaHint": "Під NDA: без назв компаній і скриншотів",
-      "prev": "Попередній",
-      "next": "Наступний",
       "items": {
         "healthcare": "Медична платформа",
         "hrm": "HRM-система",

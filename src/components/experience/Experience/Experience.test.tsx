@@ -4,8 +4,12 @@ import { it, expect, describe } from "@jest/globals";
 
 // local dependencies
 import Experience from "./Experience";
+import en from "../../../../messages/en.json";
+import { projects } from "@/content/projects";
 import { commercial } from "@/content/commercial";
 import { renderWithIntl } from "@/test/renderWithIntl";
+
+const totalSlides = commercial.length + projects.length;
 
 describe("Experience", () => {
     it("renders all key elements", () => {
@@ -18,7 +22,7 @@ describe("Experience", () => {
         expect(
             screen.getByRole("heading", {
                 level: 3,
-                name: "authkit-next-express",
+                name: en.Experience.commercial.items[commercial[0]!.id],
             }),
         ).toBeInTheDocument();
 
@@ -33,9 +37,9 @@ describe("Experience", () => {
             }),
         ).toBeInTheDocument();
 
-        expect(screen.getByTestId("commercial-label")).toHaveTextContent(
-            `Commercial · 1 / ${commercial.length}`,
-        );
+        expect(
+            document.querySelector('[aria-live="polite"]'),
+        ).toHaveTextContent(`Project 1 / ${totalSlides}`);
 
         expect(
             screen.getByRole("heading", { level: 3, name: "Languages" }),
