@@ -3,13 +3,13 @@ export type CloudPlacement = { x: number; y: number };
 export type CloudLayoutResult = { placements: CloudPlacement[]; fits: boolean };
 
 type Area = { width: number; height: number };
-type Options = { gap?: number; step?: number };
-
+type Options = { gap?: number; step?: number; spacing?: number };
 /**
  * Places boxes in an Archimedean spiral centered in `area`.
  *
- * Spiral formula: r = a * θ, where a = step / (2π). Each candidate angle
- * advances by `options.step` radians (default 0.2). The spiral is stretched
+ * Spiral formula: r = a * θ, where a = spacing / (2π): one full turn moves the
+ * radius outwards by `options.spacing` px (default 6). Each candidate angle
+ * advances by `options.step` radians (default 0.1). The spiral is stretched
  * horizontally by the area's aspect ratio (cx * aspectRatio, cy * 1) so the
  * cloud fills wide viewports instead of collapsing into a circle.
  *
@@ -25,13 +25,16 @@ export function layoutCloud(
     options?: Options,
 ): CloudLayoutResult {
     const gap = options?.gap ?? 8;
-    const step = options?.step ?? 0.2;
+    const step = options?.step ?? 0.1;
+    const spacing = options?.spacing ?? 6;
 
     const placements: CloudPlacement[] = [];
     const aspectRatio = area.width / area.height;
 
-    // Archimedean spiral coefficient: one full turn advances radius by `step` px
-    const a = step / (2 * Math.PI);
+    // Archimedean spiral coefficient: one full turn moves the radius outwards
+    // by `spacing` px. It is independent of the angular `step`, otherwise a
+    // small step makes the spiral grow so slowly that layout takes ~100 ms.
+    const a = spacing / (2 * Math.PI);
 
     for (let i = 0; i < boxes.length; i++) {
         const box = boxes[i];
