@@ -40,9 +40,5 @@ describe("Experience", () => {
         expect(
             document.querySelector('[aria-live="polite"]'),
         ).toHaveTextContent(`Project 1 / ${totalSlides}`);
-
-        expect(
-            screen.getByRole("heading", { level: 3, name: "Languages" }),
-        ).toBeInTheDocument();
     });
 });

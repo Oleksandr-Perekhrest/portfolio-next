@@ -182,7 +182,10 @@ export default function ProjectGallery() {
                                     alt={t(`projects.${project.id}.imageAlt`)}
                                     fill
                                     sizes="(max-width: 900px) 100vw, 552px"
-                                    style={{ objectFit: "cover" }}
+                                    style={{
+                                        objectFit: "cover",
+                                        objectPosition: "top",
+                                    }}
                                 />
                             </div>
                             <ul className={styles.tags}>

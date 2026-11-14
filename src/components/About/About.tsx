@@ -7,6 +7,7 @@ import { useTranslations } from "next-intl";
 // local dependencies
 import styles from "./About.module.scss";
 import { journey } from "@/content/journey";
+import { languages } from "@/content/languages";
 import SectionTitle from "@/components/SectionTitle/SectionTitle";
 
 export default function About() {
@@ -72,6 +73,23 @@ export default function About() {
                         </div>
                     </Collapsible.Content>
                 </Collapsible.Root>
+                <div className={styles.languages}>
+                    <span className={styles.languagesLabel}>
+                        {t("languages.title")}
+                    </span>
+                    <ul className={styles.languagesList}>
+                        {languages.map(({ code, level }, i) => (
+                            <li key={code} className={styles.languagesItem}>
+                                {i > 0 && <span aria-hidden> · </span>}
+                                {t(`languages.${code}`)}
+                                {" — "}
+                                {level === "native"
+                                    ? t("languages.native")
+                                    : level}
+                            </li>
+                        ))}
+                    </ul>
+                </div>
             </div>
         </section>
     );

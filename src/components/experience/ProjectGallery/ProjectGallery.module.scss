@@ -2,15 +2,22 @@
 @use "styles" as *;
 
 .card {
-    grid-column: span 2;
-    grid-row: span 2;
+    grid-column: 1 / span 3;
+    grid-row: 1 / span 2;
     display: flex;
     flex-direction: column;
-    gap: var(--space-4);
-    padding: var(--space-8);
+    gap: var(--space-3);
+    padding: var(--space-6);
     border-radius: var(--radius-xl);
     border: 1px solid var(--color-line);
     background: var(--color-surface);
+
+    @include below(tablet) {
+        grid-column: 1 / -1;
+        grid-row: auto;
+        gap: var(--space-4);
+        padding: var(--space-8);
+    }
 
     @include below(mobile) {
         grid-column: auto;
@@ -66,13 +73,29 @@
 
 .items {
     display: grid;
+    flex: 1;
+    min-height: 0;
+    grid-template-rows: 1fr;
+
+    @include below(tablet) {
+        flex: none;
+        min-height: auto;
+        grid-template-rows: auto;
+    }
 }
 
 .item {
     grid-area: 1 / 1;
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-4);
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto auto 1fr auto;
+    gap: var(--space-3);
+
+    @include below(tablet) {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-4);
+    }
 }
 
 .hidden {
@@ -81,20 +104,29 @@
 
 .name {
     @include text(card-title-lg);
+
+    grid-column: 1 / -1;
 }
 
 .description {
     @include text(body);
 
     color: var(--color-muted);
+    grid-column: 1 / -1;
 }
 
 .imageFrame {
     position: relative;
-    aspect-ratio: 16 / 10;
+    min-height: 0;
+    grid-column: 1 / -1;
     border-radius: var(--radius-lg);
     border: 1px solid var(--color-line);
     overflow: hidden;
+
+    @include below(tablet) {
+        aspect-ratio: 16 / 10;
+        min-height: auto;
+    }
 }
 
 .placeholder {
@@ -123,6 +155,7 @@
     list-style: none;
     padding: 0;
     margin: 0;
+    align-self: center;
 }
 
 .tag {
@@ -135,11 +168,16 @@
 
 .bottomRow {
     display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
     align-items: center;
     gap: var(--space-2);
-    margin-top: auto;
+    align-self: center;
+    flex-wrap: nowrap;
+
+    @include below(tablet) {
+        justify-content: space-between;
+        flex-wrap: wrap;
+        margin-top: auto;
+    }
 }
 
 .links {
@@ -152,6 +190,11 @@
     display: flex;
     align-items: center;
     gap: var(--space-2);
+    margin-left: auto;
+
+    @include below(tablet) {
+        margin-left: 0;
+    }
 }
 
 .dot {
